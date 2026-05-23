@@ -36,7 +36,7 @@ const AdminLayout = () => {
             </h1>
           </div>
         </div>
-        {sidebarLinks.map((link) => {
+        {sidebarLinks?.map((link) => {
           const Icon = link.icon;
 
           return (
