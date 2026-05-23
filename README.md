@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # 🚀 Project Core
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE.txt)
@@ -146,3 +147,7 @@ Feature complete – Version 1.0.0
 
 
 
+=======
+# nova-panel
+A sass core admin panel with primarily necessary backend code set 
+>>>>>>> 9d22e4944d3669e4f63103c3be9f3c497f6f8959
