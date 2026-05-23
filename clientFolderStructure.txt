@@ -1,0 +1,53 @@
+client/
+│
+├── src/
+│   ├── app/
+│   │   ├── App.jsx
+│   │   ├── main.jsx
+│   │
+│   ├── assets/
+│   │   ├── images/
+│   │   ├── icons/
+│   │
+│   ├── components/
+│   │   ├── ui/
+│   │   ├── shared/
+│   │
+│   ├── pages/
+│   │   ├── home/
+│   │   ├── auth/
+│   │   ├── dashboard/
+│   │
+│   ├── features/
+│   │   ├── auth/
+│   │   ├── user/
+│   │   ├── plan/
+│   │
+│   ├── hooks/
+│   ├── services/   (API calls)
+│   ├── store/      (Redux/Zustand)
+│   ├── utils/
+│   ├── routes/
+│
+├── public/
+└── vite.config.js
+
+===========================================
+
+🧠 FRONTEND LOGIC RULE
+🔵 components/
+
+Reusable UI only
+
+🟡 pages/
+
+Full screens (routes)
+
+🟢 features/
+
+Business logic grouped (VERY IMPORTANT)
+
+👉 Example:
+
+auth login flow
+user profile logic
