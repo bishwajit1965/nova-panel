@@ -4,6 +4,7 @@ import Uploads from "../pages/admin/uploads/Uploads";
 import Plan from "../pages/admin/plans/Plan";
 import Dashboard from "../pages/admin/dashboard/Dashboard";
 import Settings from "../pages/admin/settings/Settings";
+import NotFound from "../pages/publicPages/NotFound";
 
 export const adminRoutes = {
   path: "/admin",
@@ -14,5 +15,9 @@ export const adminRoutes = {
     { path: "uploads", element: <Uploads /> },
     { path: "plans", element: <Plan /> },
     { path: "settings", element: <Settings /> },
+    {
+      path: "*",
+      element: <NotFound />,
+    },
   ],
 };

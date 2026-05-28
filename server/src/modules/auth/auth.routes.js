@@ -7,8 +7,6 @@ import {
   register,
 } from "./auth.controller.js";
 import { authMiddleware } from "../../middlewares/auth.middleware.js";
-import { validate } from "../../middlewares/validate.middleware.js";
-import { loginValidation, registerValidation } from "./auth.validation.js";
 
 const router = express.Router();
 
@@ -19,10 +17,10 @@ router.get("/me", authMiddleware, me);
 router.post("/refresh", refreshToken);
 
 // Register User
-router.post("/register", validate(registerValidation), register);
+router.post("/register", register);
 
 // Login User
-router.post("/login", validate(loginValidation), login);
+router.post("/login", login);
 
 // 🔐 Logout route
 router.post("/logout", authMiddleware, logout);

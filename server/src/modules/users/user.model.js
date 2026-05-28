@@ -34,6 +34,14 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: true,
     },
+    avatarUrl: {
+      type: String,
+      default: null,
+    },
+    acceptTerms: {
+      type: Boolean,
+      default: false,
+    },
 
     refreshToken: {
       type: String,

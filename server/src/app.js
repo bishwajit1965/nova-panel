@@ -19,7 +19,8 @@ app.use(helmet());
 
 app.use(
   cors({
-    origin: "*", // later replace with frontend URL
+    origin: "http://localhost:5173",
+    // origin: "*", // later replace with frontend URL
     credentials: true,
   }),
 );
@@ -37,7 +38,7 @@ const limiter = rateLimit({
 app.use(limiter);
 
 //  🧭 4. API Routes
-app.use("/api", routes);
+app.use("/api/v1", routes);
 
 // 404 (must be before error handler)
 app.use(notFoundHandler);

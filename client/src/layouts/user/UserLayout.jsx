@@ -1,22 +1,22 @@
 import { Outlet } from "react-router-dom";
+import UsersNavbar from "./UsersNavbar";
+import Footer from "../../components/shared/footer/Footer";
 
 const UserLayout = () => {
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-base-100">
       {/* Navbar */}
-      <header className="bg-gray-200 text-gray-600 p-4">
-        <h1 className="text-xl font-bold">Nova Panel User Navbar</h1>
+      <header className="">
+        <UsersNavbar />
       </header>
 
       {/* Outlet */}
-      <main className="flex-1 p-4 bg-gray-100">
+      <main className="flex-1 lg:py-8 py-4 px-4 lg:max-w-7xl lg:mx-auto text-base-content/70">
         <Outlet />
       </main>
 
       {/* Footer */}
-      <footer className="bg-gray-200 text-gray-600 p-4 mt-4 text-center">
-        &copy; {new Date().getFullYear()} Nova Panel. All rights reserved.
-      </footer>
+      <Footer />
     </div>
   );
 };

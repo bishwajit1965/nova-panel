@@ -7,12 +7,15 @@ export const authMiddleware = async (req, res, next) => {
   try {
     //✅ 1. Get token from header
     const authHeader = req.headers.authorization;
+    const cookieToken = req.cookies.accessToken;
 
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
-      throw new AppError("Unauthorized access attempted.", 401);
+    const token = authHeader?.startsWith("Bearer ")
+      ? authHeader.split(" ")[1]
+      : cookieToken;
+
+    if (!token) {
+      throw new AppError("Unauthorized", 401);
     }
-
-    const token = authHeader.split(" ")[1];
 
     //✅ 2. Verify token
     let decoded;

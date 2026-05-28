@@ -78,6 +78,7 @@ export const loginUser = async (data) => {
   };
 };
 
+// GET ME
 export const getMe = async (user) => {
   const cleanUser = user.toObject();
   delete cleanUser.password;
@@ -85,6 +86,7 @@ export const getMe = async (user) => {
   return cleanUser;
 };
 
+// REFRESH ACCESS TOKEN
 export const refreshAccessToken = async (oldRefreshToken) => {
   if (!oldRefreshToken) {
     throw new AppError("No refresh token provided", 401);
@@ -94,14 +96,18 @@ export const refreshAccessToken = async (oldRefreshToken) => {
 
   try {
     decoded = verifyRefreshToken(oldRefreshToken);
-  } catch {
+  } catch (err) {
     throw new AppError("Invalid refresh token", 403);
+  }
+
+  if (!decoded?.id) {
+    throw new AppError("Invalid token payload", 403);
   }
 
   const user = await User.findById(decoded.id);
 
-  if (!user || user.refreshToken !== oldRefreshToken) {
-    throw new AppError("Refresh token reuse detected", 403);
+  if (!user) {
+    throw new AppError("User not found", 404);
   }
 
   // generate new tokens

@@ -1,7 +1,10 @@
 import * as authService from "./auth.service.js";
 import { convertToMs } from "../../utils/convertTime.js";
 import projectConfig from "../../config/project.config.js";
-import { refreshTokenCookieOptions } from "../../utils/cookieOptions.js";
+import {
+  accessTokenCookieOptions,
+  refreshTokenCookieOptions,
+} from "../../utils/cookieOptions.js";
 import { asyncHandler } from "../../core/async/asyncHandler.js";
 import { sendResponse } from "../../utils/sendResponse.js";
 
@@ -11,6 +14,7 @@ export const register = asyncHandler(async (req, res) => {
     req.body,
   );
   res.cookie("refreshToken", refreshToken, refreshTokenCookieOptions);
+
   return sendResponse(res, 201, "user registered successfully", {
     user,
     accessToken,
@@ -22,6 +26,7 @@ export const login = asyncHandler(async (req, res) => {
   const { user, accessToken, refreshToken } = await authService.loginUser(
     req.body,
   );
+  // res.cookie("accessToken", accessToken, accessTokenCookieOptions);
   res.cookie("refreshToken", refreshToken, refreshTokenCookieOptions);
   return sendResponse(res, 200, "Login is successful.", { user, accessToken });
 });
@@ -35,11 +40,16 @@ export const me = asyncHandler(async (req, res) => {
 // REFRESH TOKEN
 export const refreshToken = asyncHandler(async (req, res) => {
   const token = req.cookies.refreshToken;
+
   const data = await authService.refreshAccessToken(token);
+
+  // Set NEW access token cookie
+  res.cookie("accessToken", data.accessToken, accessTokenCookieOptions);
+
+  // Rotate refresh token cookie
   res.cookie("refreshToken", data.refreshToken, refreshTokenCookieOptions);
-  return sendResponse(res, 200, "Token refreshed successfully.", {
-    accessToken: data.accessToken,
-  });
+
+  return sendResponse(res, 200, "Token refreshed successfully.");
 });
 
 // LOGOUT

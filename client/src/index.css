@@ -1,11 +1,35 @@
 @import "tailwindcss";
 @plugin "daisyui";
-@tailwind utilities;
+@custom-variant dark (&:where(.dark, .dark *));
 
-body {
+body{
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   font-family: sans-serif;
   background-color: #f3f4f6;
+}
+
+p {
+  font-family: "Roboto", Arial, sans-serif;
+  /* font-size: 16px; */
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Poppins", "Helvetica", sans-serif;
+}
+
+/* Active link */
+.active{
+  color: #3b82f6;
+  font-weight: bold;
+}
+
+/* Dark Mode body background color */
+body.dark {
+  background-color: #000;
 }
