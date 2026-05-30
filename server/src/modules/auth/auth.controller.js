@@ -26,7 +26,7 @@ export const login = asyncHandler(async (req, res) => {
   const { user, accessToken, refreshToken } = await authService.loginUser(
     req.body,
   );
-  // res.cookie("accessToken", accessToken, accessTokenCookieOptions);
+  res.cookie("accessToken", accessToken, accessTokenCookieOptions);
   res.cookie("refreshToken", refreshToken, refreshTokenCookieOptions);
   return sendResponse(res, 200, "Login is successful.", { user, accessToken });
 });
@@ -57,7 +57,8 @@ export const logout = asyncHandler(async (req, res) => {
   await authService.logoutUser(req.user._id);
   res.clearCookie("refreshToken", {
     httpOnly: true,
-    secure: true,
+    secure: process.env.NODE_ENV === "production",
+    // secure: true,
     sameSite: "strict",
   });
   return sendResponse(res, 200, "Logged out successfully.");

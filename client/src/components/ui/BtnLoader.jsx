@@ -3,7 +3,7 @@ import { Loader as LoaderIcon } from "lucide-react";
 const BtnLoader = ({
   size = 20,
   color = "currentColor",
-  message = "Processing...",
+  message = "Processing",
 }) => {
   return (
     <div className="flex items-center justify-center gap-1">

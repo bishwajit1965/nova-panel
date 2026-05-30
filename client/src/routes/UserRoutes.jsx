@@ -5,10 +5,16 @@ import MyUploads from "../pages/user/uploads/MyUploads";
 import Dashboard from "../pages/user/dashboard/Dashboard";
 import Settings from "../pages/user/settings/Settings";
 import NotFound from "../pages/publicPages/NotFound";
+import ProtectedRoute from "./ProtectedRoutes";
 
 export const userRoutes = {
   path: "/users",
-  element: <UserLayout />,
+  element: (
+    <ProtectedRoute allowedRoles={["user"]}>
+      <UserLayout />
+    </ProtectedRoute>
+  ),
+
   children: [
     {
       index: true,

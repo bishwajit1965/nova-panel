@@ -1,15 +1,15 @@
-import Login from "../components/shared/auth/Login";
-import Register from "../components/shared/auth/Register";
 import PublicLayout from "../layouts/public/PublicLayout";
 import AboutPage from "../pages/publicPages/AboutPage";
 import ContactPage from "../pages/publicPages/ContactPage";
 import HomePage from "../pages/publicPages/HomePage";
 import NotFound from "../pages/publicPages/NotFound";
 import Terms from "../pages/publicPages/Terms";
+import UnauthorizedPage from "../pages/publicPages/UnauthorizedPage";
 
 export const publicRoutes = {
   path: "/",
   element: <PublicLayout />,
+
   children: [
     {
       index: true,
@@ -28,12 +28,8 @@ export const publicRoutes = {
       element: <Terms />,
     },
     {
-      path: "login",
-      element: <Login />,
-    },
-    {
-      path: "register",
-      element: <Register />,
+      path: "unauthorized",
+      element: <UnauthorizedPage />,
     },
     {
       path: "*",

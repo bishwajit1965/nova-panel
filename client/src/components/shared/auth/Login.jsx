@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { NavLink, Link, useNavigate } from "react-router-dom";
+import { NavLink, Link, useNavigate, useLocation } from "react-router-dom";
 import Swal from "sweetalert2";
 import { LucideEye, LucideEyeClosed, LucideLogIn } from "lucide-react";
 import useValidator from "../../../hooks/useValidator";
@@ -18,8 +18,10 @@ const Login = () => {
     password: "",
   });
 
+  const location = useLocation();
   const navigate = useNavigate();
-  const { setUser } = useAuth();
+  const { user, setUser } = useAuth();
+  console.log("USER DATA", user);
   const handleChange = (e) => {
     setForm({
       ...form,
@@ -44,9 +46,10 @@ const Login = () => {
       const res = await loginUser(form);
 
       if (res.success) {
-        const user = res.data.user;
+        const loggedUser = res.data?.user;
         // store user in Auth Context
-        setUser(user);
+        setUser(loggedUser);
+
         Swal.fire({
           position: "top-end",
           icon: "success",
@@ -55,7 +58,47 @@ const Login = () => {
           timer: 1500,
         });
 
-        navigate("/admin/dashboard");
+        // REDIRECT GATE
+        const userRoles = (loggedUser?.roles || []).map((r) =>
+          (typeof r === "string" ? r : r.name).toLowerCase(),
+        );
+
+        const getDefaultRoute = (roles) => {
+          if (roles.includes("superadmin")) return "/superAdmin/dashboard";
+          if (roles.includes("admin")) return "/admin/dashboard";
+          if (roles.includes("moderator")) return "/moderator/dashboard";
+          return "/";
+        };
+
+        const isValidFrom = (from, roles) => {
+          if (!from) return false;
+
+          if (roles.includes("superadmin")) {
+            return from.startsWith("/superAdmin") || from === "/";
+          }
+
+          if (roles.includes("admin")) {
+            return from.startsWith("/admin") || from === "/";
+          }
+
+          if (roles.includes("moderator")) {
+            return from.startsWith("/moderator") || from === "/";
+          }
+
+          if (roles.includes("user")) {
+            return from.startsWith("/users") || from === "/";
+          }
+
+          return false;
+        };
+
+        const from = location.state?.from?.pathname;
+
+        const redirectTo = isValidFrom(from, userRoles)
+          ? from
+          : getDefaultRoute(userRoles);
+
+        navigate(redirectTo, { replace: true });
       }
     } catch (err) {
       Swal.fire({
@@ -78,7 +121,7 @@ const Login = () => {
         className="lg:max-w-sm min-w-full lg:p-6 p-2 lg:space-y-4 space-y-2 items-center justify-center border border-base-content/10 bg-base-200 rounded-lg shadow hover:shadow-xl"
       >
         <div className="border-b border-base-content/10 pb-2 mb-4">
-          <Link to="/register">
+          <Link to="/auth/register">
             <h1 className="lg:text-xl text-lg font-extrabold flex items-center justify-between gap-2">
               <span className="flex items-center gap-2">
                 {" "}
@@ -139,7 +182,7 @@ const Login = () => {
           </NavLink>
           •
           <NavLink
-            to="/register"
+            to="/auth/register"
             className="text-xs text-base-content/60 hover:underline hover:text-blue-500 float-right"
           >
             New user ? Register
@@ -153,7 +196,7 @@ const Login = () => {
           className="w-full"
         >
           {loading ? <BtnLoader /> : <LucideLogIn />}
-          {loading ? "Logging in..." : "Login"}
+          {loading ? "to login..." : "Login"}
         </Button>
       </form>
     </div>

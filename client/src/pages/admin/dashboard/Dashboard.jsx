@@ -4,8 +4,7 @@ const Dashboard = () => {
   const { user } = useAuth();
   return (
     <div>
-      Dashboard
-      <p>{user ? `Welcome, ${user.name}!` : "Welcome!"}</p>
+      <p>Admin Dashboard → {user ? `Welcome, ${user.name}!` : "Welcome!"}</p>
     </div>
   );
 };

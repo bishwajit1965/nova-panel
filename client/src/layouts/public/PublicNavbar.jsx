@@ -1,15 +1,55 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import ThemeToggle from "../../components/ui/ThemeToggle";
 import Logo from "../../components/ui/Logo";
+import { logoutUser } from "../../services/auth.service";
+import { useAuth } from "../../hooks/useAuth";
+import { useState } from "react";
+import Swal from "sweetalert2";
+import { LucideLogIn, LucideLogOut, LucideMail } from "lucide-react";
 
 const PublicNavbar = () => {
+  const [loading, setLoading] = useState(false);
+  const { setUser, user } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    try {
+      setLoading(true);
+      const res = await logoutUser();
+      if (res.success) {
+        setUser(null);
+
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "Logout successful.",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+
+        navigate("/auth/login", { replace: true });
+      }
+    } catch (err) {
+      Swal.fire({
+        position: "top-end",
+        icon: "error",
+        title: "Logout failed.",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      console.log(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const navItems = [
     { id: 0, name: "Home", path: "/" },
     { id: 1, name: "About", path: "/about" },
     { id: 2, name: "Contact", path: "/contact" },
     { id: 3, name: "Terns & Conditions", path: "/terms" },
-    { id: 4, name: "Login", path: "/login" },
-    { id: 5, name: "Register", path: "/register" },
+    { id: 4, name: "Login", path: "/auth/login" },
+    { id: 5, name: "Register", path: "/auth/register" },
   ];
 
   return (
@@ -127,18 +167,35 @@ const PublicNavbar = () => {
             tabIndex="-1"
             className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
           >
-            <li>
-              <a className="justify-between">
-                Profile
-                <span className="badge">New</span>
-              </a>
-            </li>
-            <li>
-              <a>Settings</a>
-            </li>
-            <li>
-              <a>Logout</a>
-            </li>
+            {user ? (
+              <>
+                <li>
+                  <a className="justify-between">
+                    Profile
+                    <span className="badge">New</span>
+                  </a>
+                </li>
+                <li>
+                  <a>Settings</a>
+                </li>
+                <li>
+                  <a href="">
+                    <LucideMail size={16} /> {user?.email}
+                  </a>
+                </li>
+                <li>
+                  <a disabled={loading} onClick={handleLogout}>
+                    <LucideLogOut size={16} /> Logout
+                  </a>
+                </li>
+              </>
+            ) : (
+              <li>
+                <a href="/login">
+                  <LucideLogIn size={16} /> Login
+                </a>
+              </li>
+            )}
           </ul>
         </div>
       </div>

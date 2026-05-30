@@ -50,7 +50,12 @@ export const registerUser = async (data) => {
 
 // LOGIN USER
 export const loginUser = async (data) => {
-  const user = await User.findOne({ email: data.email });
+  const user = await User.findOne({ email: data.email }).populate({
+    path: "roles",
+    populate: {
+      path: "permissions",
+    },
+  });
 
   if (!user) throw new AppError("Invalid credentials", 401);
 
@@ -108,6 +113,11 @@ export const refreshAccessToken = async (oldRefreshToken) => {
 
   if (!user) {
     throw new AppError("User not found", 404);
+  }
+
+  // 🚨 CRITICAL CHECK
+  if (!user.refreshToken || user.refreshToken !== oldRefreshToken) {
+    throw new AppError("Refresh token mismatch", 403);
   }
 
   // generate new tokens

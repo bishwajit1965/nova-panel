@@ -101,7 +101,7 @@ const Register = () => {
         className="lg:max-w-sm min-w-full lg:p-6 p-2 lg:space-y-4 space-y-2 items-center justify-center border border-base-content/10 bg-base-200 rounded-lg shadow hover:shadow-xl"
       >
         <div className="border-b border-base-content/10 pb-2 mb-4">
-          <Link to="/login">
+          <Link to="/auth/login">
             <h1 className="lg:text-xl text-lg font-extrabold flex items-center justify-between gap-2">
               <span className="flex items-center gap-2">
                 {" "}
@@ -219,7 +219,7 @@ const Register = () => {
             </Link>
             •
             <Link
-              to="/login"
+              to="/auth/login"
               className="text-xs hover:link hover:text-blue-500 m-0 p-0"
             >
               A Member ? Login{" "}
@@ -239,7 +239,7 @@ const Register = () => {
           className="w-full"
         >
           {loading ? <BtnLoader /> : <LucideUsers />}
-          {loading ? "" : "Register"}
+          {loading ? "to register..." : "Register"}
         </Button>
 
         {/* <button

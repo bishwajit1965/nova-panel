@@ -3,10 +3,12 @@ import { userRoutes } from "./UserRoutes";
 import { adminRoutes } from "./AdminRoutes";
 import { authRoutes } from "./AuthRoutes";
 import { publicRoutes } from "./PublicRoutes";
+import { superAdminRoutes } from "./SuperAdminRouts";
 
 export const router = createBrowserRouter([
   authRoutes,
-  userRoutes,
+  superAdminRoutes,
   adminRoutes,
+  userRoutes,
   publicRoutes,
 ]);

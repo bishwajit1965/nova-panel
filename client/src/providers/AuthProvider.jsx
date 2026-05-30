@@ -5,6 +5,8 @@ import api from "../services/api";
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [authReady, setAuthReady] = useState(false);
 
   useEffect(() => {
     const fetchMe = async () => {
@@ -15,6 +17,7 @@ const AuthProvider = ({ children }) => {
 
         if (res.data?.success && res.data?.data?.user) {
           setUser(res.data.data.user);
+          setIsAuthenticated(true);
         } else {
           setUser(null);
         }
@@ -22,6 +25,7 @@ const AuthProvider = ({ children }) => {
         setUser(null);
         console.error("Error fetching user data:", error);
       } finally {
+        setAuthReady(true);
         setLoading(false);
       }
     };
@@ -31,6 +35,8 @@ const AuthProvider = ({ children }) => {
 
   const authInfo = {
     user,
+    isAuthenticated,
+    authReady,
     setUser,
     loading,
   };

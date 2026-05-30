@@ -1,12 +1,4 @@
-import {
-  LucideChevronDown,
-  LucideChevronRight,
-  LucideLogOut,
-  LucideSquareMenu,
-  LucideX,
-} from "lucide-react";
 import { useState } from "react";
-import { sidebarLinks } from "../../routes/sidebarLinks.js";
 import {
   NavLink,
   Outlet,
@@ -14,15 +6,25 @@ import {
   useLocation,
   useNavigate,
 } from "react-router-dom";
-import { useAuth } from "../../hooks/useAuth.js";
-import { logoutUser } from "../../services/auth.service";
+import { useAuth } from "../../hooks/useAuth";
+import {
+  LucideChevronDown,
+  LucideChevronRight,
+  LucideLogOut,
+  LucideSquareMenu,
+  LucideX,
+} from "lucide-react";
 import Swal from "sweetalert2";
-import Button from "../../components/ui/Button.jsx";
-import { LucideIcon } from "../../components/lib/LucideIcons.js";
+import { logoutUser } from "../../services/auth.service";
+import { supAdminSidebarLinks } from "../../routes/supAdminSidebarLinks";
+import Button from "../../components/ui/Button";
+import { LucideIcon } from "../../components/lib/LucideIcons";
 
-const AdminLayout = () => {
+const SuperAdminLayout = () => {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const { setUser, user } = useAuth();
+  const [isSideBarOpen, setIsSideBarOpen] = useState(false);
   const location = useLocation();
   const formatPathName = (pathname) => {
     return pathname
@@ -34,15 +36,11 @@ const AdminLayout = () => {
   };
 
   let page = formatPathName(location.pathname.trim().split("/").pop());
-
-  const [isSideBarOpen, setIsSideBarOpen] = useState(false);
-  const { setUser, user } = useAuth();
   const navigate = useNavigate();
 
   const toggleSidebar = () => {
     setIsSideBarOpen((prev) => !prev);
   };
-
   const handleLogout = async () => {
     try {
       setLoading(true);
@@ -73,10 +71,9 @@ const AdminLayout = () => {
       setLoading(false);
     }
   };
-
   return (
     <div className="min-h-screen flex">
-      {/* Sidebar */}
+      {/* LEFT SIDEBAR */}
       {/* Mobile overlay */}
       {isSideBarOpen && (
         <div
@@ -84,7 +81,6 @@ const AdminLayout = () => {
           onClick={() => setIsSideBarOpen(false)}
         />
       )}
-
       <aside
         className={`fixed lg:static lg:min-h-screen top-0 left-0 lg:z-10 z-50 h-full w-64 ${isSideBarOpen ? "translate-x-0" : "-translate-x-full"} lg:translate-x-0  bg-gray-800 text-gray-400`}
       >
@@ -100,24 +96,26 @@ const AdminLayout = () => {
             </h1>
           </div>
         </div>
-        {sidebarLinks?.map((link) => {
-          const Icon = link.icon;
+        <div className="">
+          {supAdminSidebarLinks?.map((link) => {
+            const Icon = link.icon;
 
-          return (
-            <NavLink
-              key={link.path}
-              to={link.path}
-              className={({ isActive }) =>
-                `flex items-center gap-3 px-4 py-2 rounded transition ${
-                  isActive ? "bg-slate-700 text-white" : "hover:bg-slate-700"
-                }`
-              }
-            >
-              <Icon className="h-4 w-4" />
-              {link.label}
-            </NavLink>
-          );
-        })}
+            return (
+              <NavLink
+                key={link.path}
+                to={link.path}
+                className={({ isActive }) =>
+                  `flex items-center gap-3 px-4 py-2 rounded transition ${
+                    isActive ? "bg-slate-700 text-white" : "hover:bg-slate-700"
+                  }`
+                }
+              >
+                <Icon className="h-4 w-4" />
+                {link.label}
+              </NavLink>
+            );
+          })}
+        </div>
 
         <div className="absolute bottom-0 left-0 right-0 lg:hidden px-4 py-2">
           {user && (
@@ -133,7 +131,7 @@ const AdminLayout = () => {
         </div>
       </aside>
 
-      {/* Main Content */}
+      {/* RIGHT MAIN CONTENT PANEL */}
       <main className="flex-1 relative">
         <header className="border-b border-slate-300 bg-gray-200 text-gray-600 shadow-sm p-4">
           {/* <AdminNavbar /> */}
@@ -227,4 +225,4 @@ const AdminLayout = () => {
   );
 };
 
-export default AdminLayout;
+export default SuperAdminLayout;

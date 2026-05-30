@@ -137,10 +137,14 @@ import {
   AlertTriangleIcon,
   Antenna,
   Sparkle,
+  AlertCircle,
+  AlertCircleIcon,
 } from "lucide-react";
 
 // Central registry
 export const LucideIcon = {
+  AlertCircle,
+  AlertCircleIcon,
   AlertOctagon,
   AlertTriangleIcon,
   Antenna,
