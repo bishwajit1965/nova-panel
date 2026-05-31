@@ -5,19 +5,18 @@ import api from "../services/api";
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [authReady, setAuthReady] = useState(false);
 
   useEffect(() => {
     const fetchMe = async () => {
       try {
         setLoading(true);
-
-        const res = await api.get("/auth/me");
-
-        if (res.data?.success && res.data?.data?.user) {
-          setUser(res.data.data.user);
-          setIsAuthenticated(true);
+        const res = await api.get("/auth/me", { withCredentials: true });
+        console.log("ME in auth provider", res);
+        const userMe = res.data?.data?.user;
+        if (userMe) {
+          setUser(userMe);
+          return userMe;
         } else {
           setUser(null);
         }
@@ -33,12 +32,16 @@ const AuthProvider = ({ children }) => {
     fetchMe();
   }, []);
 
+  const logout = () => {
+    setUser(null);
+  };
+
   const authInfo = {
     user,
-    isAuthenticated,
     authReady,
     setUser,
     loading,
+    logout,
   };
 
   return (

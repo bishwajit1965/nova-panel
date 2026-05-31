@@ -222,7 +222,7 @@ const Register = () => {
               to="/auth/login"
               className="text-xs hover:link hover:text-blue-500 m-0 p-0"
             >
-              A Member ? Login{" "}
+              A Member ? <span className="font-bold">Login</span>{" "}
             </Link>
           </div>
           <span>
@@ -241,19 +241,6 @@ const Register = () => {
           {loading ? <BtnLoader /> : <LucideUsers />}
           {loading ? "to register..." : "Register"}
         </Button>
-
-        {/* <button
-          type="submit"
-          disabled={loading}
-          className="w-full btn btn-md rounded-md bg-black text-white flex items-center gap-2"
-        >
-          {loading ? (
-            <Loader size={20} className="animate-spin" />
-          ) : (
-            <LucideUsers size={20} />
-          )}{" "}
-          {loading ? "Registering...." : "Register"}
-        </button> */}
       </form>
     </div>
   );

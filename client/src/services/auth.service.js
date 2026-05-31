@@ -3,7 +3,7 @@ import api from "./api";
 // LOGIN
 export const loginUser = async (data) => {
   const response = await api.post("/auth/login", data);
-  return response.data;
+  return response?.data;
 };
 
 // REGISTER

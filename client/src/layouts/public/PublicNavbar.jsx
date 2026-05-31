@@ -5,17 +5,23 @@ import { logoutUser } from "../../services/auth.service";
 import { useAuth } from "../../hooks/useAuth";
 import { useState } from "react";
 import Swal from "sweetalert2";
-import { LucideLogIn, LucideLogOut, LucideMail } from "lucide-react";
+import {
+  LucideLogIn,
+  LucideLogOut,
+  LucideMail,
+  LucideUser2,
+} from "lucide-react";
 
 const PublicNavbar = () => {
   const [loading, setLoading] = useState(false);
-  const { setUser, user } = useAuth();
+  const { setUser, user, logout } = useAuth();
   const navigate = useNavigate();
 
   const handleLogout = async () => {
     try {
       setLoading(true);
       const res = await logoutUser();
+
       if (res.success) {
         setUser(null);
 
@@ -26,7 +32,7 @@ const PublicNavbar = () => {
           showConfirmButton: false,
           timer: 1500,
         });
-
+        logout();
         navigate("/auth/login", { replace: true });
       }
     } catch (err) {
@@ -48,8 +54,6 @@ const PublicNavbar = () => {
     { id: 1, name: "About", path: "/about" },
     { id: 2, name: "Contact", path: "/contact" },
     { id: 3, name: "Terns & Conditions", path: "/terms" },
-    { id: 4, name: "Login", path: "/auth/login" },
-    { id: 5, name: "Register", path: "/auth/register" },
   ];
 
   return (
@@ -157,10 +161,14 @@ const PublicNavbar = () => {
             className="btn btn-ghost btn-circle avatar"
           >
             <div className="w-10 rounded-full">
-              <img
-                alt="Tailwind CSS Navbar component"
-                src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
-              />
+              {user ? (
+                <img src={user?.avatarUrl} alt={user?.name} />
+              ) : (
+                <img
+                  alt="Tailwind CSS Navbar component"
+                  src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+                />
+              )}
             </div>
           </div>
           <ul
@@ -179,7 +187,7 @@ const PublicNavbar = () => {
                   <a>Settings</a>
                 </li>
                 <li>
-                  <a href="">
+                  <a href="#">
                     <LucideMail size={16} /> {user?.email}
                   </a>
                 </li>
@@ -190,11 +198,18 @@ const PublicNavbar = () => {
                 </li>
               </>
             ) : (
-              <li>
-                <a href="/login">
-                  <LucideLogIn size={16} /> Login
-                </a>
-              </li>
+              <>
+                <li>
+                  <a href="/auth/register">
+                    <LucideUser2 size={16} /> Register
+                  </a>
+                </li>
+                <li>
+                  <a href="/auth/login">
+                    <LucideLogIn size={16} /> Login
+                  </a>
+                </li>
+              </>
             )}
           </ul>
         </div>

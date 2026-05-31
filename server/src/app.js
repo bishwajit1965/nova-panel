@@ -32,10 +32,15 @@ app.use(express.urlencoded({ extended: true }));
 // 🚦 3. Rate Limiting
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 min
-  max: 100, // limit per IP
+  max: 10000, // limit per IP
 });
 
 app.use(limiter);
+
+app.use((req, res, next) => {
+  console.log(req.method, req.originalUrl);
+  next();
+});
 
 //  🧭 4. API Routes
 app.use("/api/v1", routes);

@@ -10,7 +10,7 @@ import ProtectedRoute from "./ProtectedRoutes";
 export const superAdminRoutes = {
   path: "/superAdmin",
   element: (
-    <ProtectedRoute allowedRoles={["superAdmin"]}>
+    <ProtectedRoute allowedRoles={["superadmin"]}>
       <SuperAdminLayout />
     </ProtectedRoute>
   ),

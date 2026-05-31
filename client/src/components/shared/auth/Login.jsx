@@ -44,9 +44,10 @@ const Login = () => {
     try {
       setLoading(true);
       const res = await loginUser(form);
-
+      console.log("RESPONSE IN LOGIN PAGE", res);
       if (res.success) {
         const loggedUser = res.data?.user;
+        console.log("LOGGED USER", loggedUser);
         // store user in Auth Context
         setUser(loggedUser);
 
@@ -62,7 +63,11 @@ const Login = () => {
         const userRoles = (loggedUser?.roles || []).map((r) =>
           (typeof r === "string" ? r : r.name).toLowerCase(),
         );
+        console.log("USER ROLES", userRoles);
 
+        const from = location.state?.from?.pathname;
+
+        console.log("From", from);
         const getDefaultRoute = (roles) => {
           if (roles.includes("superadmin")) return "/superAdmin/dashboard";
           if (roles.includes("admin")) return "/admin/dashboard";
@@ -92,11 +97,11 @@ const Login = () => {
           return false;
         };
 
-        const from = location.state?.from?.pathname;
-
         const redirectTo = isValidFrom(from, userRoles)
           ? from
           : getDefaultRoute(userRoles);
+
+        console.log("Redirect to", redirectTo);
 
         navigate(redirectTo, { replace: true });
       }
@@ -185,7 +190,7 @@ const Login = () => {
             to="/auth/register"
             className="text-xs text-base-content/60 hover:underline hover:text-blue-500 float-right"
           >
-            New user ? Register
+            New user ? <span className="font-bold">Register</span>
           </NavLink>
         </div>
 

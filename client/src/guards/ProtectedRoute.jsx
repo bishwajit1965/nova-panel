@@ -1,5 +1,4 @@
 import { Navigate, useLocation } from "react-router-dom";
-
 import { useAuth } from "../hooks/useAuth";
 import Loader from "../components/ui/Loader";
 
@@ -11,70 +10,81 @@ const ProtectedRoute = ({
   superAdminOnly = false,
   deniedMessage,
 }) => {
-  const { user, authReady, loading } = useAuth();
-
+  const { user, loading } = useAuth();
   const location = useLocation();
 
-  if (loading || !authReady) return <Loader />;
+  // ⏳ wait for AuthProvider to finish initial check
+  if (loading) return <Loader />;
 
-  // ✅ Not authenticated → go to login
+  // ❌ not logged in
   if (!user) {
     return <Navigate to="/auth/login" state={{ from: location }} replace />;
   }
 
-  // ✅Normalize Roles
-  const normalizeRoles = (roles = []) =>
-    roles
-      .map((r) => (typeof r === "string" ? r : r?.name))
-      .filter(Boolean)
-      .map((r) => r.toLowerCase());
-
-  const userRoles = normalizeRoles(user?.roles);
+  // -------------------------
+  // ROLE NORMALIZATION
+  // -------------------------
+  const userRoles = (user.roles || [])
+    .map((r) => (typeof r === "string" ? r : r?.name))
+    .filter(Boolean)
+    .map((r) => r.toLowerCase());
 
   const isSuperAdmin = userRoles.includes("superadmin");
 
-  // ✅ Admin overrides everything
   const isAdmin = isSuperAdmin || userRoles.includes("admin");
 
-  // ✅ Super admin only route
+  // -------------------------
+  // SUPER ADMIN ONLY ROUTE
+  // -------------------------
   if (superAdminOnly && !isSuperAdmin) {
     return <Navigate to="/unauthorized" replace />;
   }
 
   const allowedRolesLower = allowedRoles.map((r) => r.toLowerCase());
 
-  // ✅ Permissions
+  // -------------------------
+  // PERMISSIONS
+  // -------------------------
   const userPermissions =
     user.roles?.flatMap((r) => r.permissions?.map((p) => p.key)) || [];
 
-  // ✅ Features (from plan)
+  // -------------------------
+  // FEATURES
+  // -------------------------
   const userFeatures = user.plan?.features?.map((f) => f.key) || [];
 
+  // -------------------------
+  // ACCESS CHECKS
+  // -------------------------
   const hasRoleAccess =
     isAdmin ||
     allowedRolesLower.length === 0 ||
-    allowedRolesLower.some((role) => userRoles.includes(role));
+    allowedRolesLower.some((r) => userRoles.includes(r));
 
   const hasPermissionAccess =
     isAdmin ||
     requiredPermissions.length === 0 ||
-    requiredPermissions.every((perm) => userPermissions.includes(perm));
+    requiredPermissions.every((p) => userPermissions.includes(p));
 
   const hasFeatureAccess =
     isAdmin ||
     requiredFeatures.length === 0 ||
-    requiredFeatures.every((feat) => userFeatures.includes(feat));
+    requiredFeatures.every((f) => userFeatures.includes(f));
 
+  // ❌ denied
   if (!hasRoleAccess || !hasPermissionAccess || !hasFeatureAccess) {
     return (
       <Navigate
         to="/unauthorized"
         replace
-        state={{ deniedMessage: deniedMessage || "Access is denied." }}
+        state={{
+          deniedMessage: deniedMessage || "Access is denied.",
+        }}
       />
     );
   }
 
+  // ✅ allowed
   return children;
 };
 

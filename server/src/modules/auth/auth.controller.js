@@ -55,11 +55,14 @@ export const refreshToken = asyncHandler(async (req, res) => {
 // LOGOUT
 export const logout = asyncHandler(async (req, res) => {
   await authService.logoutUser(req.user._id);
-  res.clearCookie("refreshToken", {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    // secure: true,
-    sameSite: "strict",
-  });
+  // res.clearCookie("refreshToken", {
+  //   httpOnly: true,
+  //   secure: process.env.NODE_ENV === "production",
+  //   // secure: true,
+  //   sameSite: "strict",
+  // });
+  res.clearCookie("accessToken", accessTokenCookieOptions);
+  res.clearCookie("refreshToken", refreshTokenCookieOptions);
+
   return sendResponse(res, 200, "Logged out successfully.");
 });

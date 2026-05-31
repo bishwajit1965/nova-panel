@@ -36,7 +36,7 @@ const AdminLayout = () => {
   let page = formatPathName(location.pathname.trim().split("/").pop());
 
   const [isSideBarOpen, setIsSideBarOpen] = useState(false);
-  const { setUser, user } = useAuth();
+  const { setUser, user, logout } = useAuth();
   const navigate = useNavigate();
 
   const toggleSidebar = () => {
@@ -57,7 +57,7 @@ const AdminLayout = () => {
           showConfirmButton: false,
           timer: 1500,
         });
-
+        logout();
         navigate("/auth/login", replace);
       }
     } catch (err) {
