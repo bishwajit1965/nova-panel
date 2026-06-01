@@ -1,5 +1,4 @@
 import { Navigate, useLocation } from "react-router-dom";
-
 import { useAuth } from "../hooks/useAuth";
 import Loader from "../components/ui/Loader";
 
@@ -12,65 +11,75 @@ const ProtectedRoute = ({
   deniedMessage,
 }) => {
   const { user, authReady, loading } = useAuth();
-
   const location = useLocation();
 
+  // 1. WAIT FOR AUTH BOOTSTRAP
   if (loading || !authReady) return <Loader />;
 
-  // ✅ Not authenticated → go to login
+  // 2. NOT LOGGED IN → LOGIN PAGE
   if (!user) {
     return <Navigate to="/auth/login" state={{ from: location }} replace />;
   }
 
-  // ✅Normalize Roles
-  const normalizeRoles = (roles = []) =>
-    roles
-      .map((r) => (typeof r === "string" ? r : r?.name))
-      .filter(Boolean)
-      .map((r) => r.toLowerCase());
-
-  const userRoles = normalizeRoles(user?.roles);
-
-  const isSuperAdmin = userRoles.includes("superadmin");
-
-  // ✅ Admin overrides everything
-  const isAdmin = isSuperAdmin || userRoles.includes("admin");
-
-  // ✅ Super admin only route
-  if (superAdminOnly && !isSuperAdmin) {
-    return <Navigate to="/unauthorized" replace />;
-  }
+  // 3. NORMALIZE ROLES
+  const userRoles = (user?.roles || [])
+    .map((r) => (typeof r === "string" ? r : r?.name))
+    .filter(Boolean)
+    .map((r) => r.toLowerCase());
 
   const allowedRolesLower = allowedRoles.map((r) => r.toLowerCase());
 
-  // ✅ Permissions
-  const userPermissions =
-    user.roles?.flatMap((r) => r.permissions?.map((p) => p.key)) || [];
+  const isSuperAdmin = userRoles.includes("superadmin");
 
-  // ✅ Features (from plan)
-  const userFeatures = user.plan?.features?.map((f) => f.key) || [];
+  // SuperAdmin wild card entry
+  const hasSuperAdminOverride = isSuperAdmin;
 
-  const hasRoleAccess =
-    isAdmin ||
-    allowedRolesLower.length === 0 ||
-    allowedRolesLower.some((role) => userRoles.includes(role));
-
-  const hasPermissionAccess =
-    isAdmin ||
-    requiredPermissions.length === 0 ||
-    requiredPermissions.every((perm) => userPermissions.includes(perm));
-
-  const hasFeatureAccess =
-    isAdmin ||
-    requiredFeatures.length === 0 ||
-    requiredFeatures.every((feat) => userFeatures.includes(feat));
-
-  if (!hasRoleAccess || !hasPermissionAccess || !hasFeatureAccess) {
+  // 4. SUPER ADMIN ONLY ROUTE
+  if (superAdminOnly && !isSuperAdmin) {
     return (
       <Navigate
         to="/unauthorized"
         replace
-        state={{ deniedMessage: deniedMessage || "Access is denied." }}
+        state={{ deniedMessage: deniedMessage || "Access denied." }}
+      />
+    );
+  }
+
+  // 5. ROLE CHECK (STRICT MATCH ONLY)
+  const hasRoleAccess =
+    allowedRolesLower.length === 0
+      ? true
+      : allowedRolesLower.some((role) => userRoles.includes(role));
+
+  // 6. PERMISSION CHECK (STRICT)
+  const userPermissions =
+    user.roles?.flatMap((r) => r.permissions?.map((p) => p.key)) || [];
+
+  const hasPermissionAccess =
+    requiredPermissions.length === 0
+      ? true
+      : requiredPermissions.every((perm) => userPermissions.includes(perm));
+
+  // 7. FEATURE CHECK (STRICT)
+  const userFeatures = user.plan?.features?.map((f) => f.key) || [];
+
+  const hasFeatureAccess =
+    requiredFeatures.length === 0
+      ? true
+      : requiredFeatures.every((feat) => userFeatures.includes(feat));
+
+  // 8. FINAL GATE
+  if (
+    !hasSuperAdminOverride &&
+    (!hasRoleAccess || !hasPermissionAccess || !hasFeatureAccess)
+  ) {
+    return (
+      <Navigate
+        to="/unauthorized"
+        replace
+        state={{
+          deniedMessage: deniedMessage || "Access is denied.",
+        }}
       />
     );
   }

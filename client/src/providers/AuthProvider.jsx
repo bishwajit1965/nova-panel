@@ -1,39 +1,57 @@
 import { useEffect, useState } from "react";
 import AuthContext from "../contexts/AuthContext";
-import api from "../services/api";
+import { getMe, loginUser, logoutUser } from "../services/auth.service";
 
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [authReady, setAuthReady] = useState(false);
 
   useEffect(() => {
     const fetchMe = async () => {
       try {
         setLoading(true);
-        const res = await api.get("/auth/me", { withCredentials: true });
-        console.log("ME in auth provider", res);
-        const userMe = res.data?.data?.user;
-        if (userMe) {
-          setUser(userMe);
-          return userMe;
-        } else {
-          setUser(null);
+        const response = await getMe();
+        console.log("ME in auth provider", response);
+        if (response.success) {
+          const userMe = response.data?.user;
+          if (userMe) {
+            setUser(userMe || null);
+            setAuthReady(true);
+          } else {
+            setUser(null);
+          }
         }
       } catch (error) {
         setUser(null);
         console.error("Error fetching user data:", error);
       } finally {
-        setAuthReady(true);
         setLoading(false);
+        setAuthReady(true);
       }
     };
 
     fetchMe();
   }, []);
 
-  const logout = () => {
-    setUser(null);
+  const login = async (payload) => {
+    const response = await loginUser(payload);
+
+    if (response.success) {
+      const loggingUser = response.data?.user;
+      setUser(loggingUser);
+      return loggingUser;
+    }
+
+    return null;
+  };
+
+  const logout = async () => {
+    try {
+      await logoutUser();
+    } finally {
+      setUser(null);
+    }
   };
 
   const authInfo = {
@@ -41,6 +59,7 @@ const AuthProvider = ({ children }) => {
     authReady,
     setUser,
     loading,
+    login,
     logout,
   };
 

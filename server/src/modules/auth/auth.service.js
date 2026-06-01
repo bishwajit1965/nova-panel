@@ -1,6 +1,7 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import User from "../users/user.model.js";
+import Role from "../roles/role.model.js";
 import {
   generateAccessToken,
   generateRefreshToken,
@@ -15,6 +16,11 @@ import Plan from "../plans/plan.model.js";
 // REGISTER USER
 export const registerUser = async (data) => {
   const existingUser = await User.findOne({ email: data.email });
+  const defaultRole = await Role.findOne({ name: "user" });
+
+  if (!defaultRole) {
+    throw new AppError("Default user role not found", 500);
+  }
 
   if (existingUser) {
     throw new AppError("User already exists", 400);
@@ -32,6 +38,7 @@ export const registerUser = async (data) => {
     ...data,
     plan: defaultPlan._id,
     password: hashedPassword,
+    roles: [defaultRole._id],
   });
 
   const accessToken = generateAccessToken(user);

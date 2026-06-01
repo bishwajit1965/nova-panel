@@ -1,7 +1,46 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import ThemeToggle from "../../components/ui/ThemeToggle";
+import {
+  LucideLogIn,
+  LucideLogOut,
+  LucideMail,
+  LucideUser2,
+} from "lucide-react";
+import { useState } from "react";
+import { useAuth } from "../../hooks/useAuth";
+import Swal from "sweetalert2";
 
 const UsersNavbar = () => {
+  const [loading, setLoading] = useState(false);
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    try {
+      setLoading(true);
+      await logout();
+
+      Swal.fire({
+        position: "top-end",
+        icon: "success",
+        title: "Logout successful.",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      navigate("/auth/login", { replace: true });
+    } catch (err) {
+      Swal.fire({
+        position: "top-end",
+        icon: "error",
+        title: "Logout failed.",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      console.log(err);
+    } finally {
+      setLoading(false);
+    }
+  };
   const navItems = [
     { id: 0, name: "Dashboard", path: "/users" },
     { id: 1, name: "Plan", path: "/users/my-plan" },
@@ -124,18 +163,42 @@ const UsersNavbar = () => {
             tabIndex="-1"
             className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
           >
-            <li>
-              <a className="justify-between">
-                Profile
-                <span className="badge">New</span>
-              </a>
-            </li>
-            <li>
-              <a>Settings</a>
-            </li>
-            <li>
-              <a>Logout</a>
-            </li>
+            {user ? (
+              <>
+                <li>
+                  <a className="justify-between">
+                    Profile
+                    <span className="badge">New</span>
+                  </a>
+                </li>
+                <li>
+                  <a>Settings</a>
+                </li>
+                <li>
+                  <a href="#">
+                    <LucideMail size={16} /> {user?.email}
+                  </a>
+                </li>
+                <li>
+                  <a disabled={loading} onClick={handleLogout}>
+                    <LucideLogOut size={16} /> Logout
+                  </a>
+                </li>
+              </>
+            ) : (
+              <>
+                <li>
+                  <a href="/auth/register">
+                    <LucideUser2 size={16} /> Register
+                  </a>
+                </li>
+                <li>
+                  <a href="/auth/login">
+                    <LucideLogIn size={16} /> Login
+                  </a>
+                </li>
+              </>
+            )}
           </ul>
         </div>
       </div>

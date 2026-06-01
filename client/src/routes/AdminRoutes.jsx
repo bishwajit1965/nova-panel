@@ -6,11 +6,12 @@ import Dashboard from "../pages/admin/dashboard/Dashboard";
 import Settings from "../pages/admin/settings/Settings";
 import NotFound from "../pages/publicPages/NotFound";
 import ProtectedRoute from "./ProtectedRoutes";
+import { ROLES } from "../core/auth/auth.constants";
 
 export const adminRoutes = {
   path: "/admin",
   element: (
-    <ProtectedRoute allowedRoles={["superAdmin", "admin"]}>
+    <ProtectedRoute allowedRoles={[ROLES.SUPER_ADMIN, ROLES.ADMIN]}>
       <AdminLayout />
     </ProtectedRoute>
   ),

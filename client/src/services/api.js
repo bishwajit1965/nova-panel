@@ -24,7 +24,19 @@ export default api;
 //   withCredentials: true,
 //   timeOut: 15000,
 // });
+// let isRefreshing = false;
+// let refreshQueue = [];
+// const processQueue = (error, token = null) => {
+//   refreshQueue.forEach((prom) => {
+//     if (error) {
+//       prom.reject(error);
+//     } else {
+//       prom.resolve(token);
+//     }
+//   });
 
+//   refreshQueue = [];
+// };
 // // -----------------------------
 // // REQUEST INTERCEPTOR
 // // -----------------------------
@@ -45,20 +57,44 @@ export default api;
 //   async (error) => {
 //     const originalRequest = error.config;
 
-//     if (error.response?.status === 401 && !originalRequest._retry) {
-//       originalRequest._retry = true;
-
-//       try {
-//         await api.post("/auth/refresh");
-
-//         return api(originalRequest);
-//       } catch (err) {
-//         // refresh failed → real logout
-//         return Promise.reject(err);
-//       }
+//     if (error.response?.status !== 401) {
+//       return Promise.reject(error);
 //     }
 
-//     return Promise.reject(error);
+//     // prevent infinite loop
+//     if (originalRequest._retry) {
+//       return Promise.reject(error);
+//     }
+
+//     originalRequest._retry = true;
+
+//     // If refresh already running → queue request
+//     if (isRefreshing) {
+//       return new Promise((resolve, reject) => {
+//         refreshQueue.push({
+//           resolve,
+//           reject,
+//         });
+//       })
+//         .then(() => api(originalRequest))
+//         .catch((err) => Promise.reject(err));
+//     }
+
+//     isRefreshing = true;
+
+//     try {
+//       await api.post("/auth/refresh");
+
+//       processQueue(null);
+
+//       return api(originalRequest);
+//     } catch (err) {
+//       processQueue(err);
+
+//       return Promise.reject(err);
+//     } finally {
+//       isRefreshing = false;
+//     }
 //   },
 // );
 

@@ -1,7 +1,6 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import ThemeToggle from "../../components/ui/ThemeToggle";
 import Logo from "../../components/ui/Logo";
-import { logoutUser } from "../../services/auth.service";
 import { useAuth } from "../../hooks/useAuth";
 import { useState } from "react";
 import Swal from "sweetalert2";
@@ -9,32 +8,28 @@ import {
   LucideLogIn,
   LucideLogOut,
   LucideMail,
+  LucideUser,
   LucideUser2,
 } from "lucide-react";
 
 const PublicNavbar = () => {
   const [loading, setLoading] = useState(false);
-  const { setUser, user, logout } = useAuth();
+  const { user, logout } = useAuth();
   const navigate = useNavigate();
 
   const handleLogout = async () => {
     try {
       setLoading(true);
-      const res = await logoutUser();
+      await logout();
 
-      if (res.success) {
-        setUser(null);
-
-        Swal.fire({
-          position: "top-end",
-          icon: "success",
-          title: "Logout successful.",
-          showConfirmButton: false,
-          timer: 1500,
-        });
-        logout();
-        navigate("/auth/login", { replace: true });
-      }
+      Swal.fire({
+        position: "top-end",
+        icon: "success",
+        title: "Logout successful.",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      navigate("/auth/login", { replace: true });
     } catch (err) {
       Swal.fire({
         position: "top-end",
@@ -185,6 +180,11 @@ const PublicNavbar = () => {
                 </li>
                 <li>
                   <a>Settings</a>
+                </li>
+                <li>
+                  <a href="#">
+                    <LucideUser size={16} /> {user?.name}
+                  </a>
                 </li>
                 <li>
                   <a href="#">

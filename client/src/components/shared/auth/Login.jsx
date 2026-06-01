@@ -4,7 +4,6 @@ import Swal from "sweetalert2";
 import { LucideEye, LucideEyeClosed, LucideLogIn } from "lucide-react";
 import useValidator from "../../../hooks/useValidator";
 import { useAuth } from "../../../hooks/useAuth";
-import { loginUser } from "../../../services/auth.service";
 import { validationRules } from "../../../../../server/src/modules/auth/auth.validation";
 import BrandLogo from "../brandLogo/BrandLogo";
 import Button from "../../ui/Button";
@@ -20,8 +19,8 @@ const Login = () => {
 
   const location = useLocation();
   const navigate = useNavigate();
-  const { user, setUser } = useAuth();
-  console.log("USER DATA", user);
+  const { login, setUser } = useAuth();
+
   const handleChange = (e) => {
     setForm({
       ...form,
@@ -43,68 +42,57 @@ const Login = () => {
     if (!validate()) return;
     try {
       setLoading(true);
-      const res = await loginUser(form);
-      console.log("RESPONSE IN LOGIN PAGE", res);
-      if (res.success) {
-        const loggedUser = res.data?.user;
-        console.log("LOGGED USER", loggedUser);
-        // store user in Auth Context
-        setUser(loggedUser);
+      const res = await login(form);
+      // Important !!! to use setUser(res) to update the latest data
+      setUser(res);
 
-        Swal.fire({
-          position: "top-end",
-          icon: "success",
-          title: "Login successful.",
-          showConfirmButton: false,
-          timer: 1500,
-        });
+      Swal.fire({
+        position: "top-end",
+        icon: "success",
+        title: "Login successful.",
+        showConfirmButton: false,
+        timer: 1500,
+      });
 
-        // REDIRECT GATE
-        const userRoles = (loggedUser?.roles || []).map((r) =>
-          (typeof r === "string" ? r : r.name).toLowerCase(),
-        );
-        console.log("USER ROLES", userRoles);
+      // REDIRECT GATE TO LAND USER ON ROLE-WISE PAGE
+      const userRoles = (res?.roles || []).map((r) =>
+        (typeof r === "string" ? r : r.name).toLowerCase(),
+      );
 
-        const from = location.state?.from?.pathname;
+      console.log("USERS ROLES", userRoles);
 
-        console.log("From", from);
-        const getDefaultRoute = (roles) => {
-          if (roles.includes("superadmin")) return "/superAdmin/dashboard";
-          if (roles.includes("admin")) return "/admin/dashboard";
-          if (roles.includes("moderator")) return "/moderator/dashboard";
-          return "/";
-        };
+      const from = location.state?.from?.pathname;
 
-        const isValidFrom = (from, roles) => {
-          if (!from) return false;
+      const getDefaultRoute = (roles) => {
+        if (roles.includes("superadmin")) return "/superAdmin/dashboard";
+        if (roles.includes("admin")) return "/admin/dashboard";
+        if (roles.includes("moderator")) return "/moderator/dashboard";
+        if (roles.includes("user")) return "/users";
+        return "/";
+      };
 
-          if (roles.includes("superadmin")) {
-            return from.startsWith("/superAdmin") || from === "/";
-          }
+      const isValidFrom = (from, roles) => {
+        if (!from) return false;
+        if (roles.includes("superadmin")) {
+          return from.startsWith("/superAdmin") || from === "/";
+        }
+        if (roles.includes("admin")) {
+          return from.startsWith("/admin") || from === "/";
+        }
+        if (roles.includes("moderator")) {
+          return from.startsWith("/moderator") || from === "/";
+        }
+        if (roles.includes("user")) {
+          return from.startsWith("/users") || from === "/";
+        }
+        return false;
+      };
 
-          if (roles.includes("admin")) {
-            return from.startsWith("/admin") || from === "/";
-          }
+      const redirectTo = isValidFrom(from, userRoles)
+        ? from
+        : getDefaultRoute(userRoles);
 
-          if (roles.includes("moderator")) {
-            return from.startsWith("/moderator") || from === "/";
-          }
-
-          if (roles.includes("user")) {
-            return from.startsWith("/users") || from === "/";
-          }
-
-          return false;
-        };
-
-        const redirectTo = isValidFrom(from, userRoles)
-          ? from
-          : getDefaultRoute(userRoles);
-
-        console.log("Redirect to", redirectTo);
-
-        navigate(redirectTo, { replace: true });
-      }
+      navigate(redirectTo, { replace: true });
     } catch (err) {
       Swal.fire({
         position: "top-end",
@@ -113,7 +101,7 @@ const Login = () => {
         showConfirmButton: false,
         timer: 1500,
       });
-      console.log(err);
+      console.error(err);
     } finally {
       setLoading(false);
     }

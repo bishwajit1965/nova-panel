@@ -1,3 +1,4 @@
+import { ROLES } from "../core/auth/auth.constants";
 import SuperAdminLayout from "../layouts/superAdmin/SuperAdminLayout";
 import NotFound from "../pages/publicPages/NotFound";
 import Dashboard from "../pages/superAdmin/dashboard/Dashboard";
@@ -10,7 +11,7 @@ import ProtectedRoute from "./ProtectedRoutes";
 export const superAdminRoutes = {
   path: "/superAdmin",
   element: (
-    <ProtectedRoute allowedRoles={["superadmin"]}>
+    <ProtectedRoute allowedRoles={[ROLES.SUPER_ADMIN]}>
       <SuperAdminLayout />
     </ProtectedRoute>
   ),

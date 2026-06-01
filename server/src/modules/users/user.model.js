@@ -24,12 +24,6 @@ const userSchema = new mongoose.Schema(
         ref: "Role",
       },
     ],
-
-    primaryRole: {
-      type: String,
-      default: "user",
-    },
-
     isActive: {
       type: Boolean,
       default: true,

@@ -2,7 +2,7 @@ const Logo = () => {
   return (
     <div className="flex items-center justify-center space-x-1">
       <div className="flex items-center justify-center lg:w-8 lg:h-8 w-6 h-6 p-2 rounded-full bg-blue-600 dark:bg-amber-600 text-white shadow-md">
-        <span className="lg:font-extrabold lg:text-2xl text-xl font-stretch-ultra-expanded text-shadow-2xs">
+        <span className="flex items-center justify-center lg:font-extrabold lg:text-2xl text-xl font-stretch-ultra-expanded text-shadow-2xs">
           N
         </span>
       </div>

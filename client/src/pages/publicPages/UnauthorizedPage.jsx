@@ -15,9 +15,11 @@ const UnauthorizedPage = () => {
           size={50}
           className="text-red-500 mx-auto mb-4"
         />
-        <h1 className="text-4xl font-bold mb-2">You are Unauthorized</h1>
+        <h1 className="lg:text-3xl text-xl lg:font-extrabold font-bold mb-2">
+          Unauthorized Access Attempt.
+        </h1>
 
-        {user && <p>{user?.name} is unauthorized, so</p>}
+        {user && <p>{user?.name} is unauthorized here.</p>}
 
         {deniedMessage && (
           <p className="text-lg text-gray-600 mb-6">{deniedMessage}</p>
@@ -29,7 +31,11 @@ const UnauthorizedPage = () => {
           </Button>
 
           {!isAuthenticated && (
-            <Button href="/login" variant="success" icon={LucideIcon.LogIn}>
+            <Button
+              href="/auth/login"
+              variant="success"
+              icon={LucideIcon.LogIn}
+            >
               Login
             </Button>
           )}

@@ -5,13 +5,13 @@ import MyUploads from "../pages/user/uploads/MyUploads";
 import Dashboard from "../pages/user/dashboard/Dashboard";
 import Settings from "../pages/user/settings/Settings";
 import NotFound from "../pages/publicPages/NotFound";
-// import ProtectedRoute from "../guards/ProtectedRoute";
 import ProtectedRoute from "./ProtectedRoutes";
+import { ROLES } from "../core/auth/auth.constants";
 
 export const userRoutes = {
   path: "/users",
   element: (
-    <ProtectedRoute allowedRoles={["users"]}>
+    <ProtectedRoute allowedRoles={[ROLES.USER]}>
       <UserLayout />
     </ProtectedRoute>
   ),
