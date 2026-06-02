@@ -10,6 +10,11 @@ const API_PATHS = {
     KEY: ["superAdmin-roles"],
   },
 
+  SUPER_ADMIN_PERMISSIONS: {
+    ENDPOINT: "permissions",
+    KEY: ["superAdmin-permissions"],
+  },
+
   /**========================
    * ADMIN ENDPOINTS
    *=========================*/

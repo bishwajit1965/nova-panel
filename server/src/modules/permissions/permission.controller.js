@@ -18,7 +18,7 @@ export const createPermission = asyncHandler(async (req, res) => {
 export const getAllPermissions = asyncHandler(async (req, res) => {
   const permissions = await getAllPermissionsService();
 
-  return sendResponse(res, 200, "Permissions fetched", { permissions });
+  return sendResponse(res, 200, "Permissions fetched", permissions);
 });
 
 export const getPermissionById = asyncHandler(async (req, res) => {

@@ -10,14 +10,12 @@ const router = express.Router();
  * Only admin & superAdmin can manage permissions
  */
 router.use(authMiddleware);
-router.use(roleMiddleware("admin", "superAdmin"));
+
+router.use(roleMiddleware("superadmin", "admin"));
 
 /**
  * 🧩 PERMISSION CRUD ROUTES
  */
-
-// Create Permission
-router.post("/", permissionController.createPermission);
 
 // Get all Permissions
 router.get("/all", permissionController.getAllPermissions);
@@ -25,10 +23,13 @@ router.get("/all", permissionController.getAllPermissions);
 // Get Permission by ID
 router.get("/:id", permissionController.getPermissionById);
 
+// Create Permission
+router.post("/create", permissionController.createPermission);
+
 // Update Permission
 router.patch("/edit/:id", permissionController.updatePermission);
 
 // Delete Permission
-router.delete("/:id", permissionController.deletePermission);
+router.delete("/delete/:id", permissionController.deletePermission);
 
 export default router;
