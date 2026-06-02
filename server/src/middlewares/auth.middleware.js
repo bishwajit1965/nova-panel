@@ -13,6 +13,8 @@ export const authMiddleware = async (req, res, next) => {
       ? authHeader.split(" ")[1]
       : cookieToken;
 
+    console.log("Token from header or cookie:", token);
+
     if (!token) {
       throw new AppError("Unauthorized", 401);
     }

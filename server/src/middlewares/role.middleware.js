@@ -4,6 +4,7 @@ export const roleMiddleware = (allowedRoles = []) => {
   return (req, res, next) => {
     try {
       const user = req.user;
+      console.log("User in roleMiddleware:", user);
 
       if (!user) {
         return next(new AppError("User not found.", 400));
@@ -12,7 +13,7 @@ export const roleMiddleware = (allowedRoles = []) => {
 
       // extract role names
       const roleNames = userRoles.map((role) =>
-        typeof role === "string" ? role : role.name,
+        typeof role === "string" ? role : role.name.toLowerCase(),
       );
 
       const hasRole = roleNames.some((role) => allowedRoles.includes(role));

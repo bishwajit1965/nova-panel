@@ -18,6 +18,11 @@ export const supAdminSidebarLinks = [
     icon: Users,
   },
   {
+    label: "Roles",
+    path: "/superAdmin/roles",
+    icon: Users,
+  },
+  {
     label: "Uploads",
     path: "/superAdmin/uploads",
     icon: Upload,

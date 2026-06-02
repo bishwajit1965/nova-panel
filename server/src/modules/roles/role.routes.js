@@ -16,7 +16,7 @@ import { roleMiddleware } from "../../middlewares/role.middleware.js";
 const router = express.Router();
 
 router.use(authMiddleware);
-router.use(roleMiddleware("admin", "superAdmin"));
+router.use(roleMiddleware("superadmin", "admin"));
 
 router.get("/all", getAllRoles);
 router.get("/:id", getRoleById);

@@ -10,13 +10,13 @@ const UnauthorizedPage = () => {
 
   return (
     <div className="min-h-[calc(100vh-200px)] flex items-center">
-      <div className="lg:min-w-lg border p-8 bg-base-300 border-base-content/15 rounded-lg shadow-lg hover:shadow-xl space-y-3 text-center text-base-content/70">
+      <div className="lg:min-w-lg border p-8 bg-base-300 border-base-content/5 rounded-lg shadow-lg hover:shadow-xl space-y-3 text-center text-base-content/70">
         <LucideIcon.AlertCircle
           size={50}
           className="text-red-500 mx-auto mb-4"
         />
         <h1 className="lg:text-3xl text-xl lg:font-extrabold font-bold mb-2">
-          Unauthorized Access Attempt.
+          Unauthorized to Get Access!
         </h1>
 
         {user && <p>{user?.name} is unauthorized here.</p>}

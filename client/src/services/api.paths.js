@@ -1,7 +1,18 @@
 const API_PATHS = {
-  // =========================
-  // ADMIN
-  // =========================
+  /**
+   * This file defines the API endpoints and their corresponding query keys for both admin and user (client) operations. It serves as a centralized location for managing API paths, making it easier to maintain and update them as needed. Each endpoint is associated with a unique key that can be used for caching and state management in the application.
+   */
+  /**=======================
+   * SUPER-ADMIN ENDPOINTS
+   *========================*/
+  SUPER_ADMIN_ROLES: {
+    ENDPOINT: "roles",
+    KEY: ["superAdmin-roles"],
+  },
+
+  /**========================
+   * ADMIN ENDPOINTS
+   *=========================*/
 
   ADMIN_USERS: {
     ENDPOINT: "admin/users",
@@ -18,9 +29,9 @@ const API_PATHS = {
     KEY: ["admin-analytics"],
   },
 
-  // =========================
-  // USER (CLIENT)
-  // =========================
+  /**=========================
+   * USER (CLIENT)
+   *==========================*/
 
   USERS: {
     ENDPOINT: "client/users",
@@ -42,18 +53,18 @@ const API_PATHS = {
     KEY: ["cart"],
   },
 
-  // =========================
-  // CATEGORIES (CORE ENTITY)
-  // =========================
+  /**=========================
+   * CATEGORIES (CORE ENTITY)
+   *==========================*/
 
   CATEGORIES: {
     ENDPOINT: "categories",
     KEY: ["categories"],
   },
 
-  // =========================
-  // PERMISSIONS (CORE ENTITY)
-  // =========================
+  /**=========================
+   * PERMISSIONS (CORE ENTITY)
+   *==========================*/
   PERMISSIONS: {
     ENDPOINT: "permissions",
     KEY: ["permissions"],

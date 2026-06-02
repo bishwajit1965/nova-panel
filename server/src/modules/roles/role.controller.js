@@ -20,9 +20,7 @@ import {
 export const createRole = asyncHandler(async (req, res) => {
   const role = await createRoleService(req.body);
 
-  return sendResponse(res, 201, "Role created successfully.", {
-    role,
-  });
+  return sendResponse(res, 201, "Role created successfully.", role);
 });
 
 /**
@@ -31,9 +29,7 @@ export const createRole = asyncHandler(async (req, res) => {
 export const getAllRoles = asyncHandler(async (req, res) => {
   const roles = await getAllRolesService();
 
-  return sendResponse(res, 200, "Roles fetched successfully.", {
-    roles,
-  });
+  return sendResponse(res, 200, "Roles fetched successfully.", roles);
 });
 
 /**
@@ -53,9 +49,7 @@ export const getRoleById = asyncHandler(async (req, res) => {
 export const updateRole = asyncHandler(async (req, res) => {
   const role = await updateRoleService(req.params.id, req.body);
 
-  return sendResponse(res, 200, "Role updated successfully.", {
-    role,
-  });
+  return sendResponse(res, 200, "Role update successful", role);
 });
 
 /**
@@ -97,5 +91,5 @@ export const assignPermissionsToRole = asyncHandler(async (req, res) => {
 export const deleteRole = asyncHandler(async (req, res) => {
   await deleteRoleService(req.params.id);
 
-  return sendResponse(res, 200, "Role deleted successfully.");
+  return sendResponse(res, 200, "Role delete successfully.");
 });
