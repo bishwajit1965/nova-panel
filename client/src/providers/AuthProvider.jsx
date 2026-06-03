@@ -22,6 +22,7 @@ const AuthProvider = ({ children }) => {
         console.error("Error fetching user data:", error);
       } finally {
         setAuthReady(true);
+
         setLoading(false);
       }
     };

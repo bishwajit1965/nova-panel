@@ -3,39 +3,17 @@ import axios from "axios";
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL || "http://localhost:5000/api/v1",
   withCredentials: true,
-  timeOut: 15000,
+});
+
+export const refreshApi = axios.create({
+  baseURL: import.meta.env.VITE_API_URL || "http://localhost:5000/api/v1",
+  withCredentials: true,
 });
 
 let isRefreshing = false;
 let refreshQueue = [];
 
-const processQueue = (error, token = null) => {
-  refreshQueue.forEach((prom) => {
-    if (error) {
-      prom.reject(error);
-    } else {
-      prom.resolve(token);
-    }
-  });
-
-  refreshQueue = [];
-};
-
-// -----------------------------
-// REQUEST INTERCEPTOR
-// -----------------------------
-api.interceptors.request.use((config) => {
-  if (config.data instanceof FormData) {
-    delete config.headers["Content-Type"];
-  }
-
-  return config;
-});
-
-// -----------------------------
-// RESPONSE INTERCEPTOR (15 min fix)
-// -----------------------------
-
+// Only handle FormData properly
 api.interceptors.response.use(
   (res) => res,
   async (error) => {
@@ -45,35 +23,31 @@ api.interceptors.response.use(
       return Promise.reject(error);
     }
 
-    // prevent infinite loop
     if (originalRequest._retry) {
       return Promise.reject(error);
     }
 
     originalRequest._retry = true;
 
-    // If refresh already running → queue request
+    // 🔒 If refresh already running → queue request
     if (isRefreshing) {
       return new Promise((resolve, reject) => {
-        refreshQueue.push({
-          resolve,
-          reject,
-        });
-      })
-        .then(() => api(originalRequest))
-        .catch((err) => Promise.reject(err));
+        refreshQueue.push({ resolve, reject });
+      }).then(() => api(originalRequest));
     }
 
     isRefreshing = true;
 
     try {
-      await api.post("/auth/refresh");
+      await refreshApi.post("/auth/refresh");
 
-      processQueue(null);
+      refreshQueue.forEach((p) => p.resolve());
+      refreshQueue = [];
 
       return api(originalRequest);
     } catch (err) {
-      processQueue(err);
+      refreshQueue.forEach((p) => p.reject(err));
+      refreshQueue = [];
 
       return Promise.reject(err);
     } finally {
@@ -82,48 +56,24 @@ api.interceptors.response.use(
   },
 );
 
-export default api;
+// api.interceptors.response.use(
+//   (res) => res,
+//   async (error) => {
+//     const originalRequest = error.config;
 
-// import axios from "axios";
-// const api = axios.create({
-//   baseURL: import.meta.env.VITE_API_URL || "http://localhost:5000/api/v1",
-//   withCredentials: true, // ✅ Allows cookies & authentication tokens
-// });
-
-// // Add a request interceptor to set Content-type dynamically
-// api.interceptors.request.use(
-//   (config) => {
-//     if (!config.headers["Content-Type"]) {
-//       // set Content-type to JSON if not already specified
-//       if (config.data instanceof FormData) {
-//         delete config.headers["Content-Type"];
-//       } else {
-//         config.headers["Content-Type"] = "application/json";
-//       }
+//     if (error.response?.status !== 401 || originalRequest._retry) {
+//       return Promise.reject(error);
 //     }
-//     return config;
-//   },
 
-//   (error) => {
-//     return Promise.reject(error);
+//     originalRequest._retry = true;
+
+//     try {
+//       await refreshApi.post("/auth/refresh"); // 🔥 IMPORTANT FIX
+//       return api(originalRequest);
+//     } catch (err) {
+//       return Promise.reject(err);
+//     }
 //   },
 // );
-// export default api;
 
-// import axios from "axios";
-// const api = axios.create({
-//   baseURL: import.meta.env.VITE_API_URL || "http://localhost:5000/api/v1",
-//   withCredentials: true,
-// });
-
-// // Only handle FormData properly
-// api.interceptors.request.use((config) => {
-//   if (config.data instanceof FormData) {
-//     // Let browser set boundary automatically
-//     delete config.headers["Content-Type"];
-//   }
-
-//   return config;
-// });
-
-// export default api;
+export default api;
