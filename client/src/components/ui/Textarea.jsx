@@ -48,18 +48,12 @@ const Textarea = forwardRef(
               "textarea textarea-bordered w-full",
               Icon && "pl-10",
               error && "textarea-error",
-              error &&
-                "textarea-error border-red-500 focus:border-red-500 focus:ring-red-500",
               className,
             )}
             {...props}
           />
         </div>
-        {error && (
-          <p className="text-xs text-red-500 flex justify-items-start">
-            {error}
-          </p>
-        )}
+
         {error && (
           <label className="label flex justify-items-start">
             <span className="label-text-alt text-error text-xs">{error}</span>

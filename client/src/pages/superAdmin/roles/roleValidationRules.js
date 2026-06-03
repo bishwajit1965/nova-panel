@@ -1,6 +1,6 @@
 export const roleValidationRules = {
   name: {
-    required: "Role name is required",
+    required: { message: "Role name is required" },
     minLength: {
       value: 3,
       message: "Role name must be at least 3 characters",
@@ -11,17 +11,14 @@ export const roleValidationRules = {
     },
   },
   description: {
+    required: { message: "Role description is required" },
     maxLength: {
       value: 255,
       message: "Role description must be less than 255 characters",
     },
   },
   slug: {
-    required: "Role slug is required",
-    // pattern: {
-    //   value: /^[a-z0-9]+(?:-[a-z0-9]+)*$/,
-    //   message: "Role slug must be lowercase letters, numbers, and hyphens only",
-    // },
+    required: { message: "Role slug is required" },
     minLength: {
       value: 3,
       message: "Role slug must be at least 3 characters",

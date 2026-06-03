@@ -5,7 +5,7 @@ const projectConfig = {
   },
 
   auth: {
-    accessTokenExpiry: "15d",
+    accessTokenExpiry: "1m",
     refreshTokenExpiry: "7d",
   },
 

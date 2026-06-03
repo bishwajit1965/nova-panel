@@ -12,7 +12,6 @@ import ConfirmDialogue from "../../../components/ui/ConfirmDialogue";
 
 const RolesManagement = () => {
   const [roleToUpdate, setRoleToUpdate] = useState(null);
-  const [loading, setLoading] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(null);
   const [form, setForm] = useState({
     name: "",
@@ -142,7 +141,6 @@ const RolesManagement = () => {
   const handleUpdateRole = (e) => {
     e.preventDefault();
     try {
-      setLoading(true);
       if (!validate()) return;
       const payload = roleToUpdate
         ? {
@@ -172,8 +170,6 @@ const RolesManagement = () => {
       });
     } catch (error) {
       console.error("Error in creating/updating role!", error);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -212,7 +208,7 @@ const RolesManagement = () => {
         <div className="lg:col-span-4 col-span-12 border border-base-content/15 rounded-xl shadow-sm hover:shadow-xl p-4">
           <RoleForm
             roleToUpdate={roleToUpdate}
-            loading={loading}
+            loading={roleMutation.isPending}
             onCancel={handleCancelRoleUpdate}
             onUpdate={handleUpdateRole}
             onHandleChange={handleChange}

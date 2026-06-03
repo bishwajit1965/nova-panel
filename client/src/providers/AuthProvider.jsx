@@ -13,21 +13,16 @@ const AuthProvider = ({ children }) => {
         setLoading(true);
         const response = await getMe();
         console.log("ME in auth provider", response);
-        if (response.success) {
-          const userMe = response.data?.user;
-          if (userMe) {
-            setUser(userMe || null);
-            setAuthReady(true);
-          } else {
-            setUser(null);
-          }
+        if (response.success && response.data?.user) {
+          setUser(response.data?.user);
+        } else {
+          setUser(null);
         }
       } catch (error) {
-        setUser(null);
         console.error("Error fetching user data:", error);
       } finally {
-        setLoading(false);
         setAuthReady(true);
+        setLoading(false);
       }
     };
 

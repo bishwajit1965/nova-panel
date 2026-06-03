@@ -12,24 +12,12 @@ import { useApiMutation } from "../../../hooks/useApiMutation";
 
 const PermissionsManagement = () => {
   const [permissionToUpdate, setPermissionToUpdate] = useState(null);
-  const [loading, setLoading] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(null);
   const [form, setForm] = useState({
     key: "",
     module: "",
     description: "",
   });
-
-  /* -------->  Handlers --------> */
-  const handleSelectPermissionEdit = (permissionId) => {
-    const permission = permissions.find((p) => p._id === permissionId);
-    setPermissionToUpdate(permission);
-    setForm({
-      key: permission.key || "",
-      module: permission.module || "",
-      description: permission.description || "",
-    });
-  };
 
   /*** -----> Validator integration -----> */
   const { errors, validate } = useValidator(permissionValidationRules, {
@@ -38,25 +26,7 @@ const PermissionsManagement = () => {
     description: form.description,
   });
 
-  const handleChange = (e) => {
-    setForm({
-      ...form,
-      [e.target.name]: e.target.value,
-    });
-  };
-
-  // Cancel update handler
-  const handleCancelPermissionUpdate = (e) => {
-    e.preventDefault();
-    setPermissionToUpdate(null);
-    setForm({
-      key: "",
-      module: "",
-      description: "",
-    });
-  };
-
-  // Fetches all permissions for super admin
+  /*** ------> Permission Query Mutation  fetch permissions API Hook ------> */
   const {
     data: permissions,
     isLoading: permissionsLoading,
@@ -144,11 +114,47 @@ const PermissionsManagement = () => {
 
   console.log("Permissions data", permissions);
 
-  // Update Permissions  Handler
+  /*** ------> PERMISSION HANDLERS ------> */
+
+  //  Handler to select permission for editing
+  const handleSelectPermissionEdit = (permissionId) => {
+    const permission = permissions.find((p) => p._id === permissionId);
+    setPermissionToUpdate(permission);
+    setForm({
+      key: permission.key || "",
+      module: permission.module || "",
+      description: permission.description || "",
+    });
+  };
+
+  // Handle form input changes
+  const handleChange = (e) => {
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  // Cancel update handler
+  const handleCancelPermissionUpdate = (e) => {
+    e.preventDefault();
+    try {
+      setPermissionToUpdate(null);
+      setForm({
+        key: "",
+        module: "",
+        description: "",
+      });
+    } catch (error) {
+      console.error("Error in canceling permission update!", error);
+    }
+  };
+
+  // Update Permissions Handler
   const handleUpdatePermission = (e) => {
     e.preventDefault();
     try {
-      setLoading(true);
+      // setLoading(true);
       if (!validate()) return;
       const payload = permissionToUpdate
         ? {
@@ -179,14 +185,16 @@ const PermissionsManagement = () => {
     } catch (error) {
       console.error("Error in creating/updating permission!", error);
     } finally {
-      setLoading(false);
+      // setLoading(false);
     }
   };
 
+  // Handler to confirm delete permission
   const handleConfirmDeletePermission = (permission) => {
     setConfirmDelete(permission);
   };
 
+  // Handler to delete permission
   const handleDeletePermission = (id) => {
     const payload = id;
     permissionDeleteMutation.mutate(payload, {
@@ -215,15 +223,16 @@ const PermissionsManagement = () => {
   return (
     <div>
       <div className="grid lg:grid-cols-12 gap-4 justify-between">
-        <div className="lg:col-span-4 col-span-12">
+        <div className="lg:col-span-4 col-span-12 border border-base-content/15 rounded-xl shadow-sm hover:shadow-xl p-4">
           <PermissionForm
             permissionToUpdate={permissionToUpdate}
             onUpdate={handleUpdatePermission}
             formData={form}
             errors={errors}
             onHandleChange={handleChange}
-            loading={loading}
+            loading={permissionMutation.isPending}
             onCancel={handleCancelPermissionUpdate}
+            perMutation={permissionDeleteMutation}
           />
         </div>
         <div className="lg:col-span-8 col-span-12">
