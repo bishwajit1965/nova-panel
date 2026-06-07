@@ -1,4 +1,5 @@
 import {
+  CircleCheckIcon,
   Edit,
   Edit2,
   Eye,
@@ -14,7 +15,7 @@ import {
 import { FaFilePdf } from "react-icons/fa";
 
 import Button from "./Button";
-import { cn } from "../../lib/utils";
+import { cn } from "../lib/utils";
 
 const icons = {
   edit: Edit,
@@ -25,6 +26,7 @@ const icons = {
   add: PlusCircleIcon,
   close: X,
   download: LucideDownload,
+  select: CircleCheckIcon,
   pdf: FaFilePdf,
 };
 
@@ -38,6 +40,7 @@ const labels = {
   close: "Close",
   download: "Download",
   pdf: "PDF",
+  select: "Select",
 };
 
 export function MiniIconButton({

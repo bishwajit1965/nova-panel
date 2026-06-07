@@ -20,7 +20,9 @@ export const createRoleService = async (payload) => {
  * GET ALL ROLES
  */
 export const getAllRolesService = async () => {
-  const roles = await Role.find().sort({ createdAt: -1 });
+  const roles = await Role.find()
+    .populate("permissions")
+    .sort({ createdAt: -1 });
   return roles;
 };
 

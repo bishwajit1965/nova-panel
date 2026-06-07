@@ -6,11 +6,15 @@ import * as userController from "./user.controller.js";
 const router = express.Router();
 
 router.use(authMiddleware);
-router.use(roleMiddleware("admin"));
+router.use(roleMiddleware("superadmin"));
 
 /**
  * 👤 USER ROUTES
  */
 router.get("/me", userController.getMe);
+
+router.get("/all", userController.getAllUsers);
+
+router.patch("/edit/:userId", userController.updateUserRoles);
 
 export default router;

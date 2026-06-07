@@ -23,7 +23,7 @@ router.get("/:id", getRoleById);
 router.post("/create", createRole);
 router.patch("/edit/:id", updateRole);
 router.patch("/assign/:id", assignRolesToUser); // :id => userId
-router.patch("/assign/permission/:id", assignPermissionsToRole); //:id => roleId
+router.patch("/edit/:roleId", assignPermissionsToRole); //:id => roleId
 router.delete("/delete/:id", deleteRole);
 
 export default router;

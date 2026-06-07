@@ -6,7 +6,7 @@ import {
   Settings,
 } from "lucide-react";
 
-export const sidebarLinks = [
+export const adminSidebarLinks = [
   {
     label: "Dashboard",
     path: "/admin/dashboard",

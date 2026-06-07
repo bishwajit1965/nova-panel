@@ -222,7 +222,7 @@ const PermissionsManagement = () => {
 
   return (
     <div>
-      <div className="grid lg:grid-cols-12 gap-4 justify-between">
+      <div className="grid lg:grid-cols-12 grid-cols-1 gap-4 justify-between">
         <div className="lg:col-span-4 col-span-12 border border-base-content/15 rounded-xl shadow-sm hover:shadow-xl p-4">
           <PermissionForm
             permissionToUpdate={permissionToUpdate}

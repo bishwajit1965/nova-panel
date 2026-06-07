@@ -139,11 +139,11 @@ const SuperAdminLayout = () => {
           <div className="flex items-center justify-between">
             <div className="lg:col-span-10 col-span-12">
               <div className="flex items-center justify-between gap-2">
-                <a className="lg:text-xl text-normal font-bold m-0" href="/">
+                <a className="lg:text-xl text-xs lg:font-bold m-0" href="/">
                   Nova Panel
                 </a>
                 <LucideChevronRight size={16} />{" "}
-                <span className="text-gray-500 font-bold lg:text-xl">
+                <span className="text-gray-500 lg:font-bold lg:text-xl text-xs">
                   {page === "Dashboard" ? "Home" : page}
                 </span>
               </div>
@@ -212,9 +212,10 @@ const SuperAdminLayout = () => {
             </div>
           </div>
         </header>
-
         {/* Outlet */}
-        <div className="p-4">{<Outlet />}</div>
+        <div className="p-4 max-h-[calc(100vh-100px)] overflow-y-auto text-base-content/80">
+          {<Outlet />}
+        </div>
 
         {/* Footer */}
         <footer className="absolute left-0 right-0 bottom-0 bg-gray-200 text-gray-600 p-2 text-center border-t border-slate-300">

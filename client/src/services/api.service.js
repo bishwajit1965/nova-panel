@@ -6,7 +6,7 @@ const API_BASE_URL =
 const apiService = {
   async getAll(endpoint) {
     const res = await api.get(`${API_BASE_URL}/${endpoint}`);
-    console.log("Raw response from API:", res.data); // 👈 log here to confirm
+    console.log("Raw response from API:", res.data?.data); // 👈 log here to confirm
     return res.data;
   },
 

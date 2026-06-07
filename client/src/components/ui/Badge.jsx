@@ -8,7 +8,7 @@ const Badge = ({ color = "blue", children }) => {
 
   return (
     <span
-      className={`px-2.5 py-0.75 shadow-sm rounded-full text-sm font-medium border border-base-content/15 ${colors[color]}`}
+      className={`px-2.5 py-0.75 mr-1.5 shadow-sm rounded-full text-sm font-medium border border-base-content/10 ${colors[color]}`}
     >
       {children}
     </span>

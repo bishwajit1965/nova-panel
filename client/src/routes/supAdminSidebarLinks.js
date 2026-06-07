@@ -4,6 +4,7 @@ import {
   Upload,
   CreditCard,
   Settings,
+  CreditCardIcon,
 } from "lucide-react";
 
 export const supAdminSidebarLinks = [
@@ -26,6 +27,16 @@ export const supAdminSidebarLinks = [
     label: "Permissions",
     path: "/superAdmin/permissions",
     icon: Users,
+  },
+  {
+    label: "Roles & Permissions",
+    path: "/superAdmin/roles-permissions-control",
+    icon: Users,
+  },
+  {
+    label: "Access Management",
+    path: "/superAdmin/access-management",
+    icon: CreditCardIcon,
   },
   {
     label: "Uploads",

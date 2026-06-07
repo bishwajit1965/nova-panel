@@ -7,7 +7,6 @@ const roleSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
-
     slug: {
       type: String,
       required: true,
@@ -16,19 +15,16 @@ const roleSchema = new mongoose.Schema(
       trim: true,
       index: true,
     },
-
     description: {
       type: String,
       default: "",
     },
-
     permissions: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Permission",
       },
     ],
-
     isSystem: {
       type: Boolean,
       default: false, // prevents deletion of core roles like admin/user

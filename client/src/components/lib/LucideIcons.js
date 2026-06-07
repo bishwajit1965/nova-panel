@@ -139,6 +139,7 @@ import {
   Sparkle,
   AlertCircle,
   AlertCircleIcon,
+  Loader,
 } from "lucide-react";
 
 // Central registry
@@ -190,6 +191,7 @@ export const LucideIcon = {
   FilePenLine,
   FileText,
   FolderOpen,
+  Loader,
   Laugh,
   LaughIcon,
   Glasses,

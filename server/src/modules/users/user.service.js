@@ -1,9 +1,10 @@
 import User from "./user.model.js";
+import Role from "../roles/role.model.js";
 import AppError from "../../core/errors/AppError.js";
 
 // Get me service
 export const getMeService = async (userId) => {
-  const user = User.findById(userId)
+  const user = await User.findById(userId)
     .select("-password -refreshToken -__v")
     .populate("plan");
 
@@ -23,7 +24,11 @@ export const getUserByIdService = async (id) => {
 
 // Get all users (admin)
 export const getAllUsersService = async () => {
-  return await User.find().select("name email role createdAt").populate("plan");
+  return await User.find({ isSystem: true })
+    .select("name email roles avatarUrl permissions createdAt updatedAt")
+    .populate("plan")
+    .populate({ path: "roles", populate: { path: "permissions" } });
+  // return await User.find().select("name email role createdAt").populate("plan");
 };
 
 // Toggle user status
@@ -37,13 +42,29 @@ export const toggleUsersStatusService = async (userId) => {
   return user;
 };
 
-// Update user role
-export const updateUserRoleService = async (userId, role) => {
+// Update / Assign user role
+export const updateUserRoleService = async (userId, roles) => {
   const user = await User.findById(userId);
   if (!user) throw new AppError("User not found", 404);
 
-  user.role = role;
-  await user.save();
+  user.roles = roles;
+  ((user.isSystem = true), await user.save());
 
   return user;
+};
+
+// Assign permissions to roles
+export const updateRolePermissionsService = async (roleId, permissions) => {
+  const role = await Role.findById(roleId).populate({
+    populate: { path: "permissions" },
+  });
+  if (!role) {
+    throw new AppError("Role not found", 404);
+  }
+
+  role.permissions = permissions;
+
+  await role.save();
+
+  return role;
 };

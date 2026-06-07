@@ -12,7 +12,7 @@ import {
 export const createPermission = asyncHandler(async (req, res) => {
   const permission = await createPermissionService(req.body);
 
-  return sendResponse(res, 201, "Permission created", { permission });
+  return sendResponse(res, 201, "Permission created", permission);
 });
 
 export const getAllPermissions = asyncHandler(async (req, res) => {
@@ -24,13 +24,13 @@ export const getAllPermissions = asyncHandler(async (req, res) => {
 export const getPermissionById = asyncHandler(async (req, res) => {
   const permission = await getPermissionByIdService(req.params.id);
 
-  return sendResponse(res, 200, "Permission fetched", { permission });
+  return sendResponse(res, 200, "Permission fetched", permission);
 });
 
 export const updatePermission = asyncHandler(async (req, res) => {
   const permission = await updatePermissionService(req.params.id, req.body);
 
-  return sendResponse(res, 200, "Permission updated", { permission });
+  return sendResponse(res, 200, "Permission updated", permission);
 });
 
 export const deletePermission = asyncHandler(async (req, res) => {

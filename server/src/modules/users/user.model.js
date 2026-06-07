@@ -47,6 +47,12 @@ const userSchema = new mongoose.Schema(
       ref: "Plan",
       default: null,
     },
+
+    isSystem: {
+      type: Boolean,
+      default: false,
+      index: true,
+    },
   },
   { timestamps: true },
 );

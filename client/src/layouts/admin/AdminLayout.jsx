@@ -6,7 +6,7 @@ import {
   LucideX,
 } from "lucide-react";
 import { useState } from "react";
-import { sidebarLinks } from "../../routes/sidebarLinks.js";
+import { adminSidebarLinks } from "../../routes/AdminSidebarLinks.js";
 import {
   NavLink,
   Outlet,
@@ -100,7 +100,7 @@ const AdminLayout = () => {
             </h1>
           </div>
         </div>
-        {sidebarLinks?.map((link) => {
+        {adminSidebarLinks?.map((link) => {
           const Icon = link.icon;
 
           return (
@@ -216,7 +216,9 @@ const AdminLayout = () => {
         </header>
 
         {/* Outlet */}
-        <div className="p-4">{<Outlet />}</div>
+        <div className="p-4 max-h-[calc(100vh-100px)] overflow-y-auto text-base-content/80">
+          {<Outlet />}
+        </div>
 
         {/* Footer */}
         <footer className="absolute left-0 right-0 bottom-0 bg-gray-200 text-gray-600 p-2 text-center border-t border-slate-300">

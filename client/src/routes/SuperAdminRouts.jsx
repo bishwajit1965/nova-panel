@@ -4,6 +4,8 @@ import NotFound from "../pages/publicPages/NotFound";
 import Dashboard from "../pages/superAdmin/dashboard/Dashboard";
 import PermissionsManagement from "../pages/superAdmin/permissions/PermissionsManagement";
 import Plans from "../pages/superAdmin/plans/Plans";
+import AccessManagement from "../pages/superAdmin/rolePermissionAssignment/AccessManagement";
+import RolePermissionControl from "../pages/superAdmin/rolePermissionAssignment/RolePermissionControl";
 import RolesManagement from "../pages/superAdmin/roles/RolesManagement";
 import Settings from "../pages/superAdmin/settings/Settings";
 import Uploads from "../pages/superAdmin/uploads/Uploads";
@@ -26,6 +28,14 @@ export const superAdminRoutes = {
     { path: "uploads", element: <Uploads /> },
     { path: "roles", element: <RolesManagement /> },
     { path: "permissions", element: <PermissionsManagement /> },
+    {
+      path: "roles-permissions-control",
+      element: <RolePermissionControl />,
+    },
+    {
+      path: "access-management",
+      element: <AccessManagement />,
+    },
     { path: "plans", element: <Plans /> },
     { path: "settings", element: <Settings /> },
     {
