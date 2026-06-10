@@ -4,11 +4,9 @@ import Pagination from "../../../components/pagination/Pagination";
 import { useApiQuery } from "../../../hooks/useApiQuery";
 import useFetchedDataStatusHandler from "../../../hooks/useFetchedDataStatusHandler";
 import API_PATHS from "../../../services/api.paths";
-import UsersTable from "./UsersTable";
 import CountBadge from "../../../components/ui/CountBadge";
-import Modal from "../../../components/ui/Modal";
-import { LucideCreditCard, LucideMail, LucideUser } from "lucide-react";
-import Badge from "../../../components/ui/Badge";
+import UsersTable from "./UsersTable";
+import UserModalData from "./UserModalData";
 
 const UserManagement = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -59,99 +57,43 @@ const UserManagement = () => {
     error: usersErrorObj,
     label: "users-super-admin",
   });
+
   return (
-    <div>
-      <h1 className="lg:text-xl text-xl font-extrabold text-base-content/70 flex items-center gap-2">
-        <LucideIcon.Users /> Users Management → Total Users:{" "}
-        <CountBadge dataLength={users} />
-      </h1>
-      <div className="">
-        {usersDataStatus.status !== "success" ? (
-          usersDataStatus?.content
-        ) : (
-          <>
-            <UsersTable users={paginatedData} onToggle={toggleViewModal} />
-
-            {/* ----> PAGINATION READER ---->*/}
-            <Pagination
-              items={users}
-              dataLength={dataLength}
-              onPaginatedDataChange={setPaginatedData}
-            />
-          </>
-        )}
+    <div className="">
+      <div className="mb-2">
+        <h1 className="lg:text-xl text-xs font-extrabold text-base-content/70 flex items-center flex-wrap gap-1">
+          <LucideIcon.Users /> <span>User Management</span> •
+          <span>Total Users:</span>
+          <CountBadge dataLength={users} />
+        </h1>
       </div>
+      <div className="">
+        <div className="grid grid-cols-1">
+          {usersDataStatus.status !== "success" ? (
+            usersDataStatus?.content
+          ) : (
+            <div className="">
+              <UsersTable users={paginatedData} onToggle={toggleViewModal} />
 
-      {/* USER DETAILS MODAL */}
-      {isModalOpen && (
-        <Modal isOpen={isModalOpen} onClose={closeModal}>
-          <div className="lg:space-y-4 space-y-2">
-            <div className="flex items-center gap-4 text-base-content/80">
-              <img
-                src={
-                  user?.avatarUrl
-                    ? user?.avatarUrl
-                    : "https://i.ibb.co.com/1z7P2wJ/girl2.jpg"
-                }
-                alt={user?.name}
-                className="w-24 h-24 rounded-full"
-              />
-              <div className="space-y-2">
-                <h1 className="lg:text-xl text-lg font-extrabold">
-                  {user?.name}
-                </h1>
-                <p className="flex items-center gap-2 text-sm">
-                  <LucideMail size={15} /> {user?.email}
-                </p>
-                <p className="text-sm font-bold">
-                  Roles:&nbsp;
-                  {user?.roles?.map((r) => (
-                    <Badge key={r._id}> {r?.name}</Badge>
-                  ))}
-                </p>
-                <p className="text-sm font-bold">
-                  User Status:&nbsp;{" "}
-                  {user?.isActive ? (
-                    <Badge color="green">Active</Badge>
-                  ) : (
-                    <Badge color="red">Inactive</Badge>
-                  )}
-                </p>
+              {/* ----> PAGINATION READER ---->*/}
+              <div className="lg:my-4 mt-8">
+                <Pagination
+                  items={users}
+                  dataLength={dataLength}
+                  onPaginatedDataChange={setPaginatedData}
+                />
               </div>
             </div>
-            <div className="text-base-content/80 text-sm space-y-2">
-              <h2 className="text-lg font-extrabold border-b border-base-content/15">
-                User Plan Details
-              </h2>
+          )}
+        </div>
 
-              <p className="font-bold flex items-center gap-2">
-                <LucideCreditCard size={15} />
-                {user?.plan?.name || "No Plan"} plan
-              </p>
-              <p className="font-bold">
-                Price:{" "}
-                {user?.plan?.price != null
-                  ? `$${user.plan.price.toFixed(2)}`
-                  : "No Price"}
-              </p>
-
-              <p className="font-bold">
-                Duration in days: {user?.plan?.durationInDays || "No duration"}
-              </p>
-              <p className="text-sm">{user?.plan?.description || "No Plan"}</p>
-              <p>
-                Features:&nbsp;
-                {user?.plan?.features?.map((f) => (
-                  <Badge key={f}>{f}</Badge>
-                ))}
-              </p>
-              <p className="font-bold">
-                Package Type: {user?.plan?.packageType}
-              </p>
-            </div>
-          </div>
-        </Modal>
-      )}
+        {/* USER DETAILS MODAL */}
+        <UserModalData
+          isModalOpen={isModalOpen}
+          closeModal={closeModal}
+          user={user}
+        />
+      </div>
     </div>
   );
 };

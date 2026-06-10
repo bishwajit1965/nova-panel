@@ -13,13 +13,13 @@ const RolesTable = ({
 }) => {
   return (
     <div>
-      <div className="flex items-center justify-between mb-4">
-        <h1 className="lg:text-xl text-lg font-extrabold text-base-content/70 flex items-center gap-2 m-0">
+      <div className="lg:flex grid gap-2 items-center justify-between mb-4">
+        <h1 className="lg:text-xl text-lg font-extrabold text-base-content/70 flex items-center gap-2">
           Roles List:
           <CountBadge dataLength={roles} color="blue-500" />
         </h1>
         <div
-          className={`flex items-center gap-2 ${!selectedRole ? "w-1/4" : " w-1/2"}`}
+          className={`flex items-center justify-between gap-2 ${!selectedRole ? "lg:w-1/4" : " w-1/2"}`}
         >
           <input
             type="text"

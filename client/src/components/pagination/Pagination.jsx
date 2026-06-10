@@ -59,7 +59,7 @@ const Pagination = ({
   return (
     <div className="flex flex-col items-center space-y-2 mt-3">
       <div className="flex items-center lg:space-x-2 dark:bg-gray-900 rounded shadow-sm">
-        <div className="border-1 border-gray-600 py-[3px] rounded-sm flex items-center">
+        <div className="border border-gray-600 py-0.75 rounded-sm flex items-center">
           <label htmlFor="itemsPerPage" className="text-xs px-2 text-gray-500">
             Items per page:
           </label>
@@ -68,7 +68,7 @@ const Pagination = ({
           id="itemsPerPage"
           value={itemsPerPage}
           onChange={handleItemsPerPageChange}
-          className="text-base-content justify-end px-2 rounded bg-base-100 dark:border-gray-600 border border-gray-600 flex items-center py-[2px]"
+          className="text-base-content justify-end px-2 rounded bg-base-100 dark:border-gray-600 border border-gray-600 flex items-center py-0.5"
         >
           {itemsPerPageOptions.map((option) => (
             <option key={option} value={option}>
@@ -82,7 +82,7 @@ const Pagination = ({
         <button
           disabled={currentPageSafe === 1}
           onClick={() => handlePageChange(currentPageSafe - 1)}
-          className={`px-1.5 py-[1px] rounded flex items-center text-gray-500 hover:text-gray-200 text-sm ${
+          className={`px-1.5 py-px rounded flex items-center text-gray-500 hover:text-gray-200 text-sm ${
             currentPageSafe === 1
               ? "bg-base-300 border border-base-600 cursor-not-allowed dark:bg-base-600"
               : "bg-base-300 border border-gray-600 hover:bg-blue-500 hover:text-white dark:bg-gray-700"
@@ -95,10 +95,10 @@ const Pagination = ({
           <button
             key={index}
             onClick={() => handlePageChange(page)}
-            className={`px-2 p-[1px] rounded text-sm ${
+            className={`px-2 p-px rounded text-sm ${
               page === currentPageSafe
-                ? "bg-blue-500 text-white text-sm p-[2px]"
-                : "bg-base-300 border border-gray-600 hover:bg-blue-500  hover:text-white dark:bg-gray-700 text-sm p-[1px]"
+                ? "bg-blue-500 text-white text-sm p-0.5"
+                : "bg-base-300 border border-gray-600 hover:bg-blue-500  hover:text-white dark:bg-gray-700 text-sm p-px"
             }`}
             disabled={page === "..."}
           >
@@ -109,7 +109,7 @@ const Pagination = ({
         <button
           disabled={currentPageSafe === totalPages}
           onClick={() => handlePageChange(currentPageSafe + 1)}
-          className={`px-1.5 py-[1px] rounded flex items-center text-gray-500 hover:text-gray-200 text-sm ${
+          className={`px-1.5 py-px rounded flex items-center text-gray-500 hover:text-gray-200 text-sm ${
             currentPageSafe === totalPages
               ? "bg-base-300 border cursor-not-allowed dark:bg-gray-600"
               : "bg-base-300 border border-gray-600 hover:bg-blue-500 hover:text-white dark:bg-gray-700"
@@ -119,7 +119,7 @@ const Pagination = ({
         </button>
       </div>
 
-      <div className="text-sm text-gray-500 dark:text-gray-300">
+      <div className="lg:text-sm text-xs text-gray-500 dark:text-gray-300">
         Showing page {currentPageSafe} of {totalPages} ({itemsPerPage} items per
         page) of total {dataLength} items
       </div>

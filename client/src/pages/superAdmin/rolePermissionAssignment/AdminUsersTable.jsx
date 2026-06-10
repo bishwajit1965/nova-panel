@@ -15,12 +15,12 @@ const AdminUsersTable = ({
 }) => {
   return (
     <div className="">
-      <div className="flex items-center justify-between mb-4">
+      <div className="lg:flex grid gap-2 items-center justify-between mb-4">
         <h1 className="lg:text-xl text-lg font-extrabold flex items-center gap-2">
           Admin Users <CountBadge dataLength={users} color="blue-500" />
         </h1>
         <div
-          className={`flex items-center gap-2 ${!selectedUser ? "w-1/4" : "w-1/2"}`}
+          className={`flex items-center gap-2 ${!selectedUser ? "lg:w-1/4 w-full" : "w-1/2"}`}
         >
           <input
             type="text"

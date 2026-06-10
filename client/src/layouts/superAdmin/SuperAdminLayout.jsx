@@ -213,7 +213,7 @@ const SuperAdminLayout = () => {
           </div>
         </header>
         {/* Outlet */}
-        <div className="p-4 min-h-[calc(100vh-100px)] overflow-y-auto text-base-content/80">
+        <div className="p-4 min-h-[calc(100vh-100px)] overflow-y-auto overflow-hidden text-base-content/80">
           {<Outlet />}
         </div>
 

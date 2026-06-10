@@ -22,7 +22,7 @@ const PermissionForm = ({
           </div>
         )}
         <div className="">
-          <h1 className="text-2xl font-semibold mb-4 flex items-center gap-2">
+          <h1 className="lg:text-2xl text-lg font-semibold mb-4 flex items-center gap-2">
             {permissionToUpdate ? (
               <LucideIcon.Edit />
             ) : (
@@ -61,7 +61,7 @@ const PermissionForm = ({
             onChange={onHandleChange}
             error={errors.module}
           />
-          <div className="flex gap-2 mt-4">
+          <div className="lg:flex grid gap-2 mt-4">
             <Button
               type="submit"
               size="sm"

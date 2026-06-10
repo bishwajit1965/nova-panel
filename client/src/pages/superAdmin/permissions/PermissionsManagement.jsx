@@ -248,11 +248,13 @@ const PermissionsManagement = () => {
                 onConfirmDelete={handleConfirmDeletePermission}
               />
               {/* ----> PAGINATION READER ---->*/}
-              <Pagination
-                items={permissions}
-                dataLength={dataLength}
-                onPaginatedDataChange={setPaginatedData}
-              />
+              <div className="lg:my-8 my-4">
+                <Pagination
+                  items={permissions}
+                  dataLength={dataLength}
+                  onPaginatedDataChange={setPaginatedData}
+                />
+              </div>
             </>
           )}
         </div>
