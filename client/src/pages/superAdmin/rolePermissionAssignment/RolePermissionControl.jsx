@@ -13,9 +13,7 @@ import CountBadge from "../../../components/ui/CountBadge";
 const RolePermissionControl = () => {
   const [selectedRole, setSelectedRole] = useState(null);
   const [selectedPermissions, setSelectedPermissions] = useState([]);
-
-  console.log("Selected Role", selectedRole);
-  console.log("Selected Permissions", selectedPermissions);
+  const [roleSearch, setRoleSearch] = useState("");
 
   // Fetches all roles for super admin
   const {
@@ -102,6 +100,16 @@ const RolePermissionControl = () => {
     setSelectedPermissions([]);
   };
 
+  const filteredRoles = roles?.filter((r) => {
+    const q = roleSearch.toLowerCase();
+    return r.name.toLowerCase().includes(q) || r.slug.toLowerCase().includes(q);
+  });
+
+  /**--------- HANDLE SEARCH RESET ---------*/
+  const handleSearchReset = () => {
+    setRoleSearch("");
+  };
+
   /** --------> ASSIGN PERMISSION TO ROLE HANDLER --------> */
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -158,7 +166,7 @@ const RolePermissionControl = () => {
             {selectedRole && (
               <>
                 <div className="">
-                  <h1 className="lg:text-xl text-lg font-extrabold capitalize flex items-center gap-2">
+                  <h1 className="lg:text-xl text-lg text-base-content/70 font-extrabold capitalize flex items-center gap-2">
                     <LucideIcon.UserCircle /> {selectedRole?.name} → Has{" "}
                     {
                       <CountBadge
@@ -254,10 +262,13 @@ const RolePermissionControl = () => {
             rolesDataStatus.content
           ) : (
             <RolesTable
-              roles={roles}
+              roles={filteredRoles}
               onSelect={handleSelectRole}
               selectedRole={selectedRole}
               handleSubmit={handleSubmit}
+              onSearch={roleSearch}
+              setRoleSearch={setRoleSearch}
+              onReset={handleSearchReset}
             />
           )}
         </div>

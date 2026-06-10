@@ -10,14 +10,22 @@ export const authorize = (...requiredPermissions) => {
       }
 
       // superAdmin bypass (optional global override)
-      if (user.primaryRole === "superAdmin") {
+      const isSuperAdmin = user.roles?.some(
+        (role) => role.slug === "superadmin",
+      );
+
+      if (isSuperAdmin) {
         return next();
       }
 
       const roles = user.roles || [];
 
       // collect all permissions from roles
-      let userPermissions = roles.flatMap((role) => role.permissions || []);
+      let userPermissions = roles.flatMap((role) =>
+        (role.permissions || []).map((p) =>
+          typeof p === "object" ? p.key : p,
+        ),
+      );
 
       // remove duplicates
       userPermissions = [...new Set(userPermissions)];

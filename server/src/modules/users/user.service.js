@@ -25,7 +25,9 @@ export const getUserByIdService = async (id) => {
 // Get all users (admin)
 export const getAllUsersService = async () => {
   return await User.find({ isSystem: true })
-    .select("name email roles avatarUrl permissions createdAt updatedAt")
+    .select(
+      "name email plan roles avatarUrl permissions isActive createdAt updatedAt",
+    )
     .populate("plan")
     .populate({ path: "roles", populate: { path: "permissions" } });
   // return await User.find().select("name email role createdAt").populate("plan");

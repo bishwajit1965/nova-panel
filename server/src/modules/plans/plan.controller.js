@@ -14,15 +14,16 @@ import {
 
 // CREATE PLAN
 export const createPlan = asyncHandler(async (req, res) => {
+  console.log("Plan create method is hit");
   const plan = await createPlanService(req.body);
-  return sendResponse(res, 201, "Plan created successfully.", { plan });
+  return sendResponse(res, 201, "Plan created successfully.", plan);
 });
 
 // GET ALL PLANS
 export const getAllPlans = asyncHandler(async (req, res) => {
   const plans = await getAllPlansService();
 
-  return sendResponse(res, 200, "Plans fetched successfully.", { plans });
+  return sendResponse(res, 200, "Plans fetched successfully.", plans);
 });
 
 // GET PLAN BY ID
@@ -33,16 +34,23 @@ export const getPlanById = asyncHandler(async (req, res) => {
 
 // UPDATE PLAN
 export const updatePlan = asyncHandler(async (req, res) => {
-  const plan = await updatePlanService(req.params.id, req.body);
+  console.log("Update plan method is hit");
+  const { planId } = req.params;
+  const data = req.body;
 
-  return sendResponse(res, 200, "Plan updated successfully.", { plan });
+  console.log("Features", data.features);
+  console.log("Plan Id", planId);
+  console.log("REQ>>BODY", req.body);
+  const plan = await updatePlanService(planId, data);
+  console.log("Plan to update", plan);
+  return sendResponse(res, 200, "Plan updated successfully.", plan);
 });
 
 // TOGGLE PLAN STATUS
 export const togglePlanStatus = asyncHandler(async (req, res) => {
   const plan = await togglePlanStatusService(req.params.id);
 
-  return sendResponse(res, 200, "Plan status updated successfully.", { plan });
+  return sendResponse(res, 200, "Plan status updated successfully.", plan);
 });
 
 // ASSIGN USER A PLAN
@@ -50,7 +58,7 @@ export const assignPlanToUser = asyncHandler(async (req, res) => {
   const { userId, planId } = req.body;
 
   const user = await assignPlanToUserService(userId, planId);
-  return sendResponse(res, 201, "Plan assigned successfully.", { user });
+  return sendResponse(res, 201, "Plan assigned successfully.", user);
 });
 
 // DELETE PLAN

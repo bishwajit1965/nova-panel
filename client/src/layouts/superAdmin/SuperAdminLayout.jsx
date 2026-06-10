@@ -82,21 +82,21 @@ const SuperAdminLayout = () => {
         />
       )}
       <aside
-        className={`fixed lg:static lg:min-h-screen top-0 left-0 lg:z-10 z-50 h-full w-64 ${isSideBarOpen ? "translate-x-0" : "-translate-x-full"} lg:translate-x-0  bg-gray-800 text-gray-400`}
+        className={`fixed lg:static min-h-screen top-0 left-0 lg:z-10 z-50 w-64 ${isSideBarOpen ? "translate-x-0" : "-translate-x-full"} lg:translate-x-0  bg-gray-800 text-gray-400`}
       >
-        <div className="border-b border-slate-600 p-4 shadow-sm">
-          <div className="flex items-enter gap-2">
-            <div className="h-7 w-7 rounded-full flex items-center justify-center bg-emerald-500 text-xl text-white font-bold">
-              N
-            </div>
+        <div className="sticky top-0">
+          <div className="border-b border-slate-600 p-4 shadow-sm sticky top-0">
+            <div className="flex items-enter gap-2">
+              <div className="h-7 w-7 rounded-full flex items-center justify-center bg-emerald-500 text-xl text-white font-bold">
+                N
+              </div>
 
-            <h1 className="text-xl font-bold">
-              Nova Panel{" "}
-              <span className="font-bold text-gray-200">LTS</span>{" "}
-            </h1>
+              <h1 className="text-xl font-bold">
+                Nova Panel{" "}
+                <span className="font-bold text-gray-200">LTS</span>{" "}
+              </h1>
+            </div>
           </div>
-        </div>
-        <div className="">
           {supAdminSidebarLinks?.map((link) => {
             const Icon = link.icon;
 
@@ -213,7 +213,7 @@ const SuperAdminLayout = () => {
           </div>
         </header>
         {/* Outlet */}
-        <div className="p-4 max-h-[calc(100vh-100px)] overflow-y-auto text-base-content/80">
+        <div className="p-4 min-h-[calc(100vh-100px)] overflow-y-auto text-base-content/80">
           {<Outlet />}
         </div>
 

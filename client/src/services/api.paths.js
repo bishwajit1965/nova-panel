@@ -20,6 +20,11 @@ const API_PATHS = {
     KEY: ["superAdmin-users"],
   },
 
+  SUPER_ADMIN_PLANS: {
+    ENDPOINT: "plans",
+    KEY: ["superAdmin-plans"],
+  },
+
   /**========================
    * ADMIN ENDPOINTS
    *=========================*/

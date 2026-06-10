@@ -9,7 +9,7 @@ const PermissionsTable = ({
   return (
     <div>
       <div>
-        <div className="overflow-x-auto overflow-auto max-h-[52vh]">
+        <div className="overflow-x-auto">
           <table className="table table-xs">
             <thead>
               <tr>

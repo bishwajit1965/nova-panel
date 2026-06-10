@@ -3,14 +3,14 @@ import SuperAdminLayout from "../layouts/superAdmin/SuperAdminLayout";
 import NotFound from "../pages/publicPages/NotFound";
 import Dashboard from "../pages/superAdmin/dashboard/Dashboard";
 import PermissionsManagement from "../pages/superAdmin/permissions/PermissionsManagement";
-import Plans from "../pages/superAdmin/plans/Plans";
 import AccessManagement from "../pages/superAdmin/rolePermissionAssignment/AccessManagement";
 import RolePermissionControl from "../pages/superAdmin/rolePermissionAssignment/RolePermissionControl";
 import RolesManagement from "../pages/superAdmin/roles/RolesManagement";
 import Settings from "../pages/superAdmin/settings/Settings";
 import Uploads from "../pages/superAdmin/uploads/Uploads";
-import Users from "../pages/superAdmin/users/Users";
 import ProtectedRoute from "./ProtectedRoutes";
+import PlansManagement from "../pages/superAdmin/plans/PlansManagement";
+import UserManagement from "../pages/superAdmin/users/UserManagement";
 
 export const superAdminRoutes = {
   path: "/superAdmin",
@@ -24,7 +24,7 @@ export const superAdminRoutes = {
       path: "dashboard",
       element: <Dashboard />,
     },
-    { path: "users", element: <Users /> },
+    { path: "user-management", element: <UserManagement /> },
     { path: "uploads", element: <Uploads /> },
     { path: "roles", element: <RolesManagement /> },
     { path: "permissions", element: <PermissionsManagement /> },
@@ -36,7 +36,7 @@ export const superAdminRoutes = {
       path: "access-management",
       element: <AccessManagement />,
     },
-    { path: "plans", element: <Plans /> },
+    { path: "plans-management", element: <PlansManagement /> },
     { path: "settings", element: <Settings /> },
     {
       path: "*",

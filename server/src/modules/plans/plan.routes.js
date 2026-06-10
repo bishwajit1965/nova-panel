@@ -9,7 +9,8 @@ import {
   togglePlanStatus,
   assignPlanToUser,
   deletePlan,
-} from "./plan.Controller.js";
+} from "./plan.controller.js";
+
 import { ROLES } from "../../constants/roles.constant.js";
 
 const router = express.Router();
@@ -18,10 +19,10 @@ const router = express.Router();
 router.use(authMiddleware);
 router.use(roleMiddleware([ROLES.ADMIN, ROLES.SUPER_ADMIN]));
 
-router.post("/", createPlan);
+router.post("/create", createPlan);
 router.get("/all", getAllPlans);
 router.get("/:id", getPlanById);
-router.put("/edit/:id", updatePlan);
+router.patch("/edit/:planId", updatePlan);
 router.put("/assign", assignPlanToUser);
 router.patch("/toggle/:id", togglePlanStatus);
 router.delete("/delete/:id", deletePlan);

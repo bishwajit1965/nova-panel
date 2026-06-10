@@ -37,7 +37,13 @@ const planSchema = new mongoose.Schema(
       default: [],
     },
 
-    limits: {
+    packageType: {
+      type: String,
+      enum: ["starter", "pro", "enterprise"],
+      required: true,
+    },
+
+    limitPackages: {
       maxUploads: {
         type: Number,
         default: 5,

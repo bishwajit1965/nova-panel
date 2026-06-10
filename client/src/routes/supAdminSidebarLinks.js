@@ -15,7 +15,7 @@ export const supAdminSidebarLinks = [
   },
   {
     label: "Users",
-    path: "/superAdmin/users",
+    path: "/superAdmin/user-management",
     icon: Users,
   },
   {
@@ -39,14 +39,14 @@ export const supAdminSidebarLinks = [
     icon: CreditCardIcon,
   },
   {
+    label: "Plans Management",
+    path: "/superAdmin/plans-management",
+    icon: CreditCard,
+  },
+  {
     label: "Uploads",
     path: "/superAdmin/uploads",
     icon: Upload,
-  },
-  {
-    label: "Plans",
-    path: "/superAdmin/plans",
-    icon: CreditCard,
   },
   {
     label: "Settings",

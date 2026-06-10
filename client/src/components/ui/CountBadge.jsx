@@ -10,8 +10,8 @@ const CountBadge = ({
         ? dataLength
         : 0;
 
-  if (count <= 0) {
-    return null;
+  if (count === 0) {
+    return <span className="text-red-500">no</span>;
   }
 
   return (

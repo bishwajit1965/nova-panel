@@ -31,7 +31,7 @@ export const getPlanByIdService = async (id) => {
 // UPDATE PLAN
 export const updatePlanService = async (id, data) => {
   const plan = await Plan.findByIdAndUpdate(id, data, {
-    new: true,
+    returnDocument: "after",
     runValidators: true,
   });
 

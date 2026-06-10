@@ -1,5 +1,6 @@
 import {
   CircleCheckIcon,
+  CreditCardIcon,
   Edit,
   Edit2,
   Eye,
@@ -8,7 +9,9 @@ import {
   LucideDownload,
   Pencil,
   PlusCircleIcon,
+  TimerReset,
   Trash2,
+  User,
   X,
 } from "lucide-react";
 
@@ -27,10 +30,14 @@ const icons = {
   close: X,
   download: LucideDownload,
   select: CircleCheckIcon,
+  assign: CreditCardIcon,
+  user: User,
+  suspend: TimerReset,
   pdf: FaFilePdf,
 };
 
 const labels = {
+  assign: "Assign",
   edit: "Edit",
   edit2: "Edit",
   delete: "Delete",
@@ -41,6 +48,8 @@ const labels = {
   download: "Download",
   pdf: "PDF",
   select: "Select",
+  suspend: "Suspend",
+  user: "User",
 };
 
 export function MiniIconButton({

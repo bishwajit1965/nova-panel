@@ -1,14 +1,39 @@
+import { LucideIcon } from "../../../components/lib/LucideIcons";
 import Badge from "../../../components/ui/Badge";
+import Button from "../../../components/ui/Button";
 import CountBadge from "../../../components/ui/CountBadge";
 import { MiniIconButton } from "../../../components/ui/MiniIconButton";
 import { normalizeDate } from "../../../utils/normalizeDate";
 
-const AdminUsersTable = ({ users, onSelect }) => {
+const AdminUsersTable = ({
+  users,
+  onSelect,
+  userSearch,
+  setUserSearch,
+  selectedUser,
+  onReset,
+}) => {
   return (
     <div className="">
-      <h1 className="lg:text-xl text-lg font-extrabold flex items-center gap-2">
-        Admin Users <CountBadge dataLength={users} color="blue-500" />
-      </h1>
+      <div className="flex items-center justify-between mb-4">
+        <h1 className="lg:text-xl text-lg font-extrabold flex items-center gap-2">
+          Admin Users <CountBadge dataLength={users} color="blue-500" />
+        </h1>
+        <div
+          className={`flex items-center gap-2 ${!selectedUser ? "w-1/4" : "w-1/2"}`}
+        >
+          <input
+            type="text"
+            placeholder="Search users..."
+            className="input input-sm input-bordered w-full"
+            value={userSearch}
+            onChange={(e) => setUserSearch(e.target.value)}
+          />
+          <Button onClick={onReset} size="xs" variant="outline">
+            <LucideIcon.RefreshCcw size={20} /> Reset
+          </Button>
+        </div>
+      </div>
 
       <div className="">
         <div className="overflow-x-auto">
@@ -17,9 +42,8 @@ const AdminUsersTable = ({ users, onSelect }) => {
               <tr>
                 <th>#</th>
                 <th>User Name</th>
+                <th>Users Email</th>
                 <th>Roles Name</th>
-                {/* <th>Module</th> */}
-                {/* <th>Role Key</th> */}
                 <th>Created At</th>
                 <th>Updated At</th>
                 <th>Actions</th>
@@ -29,39 +53,15 @@ const AdminUsersTable = ({ users, onSelect }) => {
               {users?.map((u, index) => (
                 <tr key={u.name}>
                   <th>{index + 1}</th>
-
                   <td>{u?.name}</td>
-
+                  <td>{u?.email}</td>
                   <td className="">
                     {u?.roles.map((r) => (
                       <Badge color="green">{r?.name}</Badge>
                     ))}
                   </td>
-
-                  {/* <td className=" ">
-                    {u?.roles?.map((r) =>
-                      r?.permissions?.map((p) => (
-                        <div className="flex items-center flex-wrap flex-1/12 mr-4">
-                          <span className=""> {p?.module}</span>
-                        </div>
-                      )),
-                    )}
-                  </td> */}
-
-                  {/* <td className=" ">
-                    {u?.roles?.map((r) =>
-                      r?.permissions?.map((p) => (
-                        <div className="flex items-center flex-wrap flex-1/12 mr-4">
-                          <span className="">{p?.key}</span>
-                        </div>
-                      )),
-                    )}
-                  </td> */}
-
                   <td>{normalizeDate(u?.createdAt)}</td>
-
                   <td>{normalizeDate(u?.updatedAt)}</td>
-
                   <td className="flex items-center gap-2">
                     <MiniIconButton
                       onClick={() => onSelect(u?._id)}
@@ -77,9 +77,8 @@ const AdminUsersTable = ({ users, onSelect }) => {
               <tr>
                 <th>#</th>
                 <th>User Name</th>
+                <th>Users Email</th>
                 <th>Roles Name</th>
-                {/* <th>Module</th>
-                <th>Role Key</th> */}
                 <th>Created At</th>
                 <th>Updated At</th>
                 <th>Actions</th>

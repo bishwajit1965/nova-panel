@@ -19,9 +19,6 @@ const RolesManagement = () => {
     description: "",
   });
 
-  console.log("Role to edit", roleToUpdate);
-  console.log("Form data", form);
-
   /*** -----> Validator integration -----> */
   const { errors, validate } = useValidator(roleValidationRules, {
     name: form.name,

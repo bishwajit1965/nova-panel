@@ -11,6 +11,8 @@ import { useApiMutation } from "../../../hooks/useApiMutation";
 const AccessManagement = () => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [selectedRoles, setSelectedRoles] = useState([]);
+  const [userSearch, setUserSearch] = useState("");
+
   console.log("Selected roles:", selectedRoles);
 
   /* ---------------- USERS ---------------- */
@@ -99,6 +101,19 @@ const AccessManagement = () => {
     setSelectedRoles([]);
   };
 
+  /**--------- HANDLE SEARCH RESET ---------*/
+  const handleSearchReset = () => {
+    setUserSearch("");
+  };
+
+  /* ------------- SEARCH USERS ------------- */
+  const filteredUsers = users?.filter((u) => {
+    const q = userSearch.toLowerCase();
+    return (
+      u.name.toLowerCase().includes(q) || u.email.toLowerCase().includes(q)
+    );
+  });
+
   /* ---------------- SUBMIT ---------------- */
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -111,8 +126,7 @@ const AccessManagement = () => {
       },
     };
 
-    console.log("SUBMIT USER ROLES PAYLOAD:", payload);
-
+    /**------> ROLE MUTATION TO UPDATE DATA ------>*/
     roleMutation.mutate(payload);
   };
 
@@ -164,7 +178,14 @@ const AccessManagement = () => {
         {usersStatus.status !== "success" ? (
           usersStatus.content
         ) : (
-          <AdminUsersTable users={users} onSelect={handleSelectUser} />
+          <AdminUsersTable
+            users={filteredUsers}
+            onSelect={handleSelectUser}
+            userSearch={userSearch}
+            setUserSearch={setUserSearch}
+            selectedUser={selectedUser}
+            onReset={handleSearchReset}
+          />
         )}
       </div>
     </div>

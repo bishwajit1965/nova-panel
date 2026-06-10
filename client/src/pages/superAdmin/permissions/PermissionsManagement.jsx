@@ -9,6 +9,7 @@ import { permissionValidationRules } from "./permissionValidationRules";
 import ConfirmDialogue from "../../../components/ui/ConfirmDialogue";
 import Swal from "sweetalert2";
 import { useApiMutation } from "../../../hooks/useApiMutation";
+import Pagination from "../../../components/pagination/Pagination";
 
 const PermissionsManagement = () => {
   const [permissionToUpdate, setPermissionToUpdate] = useState(null);
@@ -26,7 +27,7 @@ const PermissionsManagement = () => {
     description: form.description,
   });
 
-  /*** ------> Permission Query Mutation  fetch permissions API Hook ------> */
+  /*** ---> Permission Query Mutation  fetch permissions API Hook ---> */
   const {
     data: permissions,
     isLoading: permissionsLoading,
@@ -41,6 +42,10 @@ const PermissionsManagement = () => {
       refetchOnReconnect: true,
     },
   });
+
+  /**---> PAGINATION --->*/
+  const [paginatedData, setPaginatedData] = useState(permissions || []);
+  const dataLength = permissions?.length;
 
   /*** ------> Permission Mutation CREATE/UPDATE API Hook ------> */
   const permissionMutation = useApiMutation({
@@ -154,7 +159,6 @@ const PermissionsManagement = () => {
   const handleUpdatePermission = (e) => {
     e.preventDefault();
     try {
-      // setLoading(true);
       if (!validate()) return;
       const payload = permissionToUpdate
         ? {
@@ -184,8 +188,6 @@ const PermissionsManagement = () => {
       });
     } catch (error) {
       console.error("Error in creating/updating permission!", error);
-    } finally {
-      // setLoading(false);
     }
   };
 
@@ -239,11 +241,19 @@ const PermissionsManagement = () => {
           {permissionsStatus.status !== "success" ? (
             permissionsStatus.content
           ) : (
-            <PermissionsTable
-              permissions={permissions}
-              onSelectPermissionEdit={handleSelectPermissionEdit}
-              onConfirmDelete={handleConfirmDeletePermission}
-            />
+            <>
+              <PermissionsTable
+                permissions={paginatedData}
+                onSelectPermissionEdit={handleSelectPermissionEdit}
+                onConfirmDelete={handleConfirmDeletePermission}
+              />
+              {/* ----> PAGINATION READER ---->*/}
+              <Pagination
+                items={permissions}
+                dataLength={dataLength}
+                onPaginatedDataChange={setPaginatedData}
+              />
+            </>
           )}
         </div>
       </div>

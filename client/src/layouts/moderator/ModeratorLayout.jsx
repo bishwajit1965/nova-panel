@@ -85,50 +85,52 @@ const ModeratorLayout = () => {
       )}
 
       <aside
-        className={`fixed lg:static lg:min-h-screen top-0 left-0 lg:z-10 z-50 h-full w-64 ${isSideBarOpen ? "translate-x-0" : "-translate-x-full"} lg:translate-x-0  bg-gray-800 text-gray-400`}
+        className={`fixed lg:static min-h-screen top-0 left-0 lg:z-10 z-50 w-64 ${isSideBarOpen ? "translate-x-0" : "-translate-x-full"} lg:translate-x-0  bg-gray-800 text-gray-400`}
       >
-        <div className="border-b border-slate-600 p-4 shadow-sm">
-          <div className="flex items-enter gap-2">
-            <div className="h-7 w-7 rounded-full flex items-center justify-center bg-emerald-500 text-xl text-white font-bold">
-              N
+        <div className="sticky top-0">
+          <div className="border-b border-slate-600 p-4 shadow-sm">
+            <div className="flex items-enter gap-2">
+              <div className="h-7 w-7 rounded-full flex items-center justify-center bg-emerald-500 text-xl text-white font-bold">
+                N
+              </div>
+
+              <h1 className="text-xl font-bold">
+                Nova Panel{" "}
+                <span className="font-bold text-gray-200">LTS</span>{" "}
+              </h1>
             </div>
-
-            <h1 className="text-xl font-bold">
-              Nova Panel{" "}
-              <span className="font-bold text-gray-200">LTS</span>{" "}
-            </h1>
           </div>
-        </div>
-        {moderatorSidebarLinks?.map((link) => {
-          const Icon = link.icon;
+          {moderatorSidebarLinks?.map((link) => {
+            const Icon = link.icon;
 
-          return (
-            <NavLink
-              key={link.href}
-              to={link.path}
-              className={({ isActive }) =>
-                `flex items-center gap-3 px-4 py-2 rounded transition ${
-                  isActive ? "bg-slate-700 text-white" : "hover:bg-slate-700"
-                }`
-              }
-            >
-              <Icon className="h-4 w-4" />
-              {link.label}
-            </NavLink>
-          );
-        })}
+            return (
+              <NavLink
+                key={link.href}
+                to={link.path}
+                className={({ isActive }) =>
+                  `flex items-center gap-3 px-4 py-2 rounded transition ${
+                    isActive ? "bg-slate-700 text-white" : "hover:bg-slate-700"
+                  }`
+                }
+              >
+                <Icon className="h-4 w-4" />
+                {link.label}
+              </NavLink>
+            );
+          })}
 
-        <div className="absolute bottom-0 left-0 right-0 lg:hidden px-4 py-2">
-          {user && (
-            <Button
-              onClick={handleLogout}
-              size="xs"
-              variant="danger"
-              icon={LucideIcon.LogOut}
-            >
-              Logout
-            </Button>
-          )}
+          <div className="absolute bottom-0 left-0 right-0 lg:hidden px-4 py-2">
+            {user && (
+              <Button
+                onClick={handleLogout}
+                size="xs"
+                variant="danger"
+                icon={LucideIcon.LogOut}
+              >
+                Logout
+              </Button>
+            )}
+          </div>
         </div>
       </aside>
 
