@@ -24,7 +24,7 @@ router.use(authMiddleware);
 // router.use(roleMiddleware([ROLES.ADMIN, ROLES.SUPER_ADMIN]));
 
 // Fetch files from cloudinary
-router.get("/", getUploadedData);
+router.get("/all", getUploadedData);
 
 // single file
 router.post(
@@ -84,6 +84,6 @@ router.put(
 );
 
 // delete file
-router.delete("/:id", deleteFile);
+router.delete("/delete/:id", deleteFile);
 
 export default router;

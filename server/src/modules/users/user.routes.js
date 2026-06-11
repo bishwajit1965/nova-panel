@@ -17,4 +17,8 @@ router.get("/all", userController.getAllUsers);
 
 router.patch("/edit/:userId", userController.updateUserRoles);
 
+router.patch("/assign/plan/:userId", userController.assignUserPlan);
+
+router.patch("/suspend/:userId", userController.suspendUser);
+
 export default router;

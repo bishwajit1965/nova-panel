@@ -9,7 +9,7 @@ const Pagination = ({
 }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(itemsPerPageOptions[0]);
-  const totalPages = Math.max(1, Math.ceil(items.length / itemsPerPage));
+  const totalPages = Math.max(1, Math.ceil(items?.length / itemsPerPage));
   const currentPageSafe = Math.min(currentPage, totalPages);
 
   const generatePageNumbers = () => {
@@ -27,7 +27,7 @@ const Pagination = ({
       } else if (l !== "...") {
         range.push("...");
       }
-      l = range[range.length - 1];
+      l = range[range?.length - 1];
     }
 
     return range;
@@ -48,8 +48,8 @@ const Pagination = ({
 
   useEffect(() => {
     const startIndex = (currentPageSafe - 1) * itemsPerPage;
-    const endIndex = Math.min(startIndex + itemsPerPage, items.length);
-    const paginatedData = items.slice(startIndex, endIndex);
+    const endIndex = Math.min(startIndex + itemsPerPage, items?.length);
+    const paginatedData = items?.slice(startIndex, endIndex);
 
     onPaginatedDataChange(paginatedData); // Send paginated data to parent
   }, [currentPageSafe, itemsPerPage, items, onPaginatedDataChange]);
@@ -58,8 +58,8 @@ const Pagination = ({
 
   return (
     <div className="flex flex-col items-center space-y-2 mt-3">
-      <div className="flex items-center lg:space-x-2 dark:bg-gray-900 rounded shadow-sm">
-        <div className="border border-gray-600 py-0.75 rounded-sm flex items-center">
+      <div className="flex items-center lg:space-x-2 space-x-1.25 dark:bg-gray-900 rounded">
+        <div className="border border-gray-500 py-0.75 rounded-sm flex items-center">
           <label htmlFor="itemsPerPage" className="text-xs px-2 text-gray-500">
             Items per page:
           </label>
@@ -68,7 +68,7 @@ const Pagination = ({
           id="itemsPerPage"
           value={itemsPerPage}
           onChange={handleItemsPerPageChange}
-          className="text-base-content justify-end px-2 rounded bg-base-100 dark:border-gray-600 border border-gray-600 flex items-center py-0.5"
+          className="text-base-content justify-end px-2 rounded bg-base-100 dark:border-gray-600 border border-gray-500 flex items-center py-0.5"
         >
           {itemsPerPageOptions.map((option) => (
             <option key={option} value={option}>

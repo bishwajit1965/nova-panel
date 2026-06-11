@@ -200,7 +200,7 @@ const PlansManagement = () => {
   return (
     <div>
       <div className="grid lg:grid-cols-12 grid-cols-1 justify-between gap-4">
-        <div className="lg:col-span-4 col-span-12">
+        <div className="lg:col-span-4 col-span-12 mb-10">
           <PlanForm
             onPlanSubmit={handleSubmit}
             onHandleChange={handleChange}

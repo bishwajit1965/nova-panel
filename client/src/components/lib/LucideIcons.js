@@ -107,6 +107,7 @@ import {
   Briefcase,
   MessageSquare,
   MessageCircleCodeIcon,
+  LoaderIcon,
   LineChart,
   PieChart,
   ChartBar,
@@ -140,6 +141,9 @@ import {
   AlertCircle,
   AlertCircleIcon,
   Loader,
+  Copy,
+  CopyCheck,
+  CopyCheckIcon,
 } from "lucide-react";
 
 // Central registry
@@ -179,6 +183,9 @@ export const LucideIcon = {
   CalendarDays,
   CircleGauge,
   CreditCard,
+  Copy,
+  CopyCheck,
+  CopyCheckIcon,
   Clock,
   RotateCcwKeyIcon,
   Edit,
@@ -217,6 +224,7 @@ export const LucideIcon = {
   ListCheck,
   ListOrdered,
   ListOrderedIcon,
+  LoaderIcon,
   Lock,
   LogIn,
   Loader2,

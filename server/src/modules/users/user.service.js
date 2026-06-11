@@ -1,6 +1,7 @@
 import User from "./user.model.js";
 import Role from "../roles/role.model.js";
 import AppError from "../../core/errors/AppError.js";
+import Plan from "../plans/plan.model.js";
 
 // Get me service
 export const getMeService = async (userId) => {
@@ -44,6 +45,21 @@ export const toggleUsersStatusService = async (userId) => {
   return user;
 };
 
+// Super Admin Assigns user a plan
+export const assignPlanToUser = async (userId, planId) => {
+  const user = await User.findById(userId);
+  if (!user) {
+    throw new AppError("User not found.", 404);
+  }
+  const plan = await Plan.findById(planId);
+  if (!plan) {
+    throw new AppError("Plan not found.", 404);
+  }
+
+  user.plan = plan._id;
+  await user.save();
+};
+
 // Update / Assign user role
 export const updateUserRoleService = async (userId, roles) => {
   const user = await User.findById(userId);
@@ -69,4 +85,15 @@ export const updateRolePermissionsService = async (roleId, permissions) => {
   await role.save();
 
   return role;
+};
+
+// Suspend a user
+export const suspendUserService = async (userId) => {
+  const user = await User.findById(userId);
+  if (!user) {
+    throw new AppError("User not found.", 404);
+  }
+  user.isActive = !user.isActive;
+  await user.save();
+  return user;
 };

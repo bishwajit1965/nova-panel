@@ -7,10 +7,10 @@ import AccessManagement from "../pages/superAdmin/rolePermissionAssignment/Acces
 import RolePermissionControl from "../pages/superAdmin/rolePermissionAssignment/RolePermissionControl";
 import RolesManagement from "../pages/superAdmin/roles/RolesManagement";
 import Settings from "../pages/superAdmin/settings/Settings";
-import Uploads from "../pages/superAdmin/uploads/Uploads";
 import ProtectedRoute from "./ProtectedRoutes";
 import PlansManagement from "../pages/superAdmin/plans/PlansManagement";
 import UserManagement from "../pages/superAdmin/users/UserManagement";
+import UploadsManagement from "../pages/superAdmin/uploads/UploadsManagement";
 
 export const superAdminRoutes = {
   path: "/superAdmin",
@@ -25,7 +25,7 @@ export const superAdminRoutes = {
       element: <Dashboard />,
     },
     { path: "user-management", element: <UserManagement /> },
-    { path: "uploads", element: <Uploads /> },
+    { path: "uploads", element: <UploadsManagement /> },
     { path: "roles", element: <RolesManagement /> },
     { path: "permissions", element: <PermissionsManagement /> },
     {

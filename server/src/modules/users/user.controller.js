@@ -37,6 +37,24 @@ export const updateUserRoles = asyncHandler(async (req, res) => {
   return sendResponse(res, 201, "User role updated successfully.", updatedUser);
 });
 
+// Assign Plan to user
+export const assignUserPlan = asyncHandler(async (req, res) => {
+  console.log("✅ Assign plan route is hit");
+  const { userId } = req.params;
+  const { planId } = req.body;
+  const userPlan = await userService.assignPlanToUser(userId, planId);
+  return sendResponse(res, 201, "User plan assigned.", userPlan);
+});
+
+// Suspend a user
+export const suspendUser = asyncHandler(async (req, res) => {
+  console.log("🚀 Suspend user method is hit");
+  const { userId } = req.params;
+  console.log("USER ID", userId);
+  const userSuspended = await userService.suspendUserService(userId);
+  return sendResponse(res, 201, "User suspended", userSuspended);
+});
+
 export const updateRolePermissions = async (req, res) => {
   const { id } = req.params;
   const { permissions } = req.body;

@@ -97,7 +97,8 @@ const Login = () => {
       Swal.fire({
         position: "top-end",
         icon: "error",
-        title: "Login failed.",
+        title: err?.response?.data?.message || err?.message || "Login failed.",
+        // title: "Login failed.",
         showConfirmButton: false,
         timer: 1500,
       });

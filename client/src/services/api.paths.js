@@ -25,6 +25,11 @@ const API_PATHS = {
     KEY: ["superAdmin-plans"],
   },
 
+  SUPER_ADMIN_UPLOADS: {
+    ENDPOINT: "uploads",
+    KEY: ["superAdmin-uploads"],
+  },
+
   /**========================
    * ADMIN ENDPOINTS
    *=========================*/

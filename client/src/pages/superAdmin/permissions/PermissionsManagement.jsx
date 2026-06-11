@@ -117,9 +117,7 @@ const PermissionsManagement = () => {
     },
   });
 
-  console.log("Permissions data", permissions);
-
-  /*** ------> PERMISSION HANDLERS ------> */
+  /*** ------> PERMISSION RELATED HANDLERS ------> */
 
   //  Handler to select permission for editing
   const handleSelectPermissionEdit = (permissionId) => {

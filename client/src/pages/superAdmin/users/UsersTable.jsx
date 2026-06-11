@@ -2,7 +2,7 @@ import Badge from "../../../components/ui/Badge";
 import { MiniIconButton } from "../../../components/ui/MiniIconButton";
 import { normalizeDate } from "../../../utils/normalizeDate";
 
-const UsersTable = ({ users, onToggle }) => {
+const UsersTable = ({ users, onToggle, onConfirmSuspend }) => {
   return (
     <div className="overflow-x-auto">
       <table className="table table-xs">
@@ -60,9 +60,8 @@ const UsersTable = ({ users, onToggle }) => {
                   size="xs"
                 />
 
-                <MiniIconButton icon="edit" size="xs" variant="success" />
-
                 <MiniIconButton
+                  onClick={() => onToggle(user?._id)}
                   icon="assign"
                   tooltip="Assign Plan"
                   size="xs"
@@ -70,15 +69,12 @@ const UsersTable = ({ users, onToggle }) => {
                 />
 
                 <MiniIconButton
-                  icon="user"
-                  tooltip="Assign Role"
+                  onClick={() => onConfirmSuspend(user)}
+                  icon="suspend"
+                  tooltip={`${!user.isActive ? "Suspended" : "Suspend"}`}
                   size="xs"
-                  variant="success"
+                  variant={`${!user.isActive ? "warning" : "primary"}`}
                 />
-
-                <MiniIconButton icon="suspend" size="xs" variant="primary" />
-
-                <MiniIconButton icon="delete" size="xs" variant="danger" />
               </th>
             </tr>
           ))}

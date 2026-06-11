@@ -1,8 +1,20 @@
 import { LucideCreditCard, LucideMail } from "lucide-react";
 import Modal from "../../../components/ui/Modal";
 import Badge from "../../../components/ui/Badge";
+import Button from "../../../components/ui/Button";
+import { LucideIcon } from "../../../components/lib/LucideIcons";
 
-const UserModalData = ({ isModalOpen, closeModal, user }) => {
+const UserModalData = ({
+  isModalOpen,
+  closeModal,
+  user,
+  selectedPlan,
+  onAssign,
+  plans,
+  plansDataStatus,
+  onSelectPlan,
+  onPlanSelectCancel,
+}) => {
   return (
     <div>
       <div className="">
@@ -65,7 +77,7 @@ const UserModalData = ({ isModalOpen, closeModal, user }) => {
                 <p className="text-sm">
                   {user?.plan?.description || "No Plan"}
                 </p>
-                <p className="flex flex-wrap gap-1.5">
+                <p className="flex flex-wrap items-center gap-1.5">
                   Features:&nbsp;
                   {user?.plan?.features?.map((f) => (
                     <Badge key={f}>{f}</Badge>
@@ -74,6 +86,63 @@ const UserModalData = ({ isModalOpen, closeModal, user }) => {
                 <p className="font-bold">
                   Package Type: {user?.plan?.packageType}
                 </p>
+              </div>
+              <div className="border-t border-base-content/15">
+                {plansDataStatus.status !== "success" ? (
+                  plansDataStatus?.content
+                ) : (
+                  <div className="flex items-center justify-between mt-4">
+                    {plans?.map((plan) => (
+                      <div
+                        key={plan._id}
+                        className={`${selectedPlan?._id === plan?._id ? "border border-base-content/15 rounded-xl p-2.5 animate-pulse bg-red-500 text-white" : ""} `}
+                      >
+                        <div className="">
+                          <p
+                            className={`${selectedPlan?._id !== plan?._id ? "text-xl font-extrabold  text-gray-800" : " text-xl text-white font-extrabold"}`}
+                          >
+                            {plan?.name}
+                          </p>
+                          <p className="font-bold">
+                            ${plan?.price?.toFixed(2)}
+                          </p>
+                        </div>
+                        {selectedPlan?._id !== plan._id && (
+                          <Button
+                            onClick={() => onSelectPlan(plan)}
+                            size="xs"
+                            variant="primary"
+                          >
+                            <LucideIcon.CheckCircle size={15} /> Select
+                          </Button>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+              <div className="">
+                {selectedPlan && (
+                  <div className="flex items-center gap-2">
+                    <Button
+                      onClick={onAssign}
+                      size="xs"
+                      variant="success"
+                      icon={LucideIcon.CheckCircle2Icon}
+                    >
+                      Assign Plan
+                    </Button>
+
+                    <Button
+                      onClick={onPlanSelectCancel}
+                      size="xs"
+                      variant="warning"
+                      icon={LucideIcon.CheckCircle2Icon}
+                    >
+                      Cancel
+                    </Button>
+                  </div>
+                )}
               </div>
             </div>
           </Modal>

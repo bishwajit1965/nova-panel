@@ -66,6 +66,10 @@ export const loginUser = async (data) => {
 
   if (!user) throw new AppError("Invalid credentials", 401);
 
+  if (!user.isActive) {
+    throw new AppError("User is suspended/inactive", 403);
+  }
+
   const isMatch = await comparePassword(data.password, user.password);
 
   if (!isMatch) throw new AppError("Invalid credentials", 401);

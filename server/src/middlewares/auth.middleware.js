@@ -47,7 +47,7 @@ export const authMiddleware = async (req, res, next) => {
       throw new AppError("User not found.", 404);
     }
     if (!user.isActive) {
-      throw new AppError("Account is inactive.", 403);
+      throw new AppError("Account is inactive/suspended.", 403);
     }
 
     //✅ 4. Attach user to request

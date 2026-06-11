@@ -15,6 +15,7 @@ import { incrementUsage } from "../services/usage.service.js";
 
 // UPLOAD FILE
 export const uploadFile = asyncHandler(async (req, res) => {
+  console.log("🎯 Upload single method is hit");
   if (!req.file) {
     throw new AppError("No file chosen", 400);
   }
@@ -39,8 +40,7 @@ export const uploadMultipleFiles = asyncHandler(async (req, res) => {
 // GET UPLOADED FILES
 export const getUploadedData = asyncHandler(async (req, res) => {
   const uploaded = await getMyUploads(req.user._id);
-  return sendResponse(res, 200, "Files fetched successfully.", {
-    uploaded,
+  return sendResponse(res, 200, "Files fetched successfully.", uploaded, {
     count: uploaded.length,
   });
 });
