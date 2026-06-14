@@ -20,7 +20,7 @@ const Button = ({
 
   // BASE
   const base =
-    "inline-flex items-center justify-center gap-2 font-medium transition-all duration-300 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer shadow-lg";
+    "inline-flex items-center justify-center gap-2 font-medium transition-all duration-300 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer shadow-sm";
 
   // SIZE
   const sizes = {

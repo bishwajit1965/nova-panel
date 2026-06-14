@@ -10,12 +10,14 @@ import UserModalData from "./UserModalData";
 import { useApiMutation } from "../../../hooks/useApiMutation";
 import Swal from "sweetalert2";
 import ConfirmAction from "../../../components/ui/ConfirmAction";
+import Button from "../../../components/ui/Button";
 
 const UserManagement = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [user, setUser] = useState(null);
   const [selectedPlan, setSelectedPlan] = useState(null);
   const [confirmSuspend, setConfirmSuspend] = useState(null);
+  const [userSearch, setUserSearch] = useState("");
 
   /*** ---> USERS Query Mutation -> fetch permissions API Hook ---> */
   const {
@@ -169,6 +171,18 @@ const UserManagement = () => {
     suspendUserMutation.mutate(payload);
   };
 
+  /**--------- HANDLE SEARCH RESET ---------*/
+  const handleSearchReset = () => {
+    setUserSearch("");
+  };
+  /**--------- HANDLE SEARCH RESET ---------*/
+  const filteredUsers = users?.filter((u) => {
+    const q = userSearch.toLowerCase();
+    return (
+      u?.name?.toLowerCase().includes(q) || u?.slug?.toLowerCase().includes(q)
+    );
+  });
+
   /** --------> Use Fetched Data Status Handler --------> */
   const usersDataStatus = useFetchedDataStatusHandler({
     isLoading: usersLoading,
@@ -187,12 +201,30 @@ const UserManagement = () => {
 
   return (
     <div className="">
-      <div className="mb-2">
-        <h1 className="lg:text-xl text-xs font-extrabold text-base-content/70 flex items-center flex-wrap gap-1">
-          <LucideIcon.Users /> <span>User Management</span> •
-          <span>Total Users:</span>
-          <CountBadge dataLength={users} />
-        </h1>
+      <div className="lg:mb-4 lg:flex grid items-center gap-2 justify-between">
+        <div className="">
+          <h1 className="lg:text-xl text-xs font-extrabold text-base-content/70 flex items-center flex-wrap gap-1">
+            <LucideIcon.Users /> <span>User Management</span> •
+            <span>Total Users:</span>
+            <CountBadge dataLength={users} />
+          </h1>
+        </div>
+
+        <div
+          className={`flex items-center justify-between gap-2 ${!user ? "lg:w-1/4" : " w-1/2"}`}
+        >
+          <input
+            type="text"
+            placeholder="Search users..."
+            className="input input-sm input-bordered w-full shadow"
+            value={userSearch}
+            onChange={(e) => setUserSearch(e.target.value)}
+          />
+
+          <Button onClick={handleSearchReset} size="xs" variant="outline">
+            <LucideIcon.RefreshCcw size={20} /> Reset
+          </Button>
+        </div>
       </div>
       <div className="">
         <div className="grid grid-cols-1">
@@ -201,9 +233,10 @@ const UserManagement = () => {
           ) : (
             <div className="">
               <UsersTable
-                users={paginatedData}
+                users={userSearch ? filteredUsers : paginatedData}
                 onToggle={toggleViewModal}
                 onConfirmSuspend={handleConfirmSuspendUser}
+                setUserSearch={setUserSearch}
               />
 
               {/* ----> PAGINATION READER ---->*/}
@@ -234,7 +267,7 @@ const UserManagement = () => {
         {/* Confirm delete dialogue box */}
         {confirmSuspend && (
           <ConfirmAction
-            confirmText={`${confirmSuspend.isActive ? "Suspend" : "Revoke Suspension"}`}
+            confirmText={`${confirmSuspend?.isActive ? "Suspend" : "Revoke Suspension"}`}
             setState={confirmSuspend.isActive}
             isOpen={confirmSuspend}
             onClose={() => setConfirmSuspend(null)}

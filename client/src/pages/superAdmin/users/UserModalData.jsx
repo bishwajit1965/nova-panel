@@ -91,7 +91,7 @@ const UserModalData = ({
                 {plansDataStatus.status !== "success" ? (
                   plansDataStatus?.content
                 ) : (
-                  <div className="flex items-center justify-between mt-4">
+                  <div className="flex items-center justify-between lg:mt-4 mt-2">
                     {plans?.map((plan) => (
                       <div
                         key={plan._id}
@@ -99,7 +99,7 @@ const UserModalData = ({
                       >
                         <div className="">
                           <p
-                            className={`${selectedPlan?._id !== plan?._id ? "text-xl font-extrabold  text-gray-800" : " text-xl text-white font-extrabold"}`}
+                            className={`${selectedPlan?._id !== plan?._id ? "text-lg font-extrabold  text-gray7600" : " text-lg text-white font-extrabold"}`}
                           >
                             {plan?.name}
                           </p>

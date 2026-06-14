@@ -60,8 +60,8 @@ export const resetSettingsService = async () => {
     key: "global",
     site: {
       name: "My App",
-      logo: "",
-      favicon: "",
+      logo: "https://i.ibb.co.com/Q3s9YK8b/web-Dev-Pro-F.png",
+      favicon: "https://i.ibb.co.com/Q3s9YK8b/web-Dev-Pro-F.png",
     },
     branding: {
       primaryColor: "#000000",

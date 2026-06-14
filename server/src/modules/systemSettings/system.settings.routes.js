@@ -14,11 +14,16 @@ import { ROLES } from "../../constants/roles.constant.js";
 const router = express.Router();
 
 // 🌍 PUBLIC READ
-router.get("/", getSettings);
+router.get(
+  "/all",
+  authMiddleware,
+  roleMiddleware([ROLES.ADMIN, ROLES.SUPER_ADMIN]),
+  getSettings,
+);
 
 // 🔐 ADMIN UPDATE
-router.put(
-  "/",
+router.patch(
+  "/edit/:id",
   authMiddleware,
   roleMiddleware([ROLES.ADMIN, ROLES.SUPER_ADMIN]),
   updateSettings,

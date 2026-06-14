@@ -52,8 +52,8 @@ export const seedSystemSettings = async () => {
 
     site: {
       name: "My App",
-      logo: "",
-      favicon: "",
+      logo: "https://i.ibb.co.com/Q3s9YK8b/web-Dev-Pro-F.png",
+      favicon: "https://i.ibb.co.com/Q3s9YK8b/web-Dev-Pro-F.png",
     },
 
     branding: {

@@ -187,8 +187,6 @@ const PlansManagement = () => {
     planMutation.mutate(payload);
   };
 
-  console.log("Plans", plans);
-
   /** --------> Use Fetched Data Status Handler --------> */
   const plansDataStatus = useFetchedDataStatusHandler({
     isLoading: plansLoading,
