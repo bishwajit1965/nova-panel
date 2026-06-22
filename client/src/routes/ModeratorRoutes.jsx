@@ -1,8 +1,9 @@
 import { ROLES } from "../core/auth/auth.constants";
 import ModeratorLayout from "../layouts/moderator/ModeratorLayout";
-import Dashboard from "../pages/moderator/dashboard/Dashboard";
-import Plans from "../pages/moderator/plans/Plans";
-import Users from "../pages/moderator/users/Users";
+import Dashboard from "../pages/crudComponents/dashboard/Dashboard";
+import PlansManagement from "../pages/crudComponents/plans/PlansManagement";
+import UploadsManagement from "../pages/crudComponents/uploads/UploadsManagement";
+import UserManagement from "../pages/crudComponents/users/UserManagement";
 import NotFound from "../pages/publicPages/NotFound";
 import ProtectedRoute from "./ProtectedRoutes";
 
@@ -22,11 +23,15 @@ export const moderatorRoutes = {
     },
     {
       path: "users",
-      element: <Users />,
+      element: <UserManagement />,
     },
     {
       path: "plans",
-      element: <Plans />,
+      element: <PlansManagement />,
+    },
+    {
+      path: "uploads",
+      element: <UploadsManagement />,
     },
     {
       path: "*",

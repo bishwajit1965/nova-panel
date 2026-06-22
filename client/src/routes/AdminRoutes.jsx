@@ -1,12 +1,12 @@
 import AdminLayout from "../layouts/admin/AdminLayout";
-import Users from "../pages/admin/users/Users";
-import Uploads from "../pages/admin/uploads/Uploads";
-import Plan from "../pages/admin/plans/Plan";
-import Dashboard from "../pages/admin/dashboard/Dashboard";
-import Settings from "../pages/admin/settings/Settings";
 import NotFound from "../pages/publicPages/NotFound";
 import ProtectedRoute from "./ProtectedRoutes";
 import { ROLES } from "../core/auth/auth.constants";
+import Dashboard from "../pages/crudComponents/dashboard/Dashboard";
+import UploadsManagement from "../pages/crudComponents/uploads/UploadsManagement";
+import PlansManagement from "../pages/crudComponents/plans/PlansManagement";
+import Settings from "../pages/crudComponents/settings/Settings";
+import UserManagement from "../pages/crudComponents/users/UserManagement";
 
 export const adminRoutes = {
   path: "/admin",
@@ -21,9 +21,9 @@ export const adminRoutes = {
       path: "dashboard",
       element: <Dashboard />,
     },
-    { path: "users", element: <Users /> },
-    { path: "uploads", element: <Uploads /> },
-    { path: "plans", element: <Plan /> },
+    { path: "users", element: <UserManagement /> },
+    { path: "uploads", element: <UploadsManagement /> },
+    { path: "plans", element: <PlansManagement /> },
     { path: "settings", element: <Settings /> },
     {
       path: "*",

@@ -1,16 +1,16 @@
 import { ROLES } from "../core/auth/auth.constants";
 import SuperAdminLayout from "../layouts/superAdmin/SuperAdminLayout";
 import NotFound from "../pages/publicPages/NotFound";
-import Dashboard from "../pages/superAdmin/dashboard/Dashboard";
-import PermissionsManagement from "../pages/superAdmin/permissions/PermissionsManagement";
-import AccessManagement from "../pages/superAdmin/rolePermissionAssignment/AccessManagement";
-import RolePermissionControl from "../pages/superAdmin/rolePermissionAssignment/RolePermissionControl";
-import RolesManagement from "../pages/superAdmin/roles/RolesManagement";
-import Settings from "../pages/superAdmin/settings/Settings";
 import ProtectedRoute from "./ProtectedRoutes";
-import PlansManagement from "../pages/superAdmin/plans/PlansManagement";
-import UserManagement from "../pages/superAdmin/users/UserManagement";
-import UploadsManagement from "../pages/superAdmin/uploads/UploadsManagement";
+import Dashboard from "../pages/crudComponents/dashboard/Dashboard";
+import UserManagement from "../pages/crudComponents/users/UserManagement";
+import UploadsManagement from "../pages/crudComponents/uploads/UploadsManagement";
+import PermissionsManagement from "../pages/crudComponents/permissions/PermissionsManagement";
+import RolePermissionControl from "../pages/crudComponents/rolePermissionAssignment/RolePermissionControl";
+import AccessManagement from "../pages/crudComponents/rolePermissionAssignment/AccessManagement";
+import PlansManagement from "../pages/crudComponents/plans/PlansManagement";
+import Settings from "../pages/crudComponents/settings/Settings";
+import RolesManagement from "../pages/crudComponents/roles/RolesManagement";
 
 export const superAdminRoutes = {
   path: "/superAdmin",

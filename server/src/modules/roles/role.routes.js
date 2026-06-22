@@ -12,11 +12,12 @@ import {
 
 import { authMiddleware } from "../../middlewares/auth.middleware.js";
 import { roleMiddleware } from "../../middlewares/role.middleware.js";
+import { ROLES } from "../../constants/roles.constant.js";
 
 const router = express.Router();
 
 router.use(authMiddleware);
-router.use(roleMiddleware("superadmin", "admin"));
+router.use(roleMiddleware([ROLES.ADMIN, ROLES.SUPER_ADMIN, ROLES.MODERATOR]));
 
 router.get("/all", getAllRoles);
 router.get("/:id", getRoleById);

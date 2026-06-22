@@ -19,11 +19,13 @@ import { logoutUser } from "../../services/auth.service";
 import Swal from "sweetalert2";
 import Button from "../../components/ui/Button.jsx";
 import { LucideIcon } from "../../components/lib/LucideIcons.js";
+import { usePermission } from "../../hooks/hasPermission.js";
 
 const AdminLayout = () => {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const location = useLocation();
+  const { can } = usePermission();
   const formatPathName = (pathname) => {
     return pathname
       .replace(/-/g, " ") // hyphens → spaces
@@ -32,6 +34,10 @@ const AdminLayout = () => {
       .map((word) => word.charAt(0).toUpperCase() + word.slice(1)) // capitalize each
       .join(" ");
   };
+
+  const visibleLinks = adminSidebarLinks.filter(
+    (link) => !link.permission || can(link.permission),
+  );
 
   let page = formatPathName(location.pathname.trim().split("/").pop());
 
@@ -101,7 +107,7 @@ const AdminLayout = () => {
               </h1>
             </div>
           </div>
-          {adminSidebarLinks?.map((link) => {
+          {visibleLinks?.map((link) => {
             const Icon = link.icon;
 
             return (

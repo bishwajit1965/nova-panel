@@ -19,12 +19,14 @@ import { logoutUser } from "../../services/auth.service";
 import { supAdminSidebarLinks } from "../../routes/supAdminSidebarLinks";
 import Button from "../../components/ui/Button";
 import { LucideIcon } from "../../components/lib/LucideIcons";
+import { usePermission } from "../../hooks/hasPermission";
 
 const SuperAdminLayout = () => {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const { setUser, user } = useAuth();
   const [isSideBarOpen, setIsSideBarOpen] = useState(false);
+  const { can } = usePermission();
   const location = useLocation();
   const formatPathName = (pathname) => {
     return pathname
@@ -34,6 +36,10 @@ const SuperAdminLayout = () => {
       .map((word) => word.charAt(0).toUpperCase() + word.slice(1)) // capitalize each
       .join(" ");
   };
+
+  const visibleLinks = supAdminSidebarLinks.filter(
+    (link) => !link.permission || can(link.permission),
+  );
 
   let page = formatPathName(location.pathname.trim().split("/").pop());
   const navigate = useNavigate();
@@ -97,7 +103,7 @@ const SuperAdminLayout = () => {
               </h1>
             </div>
           </div>
-          {supAdminSidebarLinks?.map((link) => {
+          {visibleLinks?.map((link) => {
             const Icon = link.icon;
 
             return (
@@ -213,12 +219,12 @@ const SuperAdminLayout = () => {
           </div>
         </header>
         {/* Outlet */}
-        <div className="p-4 min-h-[calc(100vh-100px)] overflow-y-auto overflow-hidden text-base-content/80">
+        <div className="p-4 min-h-[calc(100vh-80px)] text-base-content/80">
           {<Outlet />}
         </div>
 
         {/* Footer */}
-        <footer className="absolute left-0 right-0 bottom-0 bg-gray-200 text-gray-600 p-2 text-center border-t border-slate-300">
+        <footer className="absolute left-0 right-0 bottom-0 bg-gray-200 text-center border-t border-slate-300 p-2">
           &copy; {new Date().getFullYear()} Nova Panel. All rights reserved.
         </footer>
       </main>

@@ -16,4 +16,9 @@ export const moderatorSidebarLinks = [
     path: "/moderator/plans",
     icon: CreditCard,
   },
+  {
+    label: "Uploads",
+    path: "/moderator/uploads",
+    icon: CreditCard,
+  },
 ];

@@ -17,7 +17,7 @@ const router = express.Router();
 
 // Common auth validator to all routes
 router.use(authMiddleware);
-router.use(roleMiddleware([ROLES.ADMIN, ROLES.SUPER_ADMIN]));
+router.use(roleMiddleware([ROLES.ADMIN, ROLES.SUPER_ADMIN, ROLES.MODERATOR]));
 
 router.post("/create", createPlan);
 router.get("/all", getAllPlans);

@@ -21,7 +21,7 @@ import { accessGuard } from "../../middlewares/accessGuard.js";
 const router = express.Router();
 
 router.use(authMiddleware);
-// router.use(roleMiddleware([ROLES.ADMIN, ROLES.SUPER_ADMIN]));
+router.use(roleMiddleware([ROLES.ADMIN, ROLES.SUPER_ADMIN, ROLES.MODERATOR]));
 
 // Fetch files from cloudinary
 router.get("/all", getUploadedData);
