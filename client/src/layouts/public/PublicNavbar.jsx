@@ -5,6 +5,7 @@ import { useAuth } from "../../hooks/useAuth";
 import { useState } from "react";
 import Swal from "sweetalert2";
 import {
+  LucideCreditCard,
   LucideLogIn,
   LucideLogOut,
   LucideMail,
@@ -182,8 +183,16 @@ const PublicNavbar = () => {
                   <a>Settings</a>
                 </li>
                 <li>
-                  <a href="#">
+                  <a href="#" className="font-bold">
                     <LucideUser size={16} /> {user?.name}
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="font-bold capitalize">
+                    <LucideCreditCard size={16} />
+                    {user?.roles.map((r) => (
+                      <span>{r?.name}</span>
+                    ))}
                   </a>
                 </li>
                 <li>
@@ -191,7 +200,7 @@ const PublicNavbar = () => {
                     <LucideMail size={16} /> {user?.email}
                   </a>
                 </li>
-                <li>
+                <li className="font-bold">
                   <a disabled={loading} onClick={handleLogout}>
                     <LucideLogOut size={16} /> Logout
                   </a>

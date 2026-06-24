@@ -7,12 +7,15 @@ import Settings from "../pages/user/settings/Settings";
 import NotFound from "../pages/publicPages/NotFound";
 import ProtectedRoute from "./ProtectedRoutes";
 import { ROLES } from "../core/auth/auth.constants";
+import MaintenanceGuard from "./MaintenanceGuard";
 
 export const userRoutes = {
   path: "/users",
   element: (
     <ProtectedRoute allowedRoles={[ROLES.USER]}>
-      <UserLayout />
+      <MaintenanceGuard>
+        <UserLayout />
+      </MaintenanceGuard>
     </ProtectedRoute>
   ),
 

@@ -1,9 +1,11 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import ThemeToggle from "../../components/ui/ThemeToggle";
 import {
+  LucideCreditCard,
   LucideLogIn,
   LucideLogOut,
   LucideMail,
+  LucideUser,
   LucideUser2,
 } from "lucide-react";
 import { useState } from "react";
@@ -153,10 +155,14 @@ const UsersNavbar = () => {
             className="btn btn-ghost btn-circle avatar"
           >
             <div className="w-10 rounded-full">
-              <img
-                alt="Tailwind CSS Navbar component"
-                src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
-              />
+              {user ? (
+                <img src={user?.avatarUrl} alt={user?.name} />
+              ) : (
+                <img
+                  alt="Tailwind CSS Navbar component"
+                  src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+                />
+              )}
             </div>
           </div>
           <ul
@@ -173,6 +179,19 @@ const UsersNavbar = () => {
                 </li>
                 <li>
                   <a>Settings</a>
+                </li>
+                <li>
+                  <a href="#">
+                    <LucideUser size={16} /> {user?.name}
+                  </a>
+                </li>
+                <li>
+                  <a href="#" className="font-bold capitalize">
+                    <LucideCreditCard size={16} />
+                    {user?.roles.map((r) => (
+                      <span>{r?.name}</span>
+                    ))}
+                  </a>
                 </li>
                 <li>
                   <a href="#">

@@ -8,6 +8,8 @@ import { validationRules } from "../../../../../server/src/modules/auth/auth.val
 import BrandLogo from "../brandLogo/BrandLogo";
 import Button from "../../ui/Button";
 import BtnLoader from "../../ui/BtnLoader";
+import { Input } from "../../ui/Input";
+import { LucideIcon } from "../../lib/LucideIcons";
 
 const Login = () => {
   const [loading, setLoading] = useState(false);
@@ -112,7 +114,7 @@ const Login = () => {
     <div className="min-h-[calc(100vh-200px)] flex items-center justify-center">
       <form
         onSubmit={handleSubmit}
-        className="lg:max-w-sm min-w-full lg:p-6 p-2 lg:space-y-4 space-y-2 items-center justify-center border border-base-content/10 bg-base-200 rounded-lg shadow hover:shadow-xl"
+        className="lg:max-w-sm min-w-full lg:p-6 p-2 lg:space-y-4 space-y-2 items-center justify-center border border-base-content/10 bg-base-300 rounded-lg shadow hover:shadow-xl"
       >
         <div className="border-b border-base-content/10 pb-2 mb-4">
           <Link to="/auth/register">
@@ -129,11 +131,12 @@ const Login = () => {
         </div>
 
         <div className="relative">
-          <input
+          <Input
             name="email"
             placeholder="Email • example@gmail.com"
             className={`w-full border input input-sm input-rounded ${errors.email ? "border-red-500 bg-yellow-100" : ""}`}
             onChange={handleChange}
+            icon={LucideIcon.Mail}
           />
           {errors.email && (
             <p className="text-red-600 absolute bottom-1 right-8">
@@ -142,12 +145,13 @@ const Login = () => {
           )}
         </div>
         <div className="relative">
-          <input
+          <Input
             name="password"
             type={readPassword ? "text" : "password"}
             placeholder="Password • A.#123232.#Some"
             className={`w-full border input input-sm input-rounded ${errors.password ? "border-red-500 bg-yellow-100" : ""}`}
             onChange={handleChange}
+            icon={LucideIcon.Lock}
           />
 
           <button
@@ -169,7 +173,7 @@ const Login = () => {
         </div>
         <div className="flex items-center justify-between flex-wrap gap-2">
           <NavLink
-            to="/auth/reset-password"
+            to="/auth/forgot-password"
             className="text-xs text-base-content/60 hover:underline hover:text-blue-500"
           >
             Forgot password ? Reset

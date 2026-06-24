@@ -9,6 +9,8 @@ import { registerUser } from "../../../services/auth.service";
 import Swal from "sweetalert2";
 import Button from "../../ui/Button";
 import BtnLoader from "../../ui/BtnLoader";
+import { Input } from "../../ui/Input";
+import { LucideIcon } from "../../lib/LucideIcons";
 
 const Register = () => {
   const [loading, setLoading] = useState(false);
@@ -98,7 +100,7 @@ const Register = () => {
     <div className="min-h-[calc(100vh-200px)] flex items-center justify-center">
       <form
         onSubmit={handleSubmit}
-        className="lg:max-w-sm min-w-full lg:p-6 p-2 lg:space-y-4 space-y-2 items-center justify-center border border-base-content/10 bg-base-200 rounded-lg shadow hover:shadow-xl"
+        className="lg:max-w-sm min-w-full lg:p-6 p-2 lg:space-y-4 space-y-2 items-center justify-center border border-base-content/10 bg-base-300 rounded-lg shadow hover:shadow-xl"
       >
         <div className="border-b border-base-content/10 pb-2 mb-4">
           <Link to="/auth/login">
@@ -114,9 +116,10 @@ const Register = () => {
           </Link>
         </div>
         <div className="w-full">
-          <input
+          <Input
             type="text"
             name="name"
+            icon={LucideIcon.User}
             placeholder="Name → Emily Jones"
             id="name"
             className={`w-full input input-sm ${errors.name ? "border-red-500 bg-yellow-100" : ""}`}
@@ -125,9 +128,10 @@ const Register = () => {
           {errors.name && <p className="text-xs text-red-500">{errors.name}</p>}
         </div>
         <div className="w-full">
-          <input
+          <Input
             type="text"
             name="email"
+            icon={LucideIcon.Mail}
             placeholder="Email → example@gmail.com"
             id="email"
             className={`w-full input input-sm ${errors.email ? "border-red-500 bg-yellow-100" : ""}`}
@@ -139,9 +143,10 @@ const Register = () => {
         </div>
 
         <div className="w-full relative">
-          <input
+          <Input
             type={readPassword ? "text" : "password"}
             name="password"
+            icon={LucideIcon.Lock}
             placeholder="Password → A.#122132.#Some"
             id="password"
             className={`w-full input input-sm ${errors.password ? "border-red-500 bg-yellow-100" : ""}`}
@@ -163,9 +168,10 @@ const Register = () => {
           )}
         </div>
         <div className="w-full relative">
-          <input
+          <Input
             type={readVerifyPassword ? "text" : "password"}
             name="verifyPassword"
+            icon={LucideIcon.Lock}
             placeholder="Verify Password → A.#122132.#Some"
             id="verifyPassword"
             className={`w-full input input-sm ${errors.verifyPassword ? "border-red-500 bg-yellow-100" : ""}`}
@@ -187,9 +193,10 @@ const Register = () => {
           )}
         </div>
         <div className="w-full">
-          <input
+          <Input
             type="text"
             name="avatarUrl"
+            icon={LucideIcon.UserCircle}
             placeholder="Photo Url → https://somelink.png"
             id="avatar"
             className={`w-full input input-sm ${errors.avatarUrl ? "border-red-500 bg-yellow-100" : ""}`}

@@ -3,7 +3,16 @@ import dotenv from "dotenv";
 dotenv.config();
 
 // required env validation
-const requiredEnv = ["MONGO_DB_URI", "JWT_SECRET", "JWT_REFRESH_SECRET"];
+const requiredEnv = [
+  "MONGO_DB_URI",
+  "JWT_SECRET",
+  "JWT_REFRESH_SECRET",
+  "SMTP_HOST",
+  "SMTP_PORT",
+  "SMTP_USER",
+  "SMTP_PASS",
+  "CLIENT_URL",
+];
 
 requiredEnv.forEach((key) => {
   if (!process.env[key]) {
@@ -27,4 +36,11 @@ export const config = {
   CLOUDINARY_CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME,
   CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY,
   CLOUDINARY_API_SECRET: process.env.CLOUDINARY_API_SECRET,
+
+  // NODE MAILER
+  SMTP_HOST: process.env.SMTP_HOST,
+  SMTP_PORT: process.env.SMTP_PORT,
+  SMTP_USER: process.env.SMTP_USER,
+  SMTP_PASS: process.env.SMTP_PASS,
+  CLIENT_URL: process.env.CLIENT_URL,
 };

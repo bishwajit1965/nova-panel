@@ -54,6 +54,30 @@ export const refreshToken = asyncHandler(async (req, res) => {
   return sendResponse(res, 200, "Token refreshed successfully.");
 });
 
+// FORGOT PASSWORD
+export const forgotPassword = asyncHandler(async (req, res) => {
+  const { email } = req.body;
+
+  const resetToken = await authService.forgotPasswordService(email);
+
+  return sendResponse(
+    res,
+    200,
+    "Reset link generated successfully. Check email.",
+    resetToken, // remove later in production
+  );
+});
+
+// RESET PASSWORD
+export const resetPassword = asyncHandler(async (req, res) => {
+  const { resetToken } = req.params;
+  const { password } = req.body;
+
+  await authService.resetPasswordService(resetToken, password);
+
+  return sendResponse(res, 200, "Password reset is successful.");
+});
+
 // LOGOUT
 export const logout = asyncHandler(async (req, res) => {
   await authService.logoutUser(req.user._id);

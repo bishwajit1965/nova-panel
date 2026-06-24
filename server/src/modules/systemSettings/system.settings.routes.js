@@ -13,6 +13,8 @@ import { ROLES } from "../../constants/roles.constant.js";
 
 const router = express.Router();
 
+router.get("/public", getSettings);
+
 // 🌍 PUBLIC READ
 router.get(
   "/all",

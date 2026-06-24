@@ -1,8 +1,9 @@
+import ForgotPassword from "../components/shared/auth/ForgotPassword";
 import Login from "../components/shared/auth/Login";
 import Register from "../components/shared/auth/Register";
+import ResetPassword from "../components/shared/auth/ResetPassword";
 import AuthLayout from "../layouts/auth/AuthLayout";
 import NotFound from "../pages/publicPages/NotFound";
-import ResetPassword from "../pages/publicPages/ResetPassword";
 
 export const authRoutes = {
   path: "/auth",
@@ -10,7 +11,11 @@ export const authRoutes = {
   children: [
     { path: "login", element: <Login /> },
     { path: "register", element: <Register /> },
-    { path: "reset-password", element: <ResetPassword /> },
+    { path: "forgot-password", element: <ForgotPassword /> },
+    {
+      path: "reset-password/:resetToken",
+      element: <ResetPassword />,
+    },
     {
       path: "*",
       element: <NotFound />,

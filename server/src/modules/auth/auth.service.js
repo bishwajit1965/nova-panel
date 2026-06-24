@@ -2,16 +2,19 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import User from "../users/user.model.js";
 import Role from "../roles/role.model.js";
+import crypto from "crypto";
+
 import {
   generateAccessToken,
   generateRefreshToken,
 } from "../../utils/generateToken.js";
 import AppError from "../../core/errors/AppError.js";
-import { config } from "../../config/env.js";
 import { hashPassword } from "../../utils/hashPassword.js";
 import { comparePassword } from "../../utils/comparePassword.js";
 import { verifyRefreshToken } from "../../utils/verifyToken.js";
 import Plan from "../plans/plan.model.js";
+import { config } from "../../config/env.js";
+import { sendEmail } from "../../utils/sendEmail.js";
 
 // REGISTER USER
 export const registerUser = async (data) => {
@@ -143,6 +146,74 @@ export const refreshAccessToken = async (oldRefreshToken) => {
     accessToken: newAccessToken,
     refreshToken: newRefreshToken,
   };
+};
+
+// FORGOT PASSWORD
+export const forgotPasswordService = async (email) => {
+  const user = await User.findOne({ email });
+  console.log("USER", user);
+  if (!user) {
+    throw new AppError("User not found.", 404);
+  }
+  // 1. Generate raw token
+  const resetToken = crypto.randomBytes(32).toString("hex");
+  console.log("Reset token", resetToken);
+
+  // 2. Hash token for DB storage
+  const hashedToken = crypto
+    .createHash("sha256")
+    .update(resetToken)
+    .digest("hex");
+
+  // 3. Save to DB
+  user.resetPasswordToken = hashedToken;
+  user.resetPasswordExpires = Date.now() + 10 * 60 * 1000; //10 mins
+  await user.save();
+
+  // 🔥 RESET LINK
+  const resetUrl = `${config.CLIENT_URL}/auth/reset-password/${resetToken}`;
+  console.log("Reset Url", resetUrl);
+  console.log("BEFORE SEND EMAIL");
+  await sendEmail({
+    to: user.email,
+    subject: "Nova Panel - Password Reset",
+    html: `
+      <h2>Password Reset Request</h2>
+      <p>You requested a password reset.</p>
+      <p>Click below to reset your password:</p>
+      <a href="${resetUrl}" target="_blank">${resetUrl}</a>
+      <p>This link will expire in 10 minutes.</p>
+    `,
+  });
+  console.log("EMAIL SENT");
+
+  // 4. Return raw token (to send via email)
+  return resetToken;
+};
+
+// RESET PASSWORD
+export const resetPasswordService = async (token, newPassword) => {
+  const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
+
+  const user = await User.findOne({
+    resetPasswordToken: hashedToken,
+    resetPasswordExpires: { $gt: Date.now() },
+  });
+
+  if (!user) {
+    throw new AppError("Invalid or expired reset token", 400);
+  }
+
+  // update password
+  user.password = await hashPassword(newPassword);
+
+  // clear reset fields
+  user.resetPasswordToken = null;
+  user.resetPasswordExpires = null;
+
+  await user.save();
+
+  return true;
 };
 
 // LOGOUT USER

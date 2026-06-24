@@ -5,35 +5,77 @@ import HomePage from "../pages/publicPages/HomePage";
 import NotFound from "../pages/publicPages/NotFound";
 import Terms from "../pages/publicPages/Terms";
 import UnauthorizedPage from "../pages/publicPages/UnauthorizedPage";
+import MaintenanceGuard from "./MaintenanceGuard";
 
 export const publicRoutes = {
   path: "/",
-  element: <PublicLayout />,
+  element: <MaintenanceGuard />,
 
   children: [
     {
-      index: true,
-      element: <HomePage />,
-    },
-    {
-      path: "about",
-      element: <AboutPage />,
-    },
-    {
-      path: "contact",
-      element: <ContactPage />,
-    },
-    {
-      path: "terms",
-      element: <Terms />,
-    },
-    {
-      path: "unauthorized",
-      element: <UnauthorizedPage />,
-    },
-    {
-      path: "*",
-      element: <NotFound />,
+      element: <PublicLayout />,
+      children: [
+        {
+          index: true,
+          element: <HomePage />,
+        },
+        {
+          path: "about",
+          element: <AboutPage />,
+        },
+        {
+          path: "contact",
+          element: <ContactPage />,
+        },
+        {
+          path: "terms",
+          element: <Terms />,
+        },
+        {
+          path: "unauthorized",
+          element: <UnauthorizedPage />,
+        },
+        {
+          path: "*",
+          element: <NotFound />,
+        },
+      ],
     },
   ],
 };
+
+// export const publicRoutes = {
+//   path: "/",
+//   element: <MaintenanceGuard />,
+//   children: [
+//     {
+//       element: <PublicLayout />,
+//       children: [
+//         {
+//           index: true,
+//           element: <HomePage />,
+//         },
+//         {
+//           path: "about",
+//           element: <AboutPage />,
+//         },
+//         {
+//           path: "contact",
+//           element: <ContactPage />,
+//         },
+//         {
+//           path: "terms",
+//           element: <Terms />,
+//         },
+//         {
+//           path: "unauthorized",
+//           element: <UnauthorizedPage />,
+//         },
+//         {
+//           path: "*",
+//           element: <NotFound />,
+//         },
+//       ],
+//     },
+//   ],
+// };

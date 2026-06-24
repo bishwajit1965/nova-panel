@@ -13,9 +13,12 @@ import {
 export const getSettings = asyncHandler(async (req, res) => {
   const settings = await getSettingsService();
 
-  return sendResponse(res, 200, "System settings fetched successfully", {
+  return sendResponse(
+    res,
+    200,
+    "System settings fetched successfully",
     settings,
-  });
+  );
 });
 
 // 🔹 UPDATE SETTINGS (ADMIN ONLY)

@@ -35,6 +35,22 @@ const API_PATHS = {
     KEY: ["superAdmin-settings"],
   },
 
+  /**============================
+   * RESET PASSWORD ENDPOINTS
+   *============================*/
+  RESET_PASSWORD: {
+    ENDPOINT: "auth",
+    KEY: ["password-reset"],
+  },
+
+  /**============================
+   * SYSTEM SETTINGS ENDPOINTS
+   *============================*/
+  SYSTEM_SETTINGS: {
+    ENDPOINT: "settings",
+    KEY: ["system-settings"],
+  },
+
   /**========================
    * ADMIN ENDPOINTS
    *=========================*/
