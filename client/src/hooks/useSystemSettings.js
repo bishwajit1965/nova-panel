@@ -3,7 +3,7 @@ import { useApiQuery } from "./useApiQuery";
 import useFetchedDataStatusHandler from "./useFetchedDataStatusHandler";
 
 const useSystemSettings = () => {
-  /*** ---> System Settings Query Mutation  fetch permissions API Hook ---> */
+  /*** -> System Settings Query Mutation  fetch permissions API Hook -> */
   const {
     data: systemSettings,
     isLoading: systemSettingsLoading,

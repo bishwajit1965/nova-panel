@@ -4,7 +4,6 @@ import useSystemSettings from "../hooks/useSystemSettings";
 
 const MaintenanceGuard = () => {
   const { systemSettings, systemSettingsLoading } = useSystemSettings();
-  console.log("System settings", systemSettings);
 
   if (systemSettingsLoading) return null;
 

@@ -10,6 +10,6 @@ router.use(authMiddleware);
 router.use(roleMiddleware([ROLES.ADMIN, ROLES.SUPER_ADMIN]));
 
 // 📊 Get all logs (admin only)
-router.get("/", getAllAuditLogs);
+router.get("/all", getAllAuditLogs);
 
 export default router;

@@ -43,39 +43,3 @@ export const publicRoutes = {
     },
   ],
 };
-
-// export const publicRoutes = {
-//   path: "/",
-//   element: <MaintenanceGuard />,
-//   children: [
-//     {
-//       element: <PublicLayout />,
-//       children: [
-//         {
-//           index: true,
-//           element: <HomePage />,
-//         },
-//         {
-//           path: "about",
-//           element: <AboutPage />,
-//         },
-//         {
-//           path: "contact",
-//           element: <ContactPage />,
-//         },
-//         {
-//           path: "terms",
-//           element: <Terms />,
-//         },
-//         {
-//           path: "unauthorized",
-//           element: <UnauthorizedPage />,
-//         },
-//         {
-//           path: "*",
-//           element: <NotFound />,
-//         },
-//       ],
-//     },
-//   ],
-// };

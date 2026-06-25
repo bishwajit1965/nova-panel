@@ -5,6 +5,7 @@ import {
   CreditCard,
   Settings,
   CreditCardIcon,
+  Logs,
 } from "lucide-react";
 
 export const supAdminSidebarLinks = [
@@ -13,6 +14,12 @@ export const supAdminSidebarLinks = [
     path: "/superAdmin/dashboard",
     icon: LayoutDashboard,
     permission: "dashboard.read",
+  },
+  {
+    label: "Audit Logs",
+    path: "/superAdmin/audit-logs",
+    icon: Logs,
+    permission: "audit-logs.read",
   },
   {
     label: "Users",

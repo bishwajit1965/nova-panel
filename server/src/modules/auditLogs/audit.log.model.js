@@ -17,6 +17,13 @@ const auditLogSchema = new mongoose.Schema(
       required: true, // upload, plan, user, settings
     },
 
+    roles: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Role",
+      },
+    ],
+
     targetId: {
       type: mongoose.Schema.Types.ObjectId,
       default: null,

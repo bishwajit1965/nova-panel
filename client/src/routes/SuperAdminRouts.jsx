@@ -11,6 +11,7 @@ import AccessManagement from "../pages/crudComponents/rolePermissionAssignment/A
 import PlansManagement from "../pages/crudComponents/plans/PlansManagement";
 import Settings from "../pages/crudComponents/settings/Settings";
 import RolesManagement from "../pages/crudComponents/roles/RolesManagement";
+import AuditLogsManagement from "../pages/crudComponents/auditLogs/AuditLogsManagement";
 
 export const superAdminRoutes = {
   path: "/superAdmin",
@@ -24,6 +25,7 @@ export const superAdminRoutes = {
       path: "dashboard",
       element: <Dashboard />,
     },
+    { path: "audit-logs", element: <AuditLogsManagement /> },
     { path: "user-management", element: <UserManagement /> },
     { path: "uploads", element: <UploadsManagement /> },
     { path: "roles", element: <RolesManagement /> },

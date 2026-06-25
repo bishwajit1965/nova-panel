@@ -8,6 +8,8 @@ import roleRoutes from "../modules/roles/role.routes.js";
 import permissionRoutes from "../modules/permissions/permission.routes.js";
 import systemSettingsRoutes from "../modules/systemSettings/system.settings.routes.js";
 
+import auditLogRoutes from "../modules/auditLogs/audit.log.routes.js";
+
 const router = express.Router();
 
 router.use("/auth", authRoutes);
@@ -18,5 +20,6 @@ router.use("/uploads", uploadRoutes);
 router.use("/roles", roleRoutes);
 router.use("/permissions", permissionRoutes);
 router.use("/settings", systemSettingsRoutes);
+router.use("/auditLogs", auditLogRoutes);
 
 export default router;

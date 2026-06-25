@@ -68,8 +68,8 @@ export function MiniIconButton({
   const text = tooltip || labels[icon?.toLowerCase()] || "Action";
 
   const sizes = {
-    xs: "w-7 h-7 p-0",
-    sm: "w-8 h-8 p-0",
+    xs: "w-8 h-8 p-0",
+    sm: "w-9 h-9 p-0",
     md: "w-10 h-10 p-0",
   };
 

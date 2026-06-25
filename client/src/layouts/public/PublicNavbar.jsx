@@ -188,10 +188,10 @@ const PublicNavbar = () => {
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="font-bold capitalize">
+                  <a href="#" className="font-bold capitalize flex flex-wrap">
                     <LucideCreditCard size={16} />
                     {user?.roles.map((r) => (
-                      <span>{r?.name}</span>
+                      <span>{r?.name} •</span>
                     ))}
                   </a>
                 </li>

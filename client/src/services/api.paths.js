@@ -36,6 +36,14 @@ const API_PATHS = {
   },
 
   /**============================
+   * AUDIT LOGS ENDPOINTS
+   *============================*/
+  AUDIT_LOGS: {
+    ENDPOINT: "auditLogs",
+    KEY: ["audit-logs"],
+  },
+
+  /**============================
    * RESET PASSWORD ENDPOINTS
    *============================*/
   RESET_PASSWORD: {
