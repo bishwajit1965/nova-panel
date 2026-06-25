@@ -12,6 +12,7 @@ import { asyncHandler } from "../../core/async/asyncHandler.js";
 import { sendResponse } from "../../utils/sendResponse.js";
 import AppError from "../../core/errors/AppError.js";
 import { incrementUsage } from "../services/usage.service.js";
+import { createAuditLogService } from "../auditLogs/audit.log.service.js";
 
 // UPLOAD FILE
 export const uploadFile = asyncHandler(async (req, res) => {
@@ -20,7 +21,23 @@ export const uploadFile = asyncHandler(async (req, res) => {
   }
   const upload = await saveUpload(req.file, req.user._id);
   await incrementUsage(req.user._id, "upload");
-  return sendResponse(res, 201, "File uploaded successfully.", { upload });
+
+  // Generate audit-log
+  const user = req?.user;
+  await createAuditLogService({
+    actor: user?._id,
+    action: "FILE_UPLOADED",
+    module: "UPLOADS",
+    targetId: upload?._id,
+    roles: user?.roles,
+    metadata: {
+      email: user?.email,
+      actionKey: upload?.publicId,
+      module: "UPLOADS",
+    },
+    req,
+  });
+  return sendResponse(res, 201, "File uploaded successfully.", upload);
 });
 
 // UPLOAD MULTIPLE FILES
@@ -52,6 +69,25 @@ export const updateFile = asyncHandler(async (req, res) => {
 
 // DELETE FILE
 export const deleteFile = asyncHandler(async (req, res) => {
+  const { id } = req?.params?.id;
+
+  const upload = await Upload.findById(id);
+  console.log("Upload to delete", upload);
+  // Generate audit-log
+  const user = req?.user;
+  await createAuditLogService({
+    actor: user?._id,
+    action: "FILE_DELETED",
+    module: "UPLOADS",
+    targetId: upload?._id,
+    roles: user?.roles,
+    metadata: {
+      email: user?.email,
+      actionKey: upload?.publicId,
+      module: "UPLOADS",
+    },
+    req,
+  });
   await deleteUploadById(req.params.id, req.user);
   return sendResponse(res, 200, "File deleted successfully.");
 });

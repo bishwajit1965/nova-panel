@@ -152,6 +152,7 @@ import {
   UserCog2,
   UserCog2Icon,
   UserRoundCog,
+  Image,
 } from "lucide-react";
 
 // Central registry
@@ -220,6 +221,7 @@ export const LucideIcon = {
   HeartCrackIcon,
   History,
   HistoryIcon,
+  Image,
   Key,
   KeyIcon,
   KeyRound,

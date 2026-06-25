@@ -9,7 +9,7 @@ import useFetchedDataStatusHandler from "../../../hooks/useFetchedDataStatusHand
 import UploadCard from "./UploadCard";
 import Pagination from "../../../components/pagination/Pagination";
 import ConfirmDialogue from "../../../components/ui/ConfirmDialogue";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import CountBadge from "../../../components/ui/CountBadge";
 import NoDataFound from "../../../components/ui/NoDataFound";
 import UploadViewModal from "./UploadViewModal";
@@ -19,6 +19,7 @@ const UploadsManagement = () => {
   const [confirmDelete, setConfirmDelete] = useState(null);
   const [selectedUpload, setSelectedUpload] = useState(null);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+  const fileInputRef = useRef(null);
 
   // Fetches all uploads for super admin
   const {
@@ -48,6 +49,10 @@ const UploadsManagement = () => {
 
     onSuccess: (data) => {
       console.log("Upload/update response:", data);
+      setFile(null);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
       Swal.fire({
         position: "top-end",
         icon: "success",
@@ -159,20 +164,33 @@ const UploadsManagement = () => {
           <h1 className="lg:text-xl text-lg font-extrabold">
             Super Admin Uploads Management
           </h1>
-          <div className="border border-base-content/15 lg:p-6 p-3 rounded-xl">
+          <div className="border border-base-content/15 lg:p-6 p-3 rounded-xl shadow-md hover:shadow-xl">
+            <h1 className="lg:text-lg text-xs font-bold border-b border-base-content/15 pb-1 mb-4">
+              Select file & Upload
+            </h1>
             <form onSubmit={handleSubmit} className="space-y-4">
               <Input
                 type="file"
                 name="file"
-                icon={LucideIcon.FileText}
+                ref={fileInputRef}
+                icon={LucideIcon.Image}
                 label="Choose a file"
                 placeholder="Choose your file..."
                 onChange={(e) => setFile(e.target.files[0])}
                 className="p-2"
               />
               <div className="">
-                <Button type="submit" icon={LucideIcon.UploadCloudIcon}>
-                  Upload
+                <Button
+                  type="submit"
+                  size="sm"
+                  disabled={uploadMutation?.isPending}
+                >
+                  {uploadMutation?.isPending ? (
+                    <LucideIcon.Loader2 size={20} className="animate-spin" />
+                  ) : (
+                    <LucideIcon.UploadCloud size={20} />
+                  )}
+                  {uploadMutation?.isPending ? "Uploading..." : "Upload"}
                 </Button>
               </div>
             </form>
