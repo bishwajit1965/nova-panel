@@ -92,11 +92,10 @@ const AuditLogsManagement = () => {
             value={log}
             onChange={(e) => setLog(e.target.value)}
           />
-          {log && (
-            <Button onClick={handleSearchReset} size="xs" variant="outline">
-              <LucideIcon.RefreshCcw size={20} /> Reset
-            </Button>
-          )}
+
+          <Button onClick={handleSearchReset} size="xs" variant="outline">
+            <LucideIcon.RefreshCcw size={20} /> Reset
+          </Button>
         </div>
       </div>
       {auditLogDataStatus?.status !== "success" ? (

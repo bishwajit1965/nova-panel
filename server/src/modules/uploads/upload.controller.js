@@ -15,7 +15,6 @@ import { incrementUsage } from "../services/usage.service.js";
 
 // UPLOAD FILE
 export const uploadFile = asyncHandler(async (req, res) => {
-  console.log("🎯 Upload single method is hit");
   if (!req.file) {
     throw new AppError("No file chosen", 400);
   }

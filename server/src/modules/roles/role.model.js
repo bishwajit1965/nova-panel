@@ -25,6 +25,7 @@ const roleSchema = new mongoose.Schema(
         ref: "Permission",
       },
     ],
+
     isSystem: {
       type: Boolean,
       default: false, // prevents deletion of core roles like admin/user

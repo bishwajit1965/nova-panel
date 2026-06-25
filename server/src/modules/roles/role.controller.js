@@ -2,6 +2,7 @@ import { asyncHandler } from "../../core/async/asyncHandler.js";
 import AppError from "../../core/errors/AppError.js";
 import { logger } from "../../core/logger/logger.js";
 import { sendResponse } from "../../utils/sendResponse.js";
+import { createAuditLogService } from "../auditLogs/audit.log.service.js";
 import User from "../users/user.model.js";
 
 import {
@@ -19,6 +20,23 @@ import {
  */
 export const createRole = asyncHandler(async (req, res) => {
   const role = await createRoleService(req.body);
+
+  // Generate audit-log
+  const user = req.user;
+  await createAuditLogService({
+    actor: user?._id,
+    action: "ROLE_CREATED",
+    module: "ROLES",
+    targetId: role?._id,
+    roles: user?.roles,
+    metadata: {
+      email: user?.email,
+      actionKey: role?.slug,
+      module: "ROLES",
+    },
+
+    req,
+  });
 
   return sendResponse(res, 201, "Role created successfully.", role);
 });
@@ -48,6 +66,23 @@ export const getRoleById = asyncHandler(async (req, res) => {
  */
 export const updateRole = asyncHandler(async (req, res) => {
   const role = await updateRoleService(req.params.id, req.body);
+
+  // Generate audit-log
+  const user = req?.user;
+  await createAuditLogService({
+    actor: user?._id,
+    action: "ROLE_UPDATED",
+    module: "ROLES",
+    targetId: role?._id,
+    roles: user?.roles,
+    metadata: {
+      email: user?.email,
+      actionKey: role?.slug,
+      module: "ROLES",
+    },
+
+    req,
+  });
 
   return sendResponse(res, 200, "Role update successful", role);
 });
@@ -89,6 +124,25 @@ export const assignPermissionsToRole = asyncHandler(async (req, res) => {
  * DELETE ROLE
  */
 export const deleteRole = asyncHandler(async (req, res) => {
+  const role = await getRoleByIdService(req?.params?.id);
+
+  // Generate audit-log
+  const user = req?.user;
+  await createAuditLogService({
+    actor: user?._id,
+    action: "ROLE_DELETED",
+    module: "ROLES",
+    targetId: role?._id,
+    roles: user?.roles,
+    metadata: {
+      email: user?.email,
+      actionKey: role?.slug,
+      module: "ROLES",
+    },
+
+    req,
+  });
+
   await deleteRoleService(req.params.id);
 
   return sendResponse(res, 200, "Role delete successfully.");

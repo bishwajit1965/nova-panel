@@ -12,8 +12,7 @@ export const createRoleService = async (payload) => {
     throw new AppError("Role already exists", 400);
   }
 
-  const role = await Role.create(payload);
-  return role;
+  return await Role.create(payload);
 };
 
 /**

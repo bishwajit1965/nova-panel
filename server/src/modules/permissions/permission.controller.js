@@ -20,6 +20,7 @@ export const createPermission = asyncHandler(async (req, res) => {
     action: "PERMISSION_CREATED",
     module: "PERMISSION",
     targetId: permission?._id,
+    roles: user?.roles,
     metadata: {
       email: user?.email,
       actionKey: permission?.key,
@@ -54,6 +55,7 @@ export const updatePermission = asyncHandler(async (req, res) => {
     action: "PERMISSION_UPDATED",
     module: "PERMISSION",
     targetId: permission?._id,
+    roles: user?.roles,
     metadata: {
       email: user?.email,
       actionKey: permission?.key,
@@ -75,6 +77,7 @@ export const deletePermission = asyncHandler(async (req, res) => {
     action: "PERMISSION_DELETED",
     module: "PERMISSION",
     targetId: permission?._id,
+    roles: user?.roles,
     metadata: {
       email: user?.email,
       actionKey: permission?.key,

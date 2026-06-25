@@ -5,6 +5,7 @@ export const createAuditLogService = async ({
   action,
   module,
   targetId = null,
+  roles,
   metadata = {},
   req,
 }) => {
@@ -15,6 +16,7 @@ export const createAuditLogService = async ({
     action,
     module,
     targetId,
+    roles: req.user?.roles,
     metadata: {
       ...metadata,
       planId: req.user?.plan?._id,
