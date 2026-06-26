@@ -1,7 +1,8 @@
 import {
   AlertTriangleIcon,
   CircleCheckBig,
-  Trash2Icon,
+  LucideLoader,
+  LucideTrash2,
   XCircle,
 } from "lucide-react";
 
@@ -18,9 +19,10 @@ export default function ConfirmDialogue({
   confirmText = "Delete",
   cancelText = "Cancel",
   loading = false,
+  onDelete,
 }) {
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title={title}>
+    <Modal isOpen={isOpen} onClose={onClose} title={title} onDelete={onDelete}>
       <div className="space-y-4">
         {/* Message */}
         <div className="flex items-start gap-3">
@@ -52,11 +54,17 @@ export default function ConfirmDialogue({
           <Button
             variant="danger"
             size="xs"
+            disabled={onDelete?.inPending}
             onClick={onConfirm}
-            icon={Trash2Icon}
             loading={loading}
           >
-            {confirmText}
+            {onDelete?.isPending ? (
+              <LucideLoader size={14} className="animate-spin" />
+            ) : (
+              <LucideTrash2 size={14} />
+            )}
+
+            {onDelete?.isPending ? "Deleting..." : confirmText}
           </Button>
         </div>
       </div>

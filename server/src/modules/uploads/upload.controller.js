@@ -13,6 +13,7 @@ import { sendResponse } from "../../utils/sendResponse.js";
 import AppError from "../../core/errors/AppError.js";
 import { incrementUsage } from "../services/usage.service.js";
 import { createAuditLogService } from "../auditLogs/audit.log.service.js";
+import mongoose from "mongoose";
 
 // UPLOAD FILE
 export const uploadFile = asyncHandler(async (req, res) => {
@@ -45,8 +46,32 @@ export const uploadMultipleFiles = asyncHandler(async (req, res) => {
   if (!req.files || req.files.length === 0) {
     throw new AppError("No files chosen", 400);
   }
+
   const uploads = await saveMultipleUploads(req.files, req.user._id);
   await incrementUsage(req.user._id, "upload");
+
+  // Generate audit-log
+  const user = req?.user;
+  const batchId = new mongoose.Types.ObjectId();
+  await createAuditLogService({
+    actor: user._id,
+    action: "MULTIPLE_FILES_UPLOADED",
+    module: "UPLOADS",
+    targetId: batchId, // or uploads[0]._id if you really want
+    roles: user.roles,
+    metadata: {
+      count: uploads.length,
+      email: user.email,
+      operation: "batch",
+      uploads: uploads.map((u) => ({
+        id: u._id,
+        publicId: u.publicId,
+        originalName: u.originalName,
+      })),
+    },
+    req,
+  });
+
   return sendResponse(res, 201, "Multiple files uploaded.", {
     uploads,
     count: uploads.length,

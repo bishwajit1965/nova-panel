@@ -28,14 +28,16 @@ const UploadCard = ({ upload, onSelect, onView, onConfirmDelete }) => {
           View
         </Button>
 
-        <Button
-          onClick={() => onSelect(upload)}
-          size="xs"
-          variant="success"
-          icon={LucideIcon.Edit}
-        >
-          Update
-        </Button>
+        {can("upload.update") && (
+          <Button
+            onClick={() => onSelect(upload)}
+            size="xs"
+            variant="success"
+            icon={LucideIcon.Edit}
+          >
+            Update
+          </Button>
+        )}
 
         {can("upload.delete") && (
           <Button
