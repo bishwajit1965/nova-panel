@@ -28,12 +28,6 @@ export const createAuditLogService = async ({
   });
 };
 
-// export const getAllLogsService = async () => {
-//   return await AuditLog.find()
-//     .populate("actor", "name email roles")
-//     .sort({ createdAt: -1 });
-// };
-
 export const getAllLogsService = async () => {
   return await AuditLog.find()
     .populate({

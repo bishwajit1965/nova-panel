@@ -69,10 +69,10 @@ router.post(
 );
 
 // Update old file if any new one selected
-router.put(
-  "/:id",
+router.patch(
+  "/update/single/:id",
   accessGuard({
-    roles: [ROLES.ADMIN, ROLES.SUPER_ADMIN],
+    roles: [ROLES.ADMIN, ROLES.SUPER_ADMIN, ROLES.MODERATOR],
     feature: "advanced_upload",
     permissions: [PERMISSIONS.UPLOAD_UPDATE],
     usage: "upload",

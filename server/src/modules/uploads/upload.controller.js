@@ -64,15 +64,31 @@ export const getUploadedData = asyncHandler(async (req, res) => {
 // UPDATE FILE
 export const updateFile = asyncHandler(async (req, res) => {
   const updated = await updateUploadById(req.params.id, req.file, req.user);
-  return sendResponse(res, 200, "File updated successfully.", { updated });
+
+  // Generate audit-log
+  const user = req?.user;
+  await createAuditLogService({
+    actor: user?._id,
+    action: "FILE_UPDATED",
+    module: "UPLOADS",
+    targetId: updated?._id,
+    roles: user?.roles,
+    metadata: {
+      email: user?.email,
+      actionKey: updated?.publicId,
+      module: "UPLOADS",
+    },
+    req,
+  });
+  return sendResponse(res, 200, "File updated successfully.", updated);
 });
 
 // DELETE FILE
 export const deleteFile = asyncHandler(async (req, res) => {
-  const { id } = req?.params?.id;
+  const { id } = req?.params;
 
   const upload = await Upload.findById(id);
-  console.log("Upload to delete", upload);
+
   // Generate audit-log
   const user = req?.user;
   await createAuditLogService({

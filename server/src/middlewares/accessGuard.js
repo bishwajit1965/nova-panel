@@ -55,13 +55,6 @@ export const accessGuard = (options = {}) => {
   }
 
   // ---------------------------
-  // 6. AUDIT (LAST STEP)
-  // ---------------------------
-  if (options.audit) {
-    chain.push(auditLogger(options.audit, options.auditModule || "system"));
-  }
-
-  // ---------------------------
   // EXECUTION PIPELINE
   // ---------------------------
   return async (req, res, next) => {

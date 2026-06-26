@@ -2,6 +2,7 @@ import Upload from "./upload.model.js";
 import cloudinary from "../../config/cloudinary.js";
 import AppError from "../../core/errors/AppError.js";
 import projectConfig from "../../config/project.config.js";
+import { hasRole } from "../../utils/hasRole.js";
 
 // SERVICE LAYER: Handles all business logic related to uploads, including saving to DB, updating, deleting, and fetching uploads. Also handles Cloudinary interactions for file management.
 export const saveUpload = async (file, userId) => {
@@ -47,7 +48,8 @@ export const updateUploadById = async (id, newFile, user) => {
 
   // ownership / admin check
   const isOwner = existing.user.toString() === user._id.toString();
-  const isAdmin = user.role === "admin" || user.role === "superAdmin";
+  // const isAdmin = user.role === "admin" || user.role === "superadmin";
+  const isAdmin = hasRole(user, ["superadmin", "admin"]);
 
   if (!isOwner && !isAdmin) {
     throw new AppError("Forbidden", 403);
