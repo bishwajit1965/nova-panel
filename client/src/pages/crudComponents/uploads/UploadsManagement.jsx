@@ -22,6 +22,7 @@ const UploadsManagement = () => {
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [selectEdit, setSelectEdit] = useState(null);
   const [previews, setPreviews] = useState([]);
+  const [uploadProgress, setUploadProgress] = useState(0);
   const fileInputRef = useRef(null);
   const { can } = usePermission();
 
@@ -57,8 +58,18 @@ const UploadsManagement = () => {
           : `${API_PATHS.SUPER_ADMIN_UPLOADS.ENDPOINT}/single`,
     key: API_PATHS.SUPER_ADMIN_UPLOADS.KEY, // used by useQuery
 
+    options: {
+      onUploadProgress: (progressEvent) => {
+        const percent = Math.round(
+          (progressEvent.loaded * 100) / progressEvent.total,
+        );
+        setUploadProgress(percent);
+      },
+    },
+
     onSuccess: (data) => {
       console.log("Upload/update response:", data);
+      setUploadProgress(0);
       setFiles([]);
       setPreviews([]);
       setSelectEdit(null);
@@ -75,6 +86,7 @@ const UploadsManagement = () => {
       });
     },
     onError: (error) => {
+      setUploadProgress(0);
       Swal.fire({
         position: "top-end",
         icon: "error",
@@ -286,6 +298,22 @@ const UploadsManagement = () => {
                 />
               </div>
               <div className="">
+                {uploadMutation.isPending && (
+                  <div className="my-4">
+                    <div className="flex justify-between text-xs text-base-content/70">
+                      <span>Uploading...</span>
+                      <span>{uploadProgress}%</span>
+                    </div>
+
+                    <div className="w-full h-2 bg-gray-200 rounded overflow-hidden">
+                      <div
+                        className="h-full bg-blue-500 transition-all duration-200"
+                        style={{ width: `${uploadProgress}%` }}
+                      />
+                    </div>
+                  </div>
+                )}
+
                 {can("upload.create") ? (
                   <Button
                     type="submit"
@@ -306,7 +334,9 @@ const UploadsManagement = () => {
                         : "Upload Image"}
                   </Button>
                 ) : (
-                  "You do not have permission to upload file!"
+                  <p className="font-bold">
+                    You do not have permission to upload file!
+                  </p>
                 )}
               </div>
             </form>

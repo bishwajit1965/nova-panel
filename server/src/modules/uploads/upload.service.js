@@ -34,7 +34,16 @@ export const saveMultipleUploads = async (files, userId) => {
 
 // Get all uploads for a user, sorted by most recent first
 export const getMyUploads = async (userId) => {
-  const uploads = await Upload.find({ user: userId }).sort({ createdAt: -1 });
+  const uploads = await Upload.find({ user: userId })
+    .populate({
+      path: "user",
+      select: "name email roles",
+      populate: {
+        path: "roles",
+        select: "name",
+      },
+    })
+    .sort({ createdAt: -1 });
   return uploads;
 };
 

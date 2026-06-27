@@ -9,14 +9,17 @@ export const useApiMutation = ({
   onSuccess,
   onError,
   showToast = true,
+  options = {},
   successMessage, // string | function
 }) => {
   const queryClient = useQueryClient();
 
   const mutationFn = async (payload) => {
     const url = typeof path === "function" ? path(payload) : path;
-    if (method === "create") return apiService.create(url, payload?.data);
-    if (method === "update") return apiService.update(url, payload?.data);
+    if (method === "create")
+      return apiService.create(url, payload?.data, options);
+    if (method === "update")
+      return apiService.update(url, payload?.data, options);
     if (method === "delete") return apiService.delete(url);
     throw new Error("Unsupported method");
   };

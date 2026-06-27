@@ -153,6 +153,10 @@ import {
   UserCog2Icon,
   UserRoundCog,
   Image,
+  Link,
+  Download,
+  DownloadCloud,
+  DownloadCloudIcon,
 } from "lucide-react";
 
 // Central registry
@@ -196,6 +200,9 @@ export const LucideIcon = {
   CopyCheck,
   CopyCheckIcon,
   Clock,
+  Download,
+  DownloadCloud,
+  DownloadCloudIcon,
   RotateCcwKeyIcon,
   Edit,
   Edit2,
@@ -230,6 +237,7 @@ export const LucideIcon = {
   Layers2Icon,
   Layers3,
   Layers3Icon,
+  Link,
   LineChart,
   Link2Icon,
   Link2Off,

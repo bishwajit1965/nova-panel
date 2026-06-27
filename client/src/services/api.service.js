@@ -15,13 +15,13 @@ const apiService = {
     return res.data;
   },
 
-  async create(path, data) {
-    const res = await api.post(`${API_BASE_URL}/${path}`, data);
+  async create(path, data, config = {}) {
+    const res = await api.post(`${API_BASE_URL}/${path}`, data, config);
     return res.data;
   },
 
-  async update(path, data) {
-    const res = await api.patch(`${API_BASE_URL}/${path}`, data);
+  async update(path, data, config = {}) {
+    const res = await api.patch(`${API_BASE_URL}/${path}`, data, config);
     return res.data;
   },
   async delete(path) {
