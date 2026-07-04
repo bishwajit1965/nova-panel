@@ -1,7 +1,7 @@
-import SeoSettingsForm from "../settingsComponents/seoSettings/SeoSettingsForm";
-import SeoSettingsPreview from "../settingsComponents/seoSettings/SeoSettingsPreview";
+import SystemSettingsForm from "../settingsComponents/systemSettings/SystemSettingsForm";
+import SystemSettingsPreview from "../settingsComponents/systemSettings/SystemSettingsPreview";
 
-const SeoSettings = ({
+const SystemSettings = ({
   data,
   setData,
   onSelect,
@@ -13,11 +13,10 @@ const SeoSettings = ({
 }) => {
   return (
     <div>
-      <h1 className="lg:text-xl text-lg font-bold">Seo Settings</h1>
-
-      <div className="grid lg:grid-cols-12 grid-cols-1 justify-between lg:gap-4 gap-1">
+      {/* <h1 className="lg:text-xl text-sm font-extrabold">System Settings</h1> */}
+      <div className="grid lg:grid-cols-12 grid-cols-1 justify-between lg:gap-4 gap-2">
         <div className="lg:col-span-4 col-span-12">
-          <SeoSettingsForm
+          <SystemSettingsForm
             data={data}
             setData={setData}
             onCancel={onCancel}
@@ -28,11 +27,11 @@ const SeoSettings = ({
           />
         </div>
         <div className="lg:col-span-8 col-span-12">
-          <SeoSettingsPreview data={data} onSelect={onSelect} />
+          <SystemSettingsPreview data={data} onSelect={onSelect} />
         </div>
       </div>
     </div>
   );
 };
 
-export default SeoSettings;
+export default SystemSettings;

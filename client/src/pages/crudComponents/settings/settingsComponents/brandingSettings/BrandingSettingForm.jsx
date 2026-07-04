@@ -30,6 +30,26 @@ const BrandingSettingForm = ({
       </h1>
       <form onSubmit={handleSubmit} className="space-y-2">
         <Input
+          name="logo"
+          label="Logo Url"
+          placeholder="Logo url..."
+          onChange={(e) =>
+            updateSettingsSection("branding", "logo", e.target.value)
+          }
+          value={selectedData ? data?.branding?.logo : ""}
+          required
+        />
+        <Input
+          name="favicon"
+          label="Favicon Url"
+          placeholder="Favicon url..."
+          onChange={(e) =>
+            updateSettingsSection("branding", "favicon", e.target.value)
+          }
+          value={selectedData ? data?.branding?.favicon : ""}
+          required
+        />
+        <Input
           name="primaryColor"
           label="Primary Color"
           placeholder="Primary color..."
@@ -63,7 +83,7 @@ const BrandingSettingForm = ({
         <div className="flex items-center gap-2 mt-4">
           <Button
             type="submit"
-            size="xs"
+            size="sm"
             variant="primary"
             disabled={onMutation?.isPending}
           >
@@ -83,7 +103,7 @@ const BrandingSettingForm = ({
           {selectedData && (
             <Button
               type="button"
-              size="xs"
+              size="sm"
               variant="warning"
               icon={LucideIcon.RefreshCcw}
               onClick={onCancel}

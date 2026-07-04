@@ -1,5 +1,4 @@
 import AuditLog from "./audit.log.model.js";
-
 export const createAuditLogService = async ({
   actor,
   action,
@@ -7,24 +6,20 @@ export const createAuditLogService = async ({
   targetId = null,
   roles,
   metadata = {},
-  req,
+  ip,
+  userAgent,
 }) => {
   if (!actor) return;
 
-  return await AuditLog.create({
+  return AuditLog.create({
     actor,
     action,
     module,
     targetId,
-    roles: req.user?.roles,
-    metadata: {
-      ...metadata,
-      planId: req.user?.plan?._id,
-      planName: req.user?.plan?.name,
-      maxUploads: req.user?.plan?.limits?.maxUploads,
-    },
-    ip: req?.ip,
-    userAgent: req?.headers["user-agent"],
+    roles,
+    metadata,
+    ip,
+    userAgent,
   });
 };
 

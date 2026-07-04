@@ -62,7 +62,7 @@ const FeatureSettingsForm = ({
         <div className="flex items-center gap-2 mt-4">
           <Button
             type="submit"
-            size="xs"
+            size="sm"
             variant="primary"
             disabled={onMutation?.isPending}
           >
@@ -82,7 +82,7 @@ const FeatureSettingsForm = ({
           {selectedData && (
             <Button
               type="button"
-              size="xs"
+              size="sm"
               variant="warning"
               icon={LucideIcon.RefreshCcw}
               onClick={onCancel}

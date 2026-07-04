@@ -8,6 +8,7 @@ import {
   notFoundHandler,
 } from "./core/errors/GlobalErrorHandler.js";
 import cookieParser from "cookie-parser";
+import { registerAuditListeners } from "./modules/auditLogs/audit.listeners.js";
 
 const app = express();
 
@@ -25,10 +26,6 @@ app.use(
   }),
 );
 
-//⚡ 2. Body Parsing
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
 // 🚦 3. Rate Limiting
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 min
@@ -37,10 +34,16 @@ const limiter = rateLimit({
 
 app.use(limiter);
 
+//⚡ 2. Body Parsing
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 app.use((req, res, next) => {
   console.log(req.method, req.originalUrl);
   next();
 });
+
+registerAuditListeners();
 
 //  🧭 4. API Routes
 app.use("/api/v1", routes);

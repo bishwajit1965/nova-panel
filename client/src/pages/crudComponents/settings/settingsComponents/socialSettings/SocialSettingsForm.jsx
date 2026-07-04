@@ -13,7 +13,7 @@ const SocialSettingsForm = ({
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const payload = buildSettingsPayload(selectedData, "links", data.links);
+    const payload = buildSettingsPayload(selectedData, "social", data.social);
 
     onMutation.mutate(payload);
   };
@@ -25,23 +25,13 @@ const SocialSettingsForm = ({
       </h1>
       <form onSubmit={handleSubmit} className="space-y-2">
         <Input
-          name="website"
-          label="Website Link"
-          placeholder="Website link..."
-          onChange={(e) =>
-            updateSettingsSection("links", "website", e.target.value)
-          }
-          value={selectedData ? data?.links?.website : ""}
-          required
-        />
-        <Input
           name="facebook"
           label="Facebook Url"
           placeholder="Facebook url..."
           onChange={(e) =>
-            updateSettingsSection("links", "facebook", e.target.value)
+            updateSettingsSection("social", "facebook", e.target.value)
           }
-          value={selectedData ? data?.links?.facebook : ""}
+          value={selectedData ? data?.social?.facebook : ""}
           required
         />
         <Input
@@ -49,9 +39,9 @@ const SocialSettingsForm = ({
           label="Instagram Url"
           placeholder="Instagram url..."
           onChange={(e) =>
-            updateSettingsSection("links", "instagram", e.target.value)
+            updateSettingsSection("social", "instagram", e.target.value)
           }
-          value={selectedData ? data?.links?.instagram : ""}
+          value={selectedData ? data?.social?.instagram : ""}
           required
         />
         <Input
@@ -59,18 +49,18 @@ const SocialSettingsForm = ({
           label="LinkedIn Url"
           placeholder="LinkedIn url..."
           onChange={(e) =>
-            updateSettingsSection("links", "linkedin", e.target.value)
+            updateSettingsSection("social", "linkedin", e.target.value)
           }
-          value={selectedData ? data?.links?.linkedin : ""}
+          value={selectedData ? data?.social?.linkedin : ""}
         />
         <Input
           name="github"
           label="GitHub Url"
           placeholder="GitHub url..."
           onChange={(e) =>
-            updateSettingsSection("links", "github", e.target.value)
+            updateSettingsSection("social", "github", e.target.value)
           }
-          value={selectedData ? data?.links?.github : ""}
+          value={selectedData ? data?.social?.github : ""}
         />
 
         <div className="flex items-center gap-2 mt-4">

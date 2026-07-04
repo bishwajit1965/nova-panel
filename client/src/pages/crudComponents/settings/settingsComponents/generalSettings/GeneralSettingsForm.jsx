@@ -1,6 +1,7 @@
 import { LucideIcon } from "../../../../../components/lib/LucideIcons";
 import Button from "../../../../../components/ui/Button";
 import { Input } from "../../../../../components/ui/Input";
+import Textarea from "../../../../../components/ui/Textarea";
 
 const GeneralSettingsForm = ({
   data,
@@ -37,24 +38,25 @@ const GeneralSettingsForm = ({
         />
 
         <Input
-          name="logo"
-          label="Logo Url"
-          placeholder="Logo url..."
+          name="website"
+          label="Website Link"
+          placeholder="Website link..."
           onChange={(e) =>
-            updateSettingsSection("site", "logo", e.target.value)
+            updateSettingsSection("site", "website", e.target.value)
           }
-          value={selectedData ? data?.site?.logo : ""}
+          value={selectedData ? data?.site?.website : ""}
           required
         />
-        <Input
-          name="favicon"
-          label="Favicon Url"
-          placeholder="Favicon url..."
+
+        <Textarea
           onChange={(e) =>
-            updateSettingsSection("site", "favicon", e.target.value)
+            updateSettingsSection("site", "description", e.target.value)
           }
-          value={selectedData ? data?.site?.favicon : ""}
+          value={selectedData ? data?.site?.description : ""}
           required
+          label="Site Description"
+          name="description"
+          placeholder="Description..."
         />
 
         <div className="flex items-center gap-2 mt-4">

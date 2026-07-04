@@ -14,6 +14,11 @@ import AppError from "../../core/errors/AppError.js";
 import { incrementUsage } from "../services/usage.service.js";
 import { createAuditLogService } from "../auditLogs/audit.log.service.js";
 import mongoose from "mongoose";
+import { eventBus } from "../../core/events/eventBus.js";
+import { EVENTS } from "../../core/events/events.js";
+import { MODULES } from "../../core/events/modules.js";
+import { buildRequestContext } from "../../utils/buildRequestContext.js";
+import { OPERATION_STATUS } from "../../core/events/operationStatus.js";
 
 // UPLOAD FILE
 export const uploadFile = asyncHandler(async (req, res) => {
@@ -24,20 +29,22 @@ export const uploadFile = asyncHandler(async (req, res) => {
   await incrementUsage(req.user._id, "upload");
 
   // Generate audit-log
-  const user = req?.user;
-  await createAuditLogService({
-    actor: user?._id,
-    action: "FILE_UPLOADED",
-    module: "UPLOADS",
-    targetId: upload?._id,
-    roles: user?.roles,
+  const context = buildRequestContext(req);
+
+  eventBus.emit(EVENTS.UPLOAD_CREATED, {
+    actor: context.actor?._id,
+    action: EVENTS.UPLOAD_CREATED,
+    module: MODULES.UPLOADS,
+    targetId: upload._id,
+    ip: context.ip,
+    userAgent: context.userAgent,
+    roles: context.roles,
     metadata: {
-      email: user?.email,
-      actionKey: upload?.publicId,
-      module: "UPLOADS",
+      actionKey: upload.publicId,
+      operationStatus: OPERATION_STATUS.SUCCESS,
     },
-    req,
   });
+
   return sendResponse(res, 201, "File uploaded successfully.", upload);
 });
 
@@ -50,26 +57,29 @@ export const uploadMultipleFiles = asyncHandler(async (req, res) => {
   const uploads = await saveMultipleUploads(req.files, req.user._id);
   await incrementUsage(req.user._id, "upload");
 
-  // Generate audit-log
-  const user = req?.user;
   const batchId = new mongoose.Types.ObjectId();
-  await createAuditLogService({
-    actor: user._id,
-    action: "MULTIPLE_FILES_UPLOADED",
-    module: "UPLOADS",
+
+  // Generate audit-log
+  const context = buildRequestContext(req);
+
+  eventBus.emit(EVENTS.MULTIPLE_UPLOADS_CREATED, {
+    actor: context.actor?._id,
+    action: EVENTS.MULTIPLE_UPLOADS_CREATED,
+    module: MODULES.UPLOADS,
     targetId: batchId, // or uploads[0]._id if you really want
-    roles: user.roles,
+    ip: context.ip,
+    userAgent: context.userAgent,
+    roles: context.roles,
     metadata: {
       count: uploads.length,
-      email: user.email,
-      operation: "batch",
+      operation: "BATCH",
       uploads: uploads.map((u) => ({
         id: u._id,
-        publicId: u.publicId,
-        originalName: u.originalName,
+        publicId: u?.publicId,
+        originalName: u?.originalName,
       })),
+      operationStatus: OPERATION_STATUS.SUCCESS,
     },
-    req,
   });
 
   return sendResponse(res, 201, "Multiple files uploaded.", {
@@ -91,19 +101,20 @@ export const updateFile = asyncHandler(async (req, res) => {
   const updated = await updateUploadById(req.params.id, req.file, req.user);
 
   // Generate audit-log
-  const user = req?.user;
-  await createAuditLogService({
-    actor: user?._id,
-    action: "FILE_UPDATED",
-    module: "UPLOADS",
+  const context = buildRequestContext(req);
+
+  eventBus.emit(EVENTS.UPLOAD_UPDATED, {
+    actor: context.actor?._id,
+    action: EVENTS.UPLOAD_UPDATED,
+    module: MODULES.UPLOADS,
     targetId: updated?._id,
-    roles: user?.roles,
+    ip: context.ip,
+    userAgent: context.userAgent,
+    roles: context.roles,
     metadata: {
-      email: user?.email,
       actionKey: updated?.publicId,
-      module: "UPLOADS",
+      operationStatus: OPERATION_STATUS.SUCCESS,
     },
-    req,
   });
   return sendResponse(res, 200, "File updated successfully.", updated);
 });
@@ -115,19 +126,18 @@ export const deleteFile = asyncHandler(async (req, res) => {
   const upload = await Upload.findById(id);
 
   // Generate audit-log
-  const user = req?.user;
-  await createAuditLogService({
-    actor: user?._id,
-    action: "FILE_DELETED",
-    module: "UPLOADS",
+  const context = buildRequestContext(req);
+
+  eventBus.emit(EVENTS.UPLOAD_DELETED, {
+    actor: context.actor?._id,
+    action: EVENTS.UPLOAD_DELETED,
+    module: MODULES.UPLOADS,
     targetId: upload?._id,
-    roles: user?.roles,
+    roles: context.roles,
     metadata: {
-      email: user?.email,
       actionKey: upload?.publicId,
-      module: "UPLOADS",
+      operationStatus: OPERATION_STATUS.SUCCESS,
     },
-    req,
   });
   await deleteUploadById(req.params.id, req.user);
   return sendResponse(res, 200, "File deleted successfully.");

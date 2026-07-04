@@ -12,6 +12,7 @@ import { useEffect } from "react";
 import { useRef } from "react";
 import { useApiMutation } from "../../../hooks/useApiMutation";
 import Swal from "sweetalert2";
+import SystemSettings from "./tabs/SystemSettings";
 
 const Settings = () => {
   const [activeTab, setActiveTab] = useState("general");
@@ -192,6 +193,20 @@ const Settings = () => {
           />
         );
 
+      case "system":
+        return (
+          <SystemSettings
+            data={formData}
+            setData={setFormData}
+            onSelect={handleSelectSettings}
+            selectedData={selectedSettings}
+            onCancel={handleCancelSelectSettings}
+            onMutation={siteSettingsMutation}
+            updateSettingsSection={updateSettingsSection}
+            buildSettingsPayload={buildSettingsPayload}
+          />
+        );
+
       default:
         return null;
     }
@@ -220,6 +235,7 @@ const Settings = () => {
               "social",
               "contact",
               "features",
+              "system",
             ].map((tab) => (
               <button
                 key={tab}

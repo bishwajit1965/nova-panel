@@ -10,7 +10,6 @@ const GeneralSettingsPreview = ({ data, onSelect }) => {
           {/* head */}
           <thead>
             <tr>
-              <th>Logo</th>
               <th>Name</th>
               <th>Address</th>
               <th>Seo</th>
@@ -20,19 +19,6 @@ const GeneralSettingsPreview = ({ data, onSelect }) => {
           </thead>
           <tbody>
             <tr>
-              <td>
-                {site?.logo ? (
-                  <img
-                    src={site?.logo}
-                    alt={site?.name || "No logo"}
-                    className="w-14 h-14 rounded-full"
-                  />
-                ) : (
-                  <div className="w-14 h-14 bg-gray-200 rounded-full flex items-center justify-center text-xs">
-                    No Logo
-                  </div>
-                )}
-              </td>
               <td className="font-semibold">{site?.name || "Not set"}</td>
               <td className="text-xs">
                 {contact?.address || "No address"} <br />
@@ -78,7 +64,6 @@ const GeneralSettingsPreview = ({ data, onSelect }) => {
 
           <tfoot>
             <tr>
-              <th>Logo</th>
               <th>Name</th>
               <th>Address</th>
               <th>Seo</th>

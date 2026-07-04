@@ -56,24 +56,4 @@ api.interceptors.response.use(
   },
 );
 
-// api.interceptors.response.use(
-//   (res) => res,
-//   async (error) => {
-//     const originalRequest = error.config;
-
-//     if (error.response?.status !== 401 || originalRequest._retry) {
-//       return Promise.reject(error);
-//     }
-
-//     originalRequest._retry = true;
-
-//     try {
-//       await refreshApi.post("/auth/refresh"); // 🔥 IMPORTANT FIX
-//       return api(originalRequest);
-//     } catch (err) {
-//       return Promise.reject(err);
-//     }
-//   },
-// );
-
 export default api;

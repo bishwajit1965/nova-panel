@@ -3,7 +3,7 @@ import User from "../users/user.model.js";
 
 // Get me service
 export const getMeService = async (userId) => {
-  const user = User.findById(userId)
+  const user = await User.findById(userId)
     .select("-password -refreshToken -__v")
     .populate("plan");
 
@@ -23,7 +23,9 @@ export const getAdminByIdService = async (id) => {
 
 // Get all users (admin)
 export const getAllAdminsService = async () => {
-  return await User.find().select("name email role createdAt").populate("plan");
+  return await User.find()
+    .select("name email roles createdAt")
+    .populate("plan");
 };
 
 // Toggle user status
@@ -42,7 +44,7 @@ export const updateAdminRoleService = async (userId, role) => {
   const user = await User.findById(userId);
   if (!user) throw new AppError("User not found", 404);
 
-  user.role = role;
+  user.roles = roles;
   await user.save();
 
   return user;

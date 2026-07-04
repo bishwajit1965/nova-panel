@@ -1,6 +1,11 @@
 import { asyncHandler } from "../../core/async/asyncHandler.js";
 import AppError from "../../core/errors/AppError.js";
+import { eventBus } from "../../core/events/eventBus.js";
+import { EVENTS } from "../../core/events/events.js";
+import { MODULES } from "../../core/events/modules.js";
+import { OPERATION_STATUS } from "../../core/events/operationStatus.js";
 import { logger } from "../../core/logger/logger.js";
+import { buildRequestContext } from "../../utils/buildRequestContext.js";
 import { sendResponse } from "../../utils/sendResponse.js";
 import { createAuditLogService } from "../auditLogs/audit.log.service.js";
 import User from "../users/user.model.js";
@@ -22,20 +27,20 @@ export const createRole = asyncHandler(async (req, res) => {
   const role = await createRoleService(req.body);
 
   // Generate audit-log
-  const user = req.user;
-  await createAuditLogService({
-    actor: user?._id,
-    action: "ROLE_CREATED",
-    module: "ROLES",
-    targetId: role?._id,
-    roles: user?.roles,
-    metadata: {
-      email: user?.email,
-      actionKey: role?.slug,
-      module: "ROLES",
-    },
+  const context = buildRequestContext(req);
 
-    req,
+  eventBus.emit(EVENTS.ROLE_CREATED, {
+    actor: context.actor?._id,
+    action: EVENTS.ROLE_CREATED,
+    module: MODULES.ROLES,
+    targetId: role._id,
+    ip: context.ip,
+    userAgent: context.userAgent,
+    roles: context.roles,
+    metadata: {
+      actionKey: role.slug,
+      operationStatus: OPERATION_STATUS.SUCCESS,
+    },
   });
 
   return sendResponse(res, 201, "Role created successfully.", role);
@@ -68,20 +73,20 @@ export const updateRole = asyncHandler(async (req, res) => {
   const role = await updateRoleService(req.params.id, req.body);
 
   // Generate audit-log
-  const user = req?.user;
-  await createAuditLogService({
-    actor: user?._id,
-    action: "ROLE_UPDATED",
-    module: "ROLES",
+  const context = buildRequestContext(req);
+  eventBus.emit(EVENTS.ROLE_UPDATED, {
+    actor: context.actor?._id,
+    action: EVENTS.ROLE_UPDATED,
+    module: MODULES.ROLES,
     targetId: role?._id,
-    roles: user?.roles,
+    ip: context.ip,
+    userAgent: context.userAgent,
+    roles: context.roles,
     metadata: {
-      email: user?.email,
       actionKey: role?.slug,
       module: "ROLES",
+      operationStatus: OPERATION_STATUS.SUCCESS,
     },
-
-    req,
   });
 
   return sendResponse(res, 200, "Role update successful", role);
@@ -127,20 +132,19 @@ export const deleteRole = asyncHandler(async (req, res) => {
   const role = await getRoleByIdService(req?.params?.id);
 
   // Generate audit-log
-  const user = req?.user;
-  await createAuditLogService({
-    actor: user?._id,
-    action: "ROLE_DELETED",
-    module: "ROLES",
+  const context = buildRequestContext(req);
+  eventBus.emit(EVENTS.ROLE_DELETED, {
+    actor: context.actor?._id,
+    action: EVENTS.ROLE_DELETED,
+    module: MODULES.ROLES,
     targetId: role?._id,
-    roles: user?.roles,
+    ip: context.ip,
+    userAgent: context.userAgent,
+    roles: context.roles,
     metadata: {
-      email: user?.email,
       actionKey: role?.slug,
-      module: "ROLES",
+      operationStatus: OPERATION_STATUS.SUCCESS,
     },
-
-    req,
   });
 
   await deleteRoleService(req.params.id);

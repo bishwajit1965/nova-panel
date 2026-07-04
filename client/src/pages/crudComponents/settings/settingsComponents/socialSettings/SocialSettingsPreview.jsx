@@ -2,7 +2,7 @@ import { LucideIcon } from "../../../../../components/lib/LucideIcons";
 import Button from "../../../../../components/ui/Button";
 
 const SocialSettingsPreview = ({ data, onSelect }) => {
-  const { links } = data || {};
+  const { social } = data || {};
   return (
     <div>
       <div className="overflow-x-auto">
@@ -10,7 +10,6 @@ const SocialSettingsPreview = ({ data, onSelect }) => {
           {/* head */}
           <thead>
             <tr>
-              <th>Website</th>
               <th>Facebook</th>
               <th>Instagram</th>
               <th>LinkedIn</th>
@@ -20,15 +19,23 @@ const SocialSettingsPreview = ({ data, onSelect }) => {
           </thead>
           <tbody>
             <tr>
-              <td>{links?.website || "Not set"}</td>
-              <td className="text-xs">{links?.facebook || "Not set"}</td>
-              <td className="text-xs">{links?.instagram || "Not set"}</td>
-              <td className="text-xs">{links?.linkedin || "Not set"}</td>
-              <td className="text-xs">{links?.github || "Not set"}</td>
+              <td className="text-xs break-all">
+                {social?.facebook || "Not set"}
+              </td>
+              <td className="text-xs break-all">
+                {social?.instagram || "Not set"}
+              </td>
+              <td className="text-xs break-all">
+                {social?.linkedin || "Not set"}
+              </td>
+              <td className="text-xs break-all">
+                {social?.github || "Not set"}
+              </td>
               <td>
                 <Button
                   onClick={() => onSelect(data)}
-                  size="sm"
+                  size="xs"
+                  variant="primary"
                   icon={LucideIcon.Edit}
                 >
                   Edit
@@ -38,7 +45,6 @@ const SocialSettingsPreview = ({ data, onSelect }) => {
           </tbody>
           <tfoot>
             <tr>
-              <th>Website</th>
               <th>Facebook</th>
               <th>Instagram</th>
               <th>LinkedIn</th>

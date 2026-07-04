@@ -356,13 +356,13 @@ const Dashboard = () => {
                       <p className="text-sm text-base-content/60 dark:text-gray-300">
                         Recent Users
                       </p>
-                      <p className="text-xs font-extrabold">
+                      <div>
                         {recentUsers?.map((u) => (
                           <div key={u?._id} className="">
                             {u?.name}
                           </div>
                         ))}
-                      </p>
+                      </div>
                     </div>
                   </div>
                 </CardContent>

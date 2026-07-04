@@ -1,5 +1,5 @@
-import { LucideIcon } from "../../../../components/lib/LucideIcons";
-import Button from "../../../../components/ui/Button";
+import { LucideIcon } from "../../../../../components/lib/LucideIcons";
+import Button from "../../../../../components/ui/Button";
 
 const SeoSettingsPreview = ({ data, onSelect }) => {
   const { seo } = data || {};
