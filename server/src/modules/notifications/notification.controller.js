@@ -6,6 +6,7 @@ import { eventBus } from "../../core/events/eventBus.js";
 import { EVENTS } from "../../core/events/events.js";
 import { MODULES } from "../../core/events/modules.js";
 import { OPERATION_STATUS } from "../../core/events/operationStatus.js";
+import { sendResponse } from "../../utils/sendResponse.js";
 
 class NotificationController extends BaseCrudController {
   constructor() {
@@ -42,9 +43,10 @@ class NotificationController extends BaseCrudController {
   |* GET BY ID
   |**==========================*/
   getById = asyncHandler(async (req, res) => {
-    const notification = await super.getById(req.params.id);
+    const { notificationId } = req.params;
+    const notification = await super.getById(notificationId);
 
-    return sendResponse(res, 200, "Notification fetched", notification, 200);
+    return sendResponse(res, 200, "Notification fetched", notification);
   });
 
   /**==========================
@@ -68,13 +70,14 @@ class NotificationController extends BaseCrudController {
   |* UPDATE NOTIFICATION BY ID
   |**==========================*/
   updateById = asyncHandler(async (req, res) => {
-    const notification = await super.updateById(req.params.id, req.body);
+    const { notificationId } = req.params;
+    const notification = await super.updateById(notificationId, req.body);
     const context = buildRequestContext(req);
 
     eventBus.emit(EVENTS.NOTIFICATION_UPDATED, {
       actor: context.actor?._id,
       action: EVENTS.NOTIFICATION_UPDATED,
-      MODULE: MODULES.NOTIFICATIONS,
+      module: MODULES.NOTIFICATIONS,
       targetId: notification._id,
       ip: context.ip,
       userAgent: context.userAgent,
@@ -91,12 +94,13 @@ class NotificationController extends BaseCrudController {
   |* DELETE NOTIFICATION BY ID
   |**==========================*/
   deleteById = asyncHandler(async (req, res) => {
-    const notification = await super.deleteById(req.params.id);
+    const { notificationId } = req.params;
+    const notification = await super.deleteById(notificationId);
     const context = buildRequestContext(req);
     eventBus.emit(EVENTS.NOTIFICATION_DELETED, {
       actor: context.actor?._id,
       action: EVENTS.NOTIFICATION_DELETED,
-      MODULE: MODULES.NOTIFICATIONS,
+      module: MODULES.NOTIFICATIONS,
       targetId: notification._id,
       ip: context.ip,
       userAgent: context.userAgent,

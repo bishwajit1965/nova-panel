@@ -11,6 +11,8 @@ router.use(roleMiddleware([ROLES.ADMIN, ROLES.SUPER_ADMIN, ROLES.MODERATOR]));
 
 router.get("/all", notificationController.getAll);
 
+router.get("/get-single/:notificationId", notificationController.getById);
+
 router.post("/create", notificationController.create);
 
 router.patch("/edit/:notificationId", notificationController.updateById);
