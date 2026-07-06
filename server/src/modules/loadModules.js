@@ -10,6 +10,7 @@ import permissionModule from "./permissions/permission.module.js";
 import systemSettingsModule from "./systemSettings/system.settings.module.js";
 import auditLogModule from "./auditLogs/audit.log.module.js";
 import testModule from "./test/test.module.js";
+import notificationModule from "./notifications/notification.module.js";
 
 const modules = [
   userModule,
@@ -22,6 +23,7 @@ const modules = [
   systemSettingsModule,
   auditLogModule,
   testModule,
+  notificationModule,
 ];
 
 export default modules;

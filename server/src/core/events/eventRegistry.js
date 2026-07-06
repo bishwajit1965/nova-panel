@@ -55,6 +55,20 @@ export const EVENT_REGISTRY = Object.freeze({
     description: "A permission was deleted",
   },
 
+  // NOTIFICATIONS
+  [EVENTS.NOTIFICATION_CREATED]: {
+    module: MODULES.NOTIFICATIONS,
+    description: "Notification was created",
+  },
+  [EVENTS.NOTIFICATION_UPDATED]: {
+    module: MODULES.NOTIFICATIONS,
+    description: "Notification was updated",
+  },
+  [EVENTS.NOTIFICATION_DELETED]: {
+    module: MODULES.NOTIFICATIONS,
+    description: "Notification was deleted",
+  },
+
   // PLANS
   [EVENTS.PLAN_CREATED]: {
     module: MODULES.PLANS,

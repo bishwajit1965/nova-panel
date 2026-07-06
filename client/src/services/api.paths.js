@@ -59,6 +59,14 @@ const API_PATHS = {
     KEY: ["system-settings"],
   },
 
+  /**================================
+   * NOTIFICATION SETTINGS ENDPOINTS
+   *=================================*/
+  NOTIFICATION: {
+    ENDPOINT: "notifications",
+    KEY: ["notifications"],
+  },
+
   /**========================
    * ADMIN ENDPOINTS
    *=========================*/
