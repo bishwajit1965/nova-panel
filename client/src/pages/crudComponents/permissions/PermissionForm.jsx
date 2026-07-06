@@ -73,16 +73,18 @@ const PermissionForm = ({
               {permissionToUpdate ? "Update Permission" : "Create Permission"}
             </Button>
 
-            <Button
-              onClick={onCancel}
-              type="button"
-              size="sm"
-              icon={LucideIcon.RotateCcw}
-              variant="warning"
-              className=" "
-            >
-              Reset
-            </Button>
+            {permissionToUpdate && (
+              <Button
+                onClick={onCancel}
+                type="button"
+                size="sm"
+                icon={LucideIcon.RotateCcw}
+                variant="warning"
+                className=" "
+              >
+                Reset
+              </Button>
+            )}
           </div>
         </form>
       </div>

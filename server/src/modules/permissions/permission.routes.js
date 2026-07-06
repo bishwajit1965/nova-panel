@@ -1,8 +1,8 @@
 import express from "express";
-import * as permissionController from "./permission.controller.js";
 import { authMiddleware } from "../../middlewares/auth.middleware.js";
 import { roleMiddleware } from "../../middlewares/role.middleware.js";
 import { ROLES } from "../../constants/roles.constant.js";
+import permissionController from "./permission.controller.js";
 
 const router = express.Router();
 
@@ -11,7 +11,6 @@ const router = express.Router();
  * Only admin & superAdmin can manage permissions
  */
 router.use(authMiddleware);
-
 router.use(roleMiddleware([ROLES.ADMIN, ROLES.SUPER_ADMIN, ROLES.MODERATOR]));
 
 /**
@@ -19,18 +18,18 @@ router.use(roleMiddleware([ROLES.ADMIN, ROLES.SUPER_ADMIN, ROLES.MODERATOR]));
  */
 
 // Get all Permissions
-router.get("/all", permissionController.getAllPermissions);
+router.get("/all", permissionController.getAll);
 
 // Get Permission by ID
-router.get("/:id", permissionController.getPermissionById);
+router.get("/:id", permissionController.getById);
 
 // Create Permission
-router.post("/create", permissionController.createPermission);
+router.post("/create", permissionController.create);
 
 // Update Permission
-router.patch("/edit/:id", permissionController.updatePermission);
+router.patch("/edit/:id", permissionController.updateById);
 
 // Delete Permission
-router.delete("/delete/:id", permissionController.deletePermission);
+router.delete("/delete/:id", permissionController.deleteById);
 
 export default router;

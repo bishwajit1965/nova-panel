@@ -37,8 +37,8 @@ export default class BaseCrudController {
     return await this.service.getOne(query);
   }
 
-  async getAll(query) {
-    return await this.service.getAll(query);
+  async getAll(filter = {}, options = {}) {
+    return await this.service.getAll(filter, options);
   }
 
   // ==========================================

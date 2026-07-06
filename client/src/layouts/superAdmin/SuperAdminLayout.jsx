@@ -220,7 +220,7 @@ const SuperAdminLayout = () => {
         </header>
 
         {/* Outlet */}
-        <div className="p-4 lg:min-h-[calc(100vh-80px)] text-base-content/80 overflow-hidden">
+        <div className="p-4 lg:min-h-[calc(100vh-0)] text-base-content/80 overflow-hidden">
           {<Outlet />}
         </div>
 

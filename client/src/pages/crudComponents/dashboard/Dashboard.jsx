@@ -150,7 +150,7 @@ const Dashboard = () => {
   });
 
   return (
-    <div className="lg:space-y-8">
+    <div className="lg:space-y-8 lg:pb-12 pb-10">
       {can("dashboard.read") ? (
         <>
           <div className="">
@@ -370,14 +370,16 @@ const Dashboard = () => {
               <Card>
                 <CardContent>
                   <div className="flex items-center justify-between">
-                    <LucideIcon.UploadCloudIcon className="w-10 h-10 text-primary dark:text-gray-300" />
                     <div>
-                      <p className="text-sm text-base-content/60 dark:text-gray-300">
+                      <p className="text-sm text-base-content/60 dark:text-gray-300 flex items-center gap-2">
+                        <LucideIcon.UploadCloudIcon className="w-6 h-6 text-primary dark:text-gray-300" />
                         Recent Uploads
                       </p>
                       <div className="text-xs font-bold space-y-1">
-                        {recentUploads.map((upload) => (
-                          <div key={upload._id}>{upload.originalName}</div>
+                        {recentUploads.map((upload, index) => (
+                          <div key={upload._id} className="break-all text-xs">
+                            {index + 1}. {upload.originalName}
+                          </div>
                         ))}
                       </div>
                     </div>

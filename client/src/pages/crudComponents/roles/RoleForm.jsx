@@ -70,16 +70,18 @@ const RoleForm = ({
             {roleToUpdate ? "Update Role" : "Create Role"}
           </Button>
 
-          <Button
-            onClick={onCancel}
-            type="button"
-            size="sm"
-            icon={LucideIcon.RotateCcw}
-            variant="warning"
-            className=" "
-          >
-            Reset
-          </Button>
+          {roleToUpdate && (
+            <Button
+              onClick={onCancel}
+              type="button"
+              size="sm"
+              icon={LucideIcon.RotateCcw}
+              variant="warning"
+              className=" "
+            >
+              Reset
+            </Button>
+          )}
         </div>
       </form>
     </div>

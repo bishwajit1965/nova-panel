@@ -19,18 +19,23 @@ export default class BaseCrudService {
   // =========================
   // READ
   // =========================
+
   async getById(id, options = {}) {
     const query = this.model.findById(id);
 
     if (options.select) query.select(options.select);
-    if (options.populate) query.populate(options.populate);
-    if (options.lean) query.lean();
+
+    if (options.populate) {
+      const populates = Array.isArray(options.populate)
+        ? options.populate
+        : [options.populate];
+
+      populates.forEach((p) => query.populate(p));
+    }
 
     const result = await query;
 
-    if (!result) {
-      throw new AppError("Resource not found", 404);
-    }
+    if (!result) throw new AppError("Resource not found", 404);
 
     return result;
   }
@@ -54,14 +59,20 @@ export default class BaseCrudService {
   async getAll(filter = {}, options = {}) {
     const query = this.model.find(filter);
 
+    // SELECT FIELDS
     if (options.select) query.select(options.select);
-    // if (options.populate) query.populate(options.populate);
+    // POPULATE (safe + scalable)
     if (options.populate) {
-      Array.isArray(options.populate)
-        ? options.populate.forEach((p) => query.populate(p))
-        : query.populate(options.populate);
+      const populates = Array.isArray(options.populate)
+        ? options.populate
+        : [options.populate];
+
+      populates.forEach((p) => query.populate(p));
     }
+
+    // SORTING
     if (options.sort) query.sort(options.sort);
+    // LEAN MODE
     if (options.lean) query.lean();
 
     return await query;

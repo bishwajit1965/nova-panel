@@ -1,49 +1,55 @@
 import Permission from "./permission.model.js";
-import Role from "../roles/role.model.js";
-import AppError from "../../core/errors/AppError.js";
+import BaseCrudService from "../../core/base/BaseCrudService.js";
 
-export const createPermissionService = async (payload) => {
-  const exists = await Permission.findOne({ key: payload.key });
-
-  if (exists) {
-    throw new AppError("Permission already exists", 400);
+class PermissionService extends BaseCrudService {
+  constructor() {
+    super(Permission);
   }
+}
+export default new PermissionService();
 
-  return await Permission.create(payload);
-};
+// export const createPermissionService = async (payload) => {
+//   const exists = await Permission.findOne({ key: payload.key });
 
-export const getAllPermissionsService = async () => {
-  return await Permission.find().sort({ createdAt: -1 });
-};
+//   if (exists) {
+//     throw new AppError("Permission already exists", 400);
+//   }
 
-export const getPermissionByIdService = async (id) => {
-  const permission = await Permission.findById(id);
+//   return await Permission.create(payload);
+// };
 
-  if (!permission) {
-    throw new AppError("Permission not found", 404);
-  }
+// export const getAllPermissionsService = async () => {
+//   return await Permission.find().sort({ createdAt: -1 });
+// };
 
-  return permission;
-};
+// export const getPermissionByIdService = async (id) => {
+//   const permission = await Permission.findById(id);
 
-export const updatePermissionService = async (id, payload) => {
-  const permission = await Permission.findByIdAndUpdate(id, payload, {
-    returnDocument: "after",
-  });
+//   if (!permission) {
+//     throw new AppError("Permission not found", 404);
+//   }
 
-  if (!permission) {
-    throw new AppError("Permission not found", 404);
-  }
+//   return permission;
+// };
 
-  return permission;
-};
+// export const updatePermissionService = async (id, payload) => {
+//   const permission = await Permission.findByIdAndUpdate(id, payload, {
+//     returnDocument: "after",
+//   });
 
-export const deletePermissionService = async (id) => {
-  const permission = await Permission.findByIdAndDelete(id);
+//   if (!permission) {
+//     throw new AppError("Permission not found", 404);
+//   }
 
-  if (!permission) {
-    throw new AppError("Permission not found", 404);
-  }
+//   return permission;
+// };
 
-  return permission;
-};
+// export const deletePermissionService = async (id) => {
+//   const permission = await Permission.findByIdAndDelete(id);
+
+//   if (!permission) {
+//     throw new AppError("Permission not found", 404);
+//   }
+
+//   return permission;
+// };
