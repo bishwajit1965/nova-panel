@@ -7,7 +7,8 @@ import notificationController from "./notification.controller.js";
 const router = express.Router();
 
 router.use(authMiddleware);
-router.use(roleMiddleware([ROLES.ADMIN, ROLES.SUPER_ADMIN, ROLES.MODERATOR]));
+
+router.use(roleMiddleware([ROLES.SUPER_ADMIN, ROLES.ADMIN, ROLES.MODERATOR]));
 
 router.get("/all", notificationController.getAll);
 
@@ -18,6 +19,8 @@ router.post("/create", notificationController.create);
 router.patch("/edit/:notificationId", notificationController.updateById);
 
 router.patch("/read/:notificationId", notificationController.markAsRead);
+
+router.patch("/archive/:notificationId", notificationController.archiveNotice);
 
 router.delete("/delete/:notificationId", notificationController.deleteById);
 

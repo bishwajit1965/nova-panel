@@ -15,6 +15,16 @@ class NotificationService extends BaseCrudService {
     notification.save();
     return notification;
   }
+
+  /**==========================
+  |* ARCHIVE NOTICE
+  |**==========================*/
+  async archive(notificationId) {
+    const notification = await this.getById(notificationId);
+    notification.status = "archived";
+    await notification.save();
+    return notification;
+  }
 }
 
 export default new NotificationService();

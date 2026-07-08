@@ -1,4 +1,6 @@
 import {
+  ArchiveIcon,
+  BookCheck,
   CircleCheckIcon,
   CreditCardIcon,
   Edit,
@@ -21,6 +23,7 @@ import Button from "./Button";
 import { cn } from "../lib/utils";
 
 const icons = {
+  archive: ArchiveIcon,
   edit: Edit,
   edit2: Edit2,
   delete: Trash2,
@@ -33,10 +36,12 @@ const icons = {
   assign: CreditCardIcon,
   user: User,
   suspend: TimerReset,
+  publish: BookCheck,
   pdf: FaFilePdf,
 };
 
 const labels = {
+  archive: "Archive",
   assign: "Assign",
   edit: "Edit",
   edit2: "Edit",
@@ -50,6 +55,7 @@ const labels = {
   select: "Select",
   suspend: "Suspend",
   user: "User",
+  publish: "Publish",
 };
 
 export function MiniIconButton({
@@ -68,7 +74,7 @@ export function MiniIconButton({
   const text = tooltip || labels[icon?.toLowerCase()] || "Action";
 
   const sizes = {
-    xs: "w-8 h-8 p-0",
+    xs: "w-6.5 h-6.5 p-0",
     sm: "w-9 h-9 p-0",
     md: "w-10 h-10 p-0",
   };

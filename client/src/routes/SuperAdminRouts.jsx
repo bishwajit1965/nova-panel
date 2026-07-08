@@ -12,6 +12,7 @@ import PlansManagement from "../pages/crudComponents/plans/PlansManagement";
 import Settings from "../pages/crudComponents/settings/Settings";
 import RolesManagement from "../pages/crudComponents/roles/RolesManagement";
 import AuditLogsManagement from "../pages/crudComponents/auditLogs/AuditLogsManagement";
+import NotificationManagement from "../pages/crudComponents/notifications/NotificationManagement";
 
 export const superAdminRoutes = {
   path: "/superAdmin",
@@ -40,6 +41,7 @@ export const superAdminRoutes = {
     },
     { path: "plans-management", element: <PlansManagement /> },
     { path: "settings", element: <Settings /> },
+    { path: "notifications", element: <NotificationManagement /> },
     {
       path: "*",
       element: <NotFound />,

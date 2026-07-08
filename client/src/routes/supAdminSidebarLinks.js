@@ -69,4 +69,10 @@ export const supAdminSidebarLinks = [
     icon: Settings,
     permission: "settings.read",
   },
+  {
+    label: "Notifications",
+    path: "/superAdmin/notifications",
+    icon: Settings,
+    permission: "notifications.read",
+  },
 ];

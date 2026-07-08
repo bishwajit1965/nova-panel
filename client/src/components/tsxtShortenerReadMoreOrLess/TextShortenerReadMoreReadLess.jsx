@@ -15,7 +15,7 @@ const ReadMore = ({ text = "", maxLength = 100 }) => {
       {isLong && (
         <button
           onClick={() => setExpanded(!expanded)}
-          className="text-indigo-600 font-semibold ml-1"
+          className="text-indigo-600 font-semibold ml-1 hover:link"
         >
           {expanded ? "Read Less" : "Read More"}
         </button>

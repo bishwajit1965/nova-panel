@@ -5,9 +5,9 @@ const notificationSchema = new mongoose.Schema(
     recipient: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-      //   required: true,
-      index: true,
+      default: null,
     },
+    key: { type: String, required: true },
 
     title: {
       type: String,
@@ -19,6 +19,32 @@ const notificationSchema = new mongoose.Schema(
       type: String,
       required: true,
       trim: true,
+    },
+
+    createdBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
+
+    category: {
+      type: String,
+      enum: [
+        "general",
+        "announcement",
+        "event",
+        "policy",
+        "maintenance",
+        "update",
+        "alert",
+        "other",
+      ],
+      default: "general",
+    },
+
+    priority: {
+      type: String,
+      enum: ["low", "normal", "high", "critical"],
+      default: "normal",
     },
 
     type: {
@@ -40,12 +66,43 @@ const notificationSchema = new mongoose.Schema(
 
     module: {
       type: String,
-      default: null,
+      required: true,
     },
 
     entityId: {
       type: mongoose.Schema.Types.ObjectId,
       default: null,
+    },
+
+    scheduledAt: {
+      type: Date,
+      default: null,
+    },
+
+    expiresAt: {
+      type: Date,
+    },
+
+    status: {
+      type: String,
+      enum: ["draft", "published", "archived"],
+      default: "draft",
+    },
+    authority: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+
+    // May be we will use it later
+    // publishedAt: {
+    //   type: Date,
+    //   default: null,
+    // },
+
+    isPinned: {
+      type: Boolean,
+      default: false,
     },
 
     metadata: {

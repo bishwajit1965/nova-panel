@@ -54,7 +54,7 @@ class NotificationController extends BaseCrudController {
   |**==========================*/
   getAll = asyncHandler(async (req, res) => {
     const notifications = await super.getAll(req.query);
-    return (this, success(res, "Notifications fetched", notifications, 200));
+    return this.success(res, "Notifications fetched", notifications, 200);
   });
 
   /**==========================
@@ -88,6 +88,15 @@ class NotificationController extends BaseCrudController {
       },
     });
     return this.success(res, "Notification updated.", notification, 200);
+  });
+
+  /**==========================
+  |* ARCHIVE NOTICE
+  |**==========================*/
+  archiveNotice = asyncHandler(async (req, res) => {
+    const { notificationId } = req.params;
+    const notification = await notificationService.archive(notificationId);
+    return this.success(res, "Notice archived.", notification, 200);
   });
 
   /**==========================

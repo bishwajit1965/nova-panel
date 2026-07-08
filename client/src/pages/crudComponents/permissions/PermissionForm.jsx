@@ -68,7 +68,6 @@ const PermissionForm = ({
               icon={
                 permissionToUpdate ? LucideIcon.Edit : LucideIcon.UploadCloud
               }
-              className=" "
             >
               {permissionToUpdate ? "Update Permission" : "Create Permission"}
             </Button>
@@ -80,7 +79,6 @@ const PermissionForm = ({
                 size="sm"
                 icon={LucideIcon.RotateCcw}
                 variant="warning"
-                className=" "
               >
                 Reset
               </Button>

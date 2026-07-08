@@ -34,4 +34,9 @@ export const PERMISSIONS = {
   UPDATE_UPLOAD: "upload.update",
   DELETE_UPLOAD: "upload.delete",
   MANAGE_UPLOADS: "manage.uploads",
+
+  CREATE_NOTIFICATIONS: "notifications.create",
+  READ_NOTIFICATIONS: "notifications.read",
+  UPDATE_NOTIFICATIONS: "notifications.update",
+  DELETE_NOTIFICATIONS: "notifications.delete",
 };

@@ -17,7 +17,7 @@ export default class BaseCrudService {
   }
 
   // =========================
-  // READ
+  // READ METHODS DEFINED
   // =========================
 
   async getById(id, options = {}) {
@@ -40,12 +40,14 @@ export default class BaseCrudService {
     return result;
   }
 
+  // GET BY IDS
   async findByIds(ids = []) {
     return await this.model.find({
       _id: { $in: ids },
     });
   }
 
+  // GET ONE
   async getOne(filter = {}, options = {}) {
     const query = this.model.findOne(filter);
 
@@ -56,11 +58,13 @@ export default class BaseCrudService {
     return await query;
   }
 
+  // GET ALL
   async getAll(filter = {}, options = {}) {
     const query = this.model.find(filter);
 
     // SELECT FIELDS
     if (options.select) query.select(options.select);
+
     // POPULATE (safe + scalable)
     if (options.populate) {
       const populates = Array.isArray(options.populate)
@@ -72,6 +76,7 @@ export default class BaseCrudService {
 
     // SORTING
     if (options.sort) query.sort(options.sort);
+
     // LEAN MODE
     if (options.lean) query.lean();
 
@@ -79,7 +84,7 @@ export default class BaseCrudService {
   }
 
   // =========================
-  // UPDATE
+  // UPDATE METHODS DEFINED
   // =========================
   async updateById(id, data, options = {}) {
     const result = await this.model.findByIdAndUpdate(id, data, {
@@ -100,9 +105,8 @@ export default class BaseCrudService {
   }
 
   // =========================
-  // DELETE
+  // DELETE METHODS DEFINED
   // =========================
-
   async deleteById(id) {
     const result = await this.model.findByIdAndDelete(id);
 
@@ -118,21 +122,72 @@ export default class BaseCrudService {
   }
 
   // =========================
-  // UTILITIES
+  // UTILITIES METHODS DEFINED
   // =========================
 
+  /**
+   * Apply lifecycle timestamp rules.
+   *
+   * @param {Object} params
+   * @param {Object} params.data - Incoming payload
+   * @param {Object|null} params.existing - Existing document (null on create)
+   * @param {Object} params.config - Lifecycle configuration
+   *
+   * @returns {Object}
+   */
+  async applyLifecycle({ data, existing = null, config = {} }) {
+    const payload = { ...data };
+
+    for (const rule of config.rules || []) {
+      const {
+        stateField,
+        triggerValue,
+        timestampField,
+        clearOnExit = false,
+        preserveExisting = true,
+      } = rule;
+
+      const previousState = existing?.[stateField];
+      const currentState = payload[stateField];
+
+      // State changed to trigger value
+      if (currentState === triggerValue && previousState !== triggerValue) {
+        if (!preserveExisting || !existing?.[timestampField]) {
+          payload[timestampField] = new Date();
+        } else {
+          payload[timestampField] = existing[timestampField];
+        }
+      }
+
+      // State changed away from trigger value
+      if (
+        clearOnExit &&
+        previousState === triggerValue &&
+        currentState !== triggerValue
+      ) {
+        payload[timestampField] = null;
+      }
+    }
+
+    return payload;
+  }
+
+  // EXISTS
   async exists(filter) {
     return await this.model.exists(filter);
   }
 
+  // COUNT
   async count(filter = {}) {
     return await this.model.countDocuments(filter);
   }
 
+  // AGGREGATE
   async aggregate(pipeline = []) {
     return await this.model.aggregate(pipeline);
   }
 
+  // PAGINATE
   async paginate({
     filter = {},
     page = 1,
