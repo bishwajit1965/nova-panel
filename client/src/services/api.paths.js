@@ -64,7 +64,16 @@ const API_PATHS = {
    *=================================*/
   NOTIFICATION: {
     ENDPOINT: "notifications",
-    KEY: ["notifications"],
+
+    KEYS: {
+      ALL: ["notifications", "all"],
+      ARCHIVED: ["notifications", "archived"],
+      SOFT_DELETED: ["notifications", "softDeleted"],
+      REVOKE_ARCHIVED: ["notifications", "revokeArchived"],
+      PUBLISHED: ["notifications", "published"],
+      UPDATE: ["notifications", "update"],
+      DELETE: ["notifications", "delete"],
+    },
   },
 
   /**========================

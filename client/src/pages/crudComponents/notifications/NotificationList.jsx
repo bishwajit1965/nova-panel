@@ -1,39 +1,40 @@
 import { MiniIconButton } from "../../../components/ui/MiniIconButton";
-import NoDataFound from "../../../components/ui/NoDataFound";
+import TableDataNotFound from "../../../components/ui/TableDataNotFound";
 import { normalizeDate } from "../../../utils/normalizeDate";
 
 const NotificationList = ({
   notifications,
   onSelect,
-  onConfirmDelete,
   onView,
-  handleArchiveNotice,
+  onConfirmAction,
+  onConfirmArchive,
+  onSoftDelete,
 }) => {
   return (
     <div>
-      NotificationList{notifications?.length ? notifications?.length : 0}
       <div className="overflow-x-auto">
         <table className="table table-xs">
           <thead>
             <tr>
               <th>#</th>
               <th>title</th>
-              <th>Category</th>
-              <th>Priority</th>
-              <th>Status</th>
-              <th>CreatedAt</th>
-              <th>Expires</th>
-              <th>Action</th>
+              <th>Cate</th>
+              <th>Pri</th>
+              <th>Stat</th>
+              <th>Cre</th>
+              <th>Exp</th>
+              <th>Pub</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
             {notifications?.length === 0 ? (
-              <NoDataFound />
+              <TableDataNotFound colSpan={9} />
             ) : (
               notifications?.map((notification, index) => (
                 <tr key={notification._id}>
                   <th>{index + 1}</th>
-                  <td>
+                  <td className="break-all">
                     {notification?.title.length > 15
                       ? notification?.title.slice(0, 15) + "..."
                       : notification?.title}
@@ -43,9 +44,10 @@ const NotificationList = ({
                   <td>{notification?.status}</td>
                   <td>{normalizeDate(notification?.createdAt)}</td>
                   <td>{normalizeDate(notification?.expiresAt)}</td>
+                  <td>{normalizeDate(notification?.publishedAt)}</td>
                   <td className="flex items-center gap-1">
                     <MiniIconButton
-                      onClick={() => onView(notification?._id)}
+                      onClick={() => onView(notification?._id, notifications)}
                       size="xs"
                       icon="view"
                       label="view"
@@ -58,24 +60,33 @@ const NotificationList = ({
                       label="edit"
                       variant="success"
                     />
+                    {notification?.status === "draft" && (
+                      <MiniIconButton
+                        onClick={() =>
+                          onConfirmAction(notification._id, notifications)
+                        }
+                        size="xs"
+                        icon="publish"
+                        label="publish"
+                        variant="indigo"
+                      />
+                    )}
                     <MiniIconButton
-                      size="xs"
-                      icon="publish"
-                      label="publish"
-                      variant="indigo"
-                    />
-                    <MiniIconButton
-                      onClick={() => handleArchiveNotice(notification?._id)}
+                      onClick={() =>
+                        onConfirmArchive(notification?._id, notifications)
+                      }
                       size="xs"
                       icon="archive"
                       label="archive"
                       variant="warning"
                     />
                     <MiniIconButton
-                      onClick={() => onConfirmDelete(notification)}
+                      onClick={() =>
+                        onSoftDelete(notification?._id, notifications)
+                      }
                       size="xs"
-                      icon="delete"
-                      label="delete"
+                      icon="soft"
+                      label="soft"
                       variant="danger"
                     />
                   </td>
@@ -87,12 +98,13 @@ const NotificationList = ({
             <tr>
               <th>#</th>
               <th>title</th>
-              <th>Category</th>
-              <th>Priority</th>
-              <th>Status</th>
-              <th>CreatedAt</th>
-              <th>Expires</th>
-              <th>Action</th>
+              <th>Cate</th>
+              <th>Pri</th>
+              <th>Stat</th>
+              <th>Cre</th>
+              <th>Exp</th>
+              <th>Pub</th>
+              <th>Actions</th>
             </tr>
           </tfoot>
         </table>

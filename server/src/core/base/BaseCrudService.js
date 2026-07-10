@@ -125,53 +125,6 @@ export default class BaseCrudService {
   // UTILITIES METHODS DEFINED
   // =========================
 
-  /**
-   * Apply lifecycle timestamp rules.
-   *
-   * @param {Object} params
-   * @param {Object} params.data - Incoming payload
-   * @param {Object|null} params.existing - Existing document (null on create)
-   * @param {Object} params.config - Lifecycle configuration
-   *
-   * @returns {Object}
-   */
-  async applyLifecycle({ data, existing = null, config = {} }) {
-    const payload = { ...data };
-
-    for (const rule of config.rules || []) {
-      const {
-        stateField,
-        triggerValue,
-        timestampField,
-        clearOnExit = false,
-        preserveExisting = true,
-      } = rule;
-
-      const previousState = existing?.[stateField];
-      const currentState = payload[stateField];
-
-      // State changed to trigger value
-      if (currentState === triggerValue && previousState !== triggerValue) {
-        if (!preserveExisting || !existing?.[timestampField]) {
-          payload[timestampField] = new Date();
-        } else {
-          payload[timestampField] = existing[timestampField];
-        }
-      }
-
-      // State changed away from trigger value
-      if (
-        clearOnExit &&
-        previousState === triggerValue &&
-        currentState !== triggerValue
-      ) {
-        payload[timestampField] = null;
-      }
-    }
-
-    return payload;
-  }
-
   // EXISTS
   async exists(filter) {
     return await this.model.exists(filter);

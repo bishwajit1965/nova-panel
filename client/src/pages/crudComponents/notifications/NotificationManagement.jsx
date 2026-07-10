@@ -14,11 +14,22 @@ import { normalizeDate } from "../../../utils/normalizeDate";
 import { LucideIcon } from "../../../components/lib/LucideIcons";
 import { MiniIconButton } from "../../../components/ui/MiniIconButton";
 import ReadMore from "../../../components/tsxtShortenerReadMoreOrLess/TextShortenerReadMoreReadLess";
+import ArchivedNotificationList from "./ArchivedNotificationList";
+import SoftDeletedNotificationList from "./SoftDeletedNotificationList";
+import ConfirmActionDialogue from "../../../components/ui/ConfirmActionDialogue";
+import Pagination from "../../../components/pagination/Pagination";
+import Button from "../../../components/ui/Button";
+import CountBadge from "../../../components/ui/CountBadge";
 
 const NotificationManagement = () => {
   const [noticeToUpdate, setNoticeToUpdate] = useState(null);
   const [confirmDelete, setConfirmDelete] = useState(null);
+  const [confirmSoftDelete, setConfirmSoftDelete] = useState(null);
   const [viewNotification, setViewNotification] = useState(false);
+  const [conformAction, setConfirmAction] = useState(null);
+  const [confirmArchive, setConfirmArchive] = useState(null);
+  const [confirmRevokeNotice, setConfirmRevokeNotice] = useState(null);
+  const [notificationSearch, setNotificationSearch] = useState("");
 
   const isExpired =
     viewNotification?.expiresAt &&
@@ -47,15 +58,61 @@ const NotificationManagement = () => {
     setForm(getInitialForm());
   };
 
+  // Reset Form Action
+  const resetFormAction = () => {
+    setConfirmAction(null);
+    setConfirmArchive(null);
+    setConfirmRevokeNotice(null);
+  };
+
   /*** ---> Notification Query Mutation  fetch notification API Hook ---> */
   const {
     data: notifications,
     isLoading: notificationsLoading,
     isError: notificationsError,
+    refetch: refetchNotifications,
     error: notificationsErrorObj,
   } = useApiQuery({
     url: `${API_PATHS.NOTIFICATION.ENDPOINT}/all`,
-    queryKey: API_PATHS.NOTIFICATION.KEY,
+    queryKey: API_PATHS.NOTIFICATION.KEYS.ALL,
+    options: {
+      staleTime: 0,
+      refetchOnWindowFocus: true,
+      refetchOnReconnect: true,
+    },
+  });
+
+  /**---> PAGINATION --->*/
+  const [paginatedData, setPaginatedData] = useState(notifications || []);
+  const dataLength = notifications ? notifications?.length : [];
+
+  /*** ---> Archived Notification Query Mutation  fetch notification API Hook ---> */
+  const {
+    data: archivedNotifications,
+    isLoading: archivedNotificationsLoading,
+    isError: archivedNotificationsError,
+    refetch: refetchArchivedNotifications,
+    error: archivedNotificationsErrorObj,
+  } = useApiQuery({
+    url: `${API_PATHS.NOTIFICATION.ENDPOINT}/archived`,
+    queryKey: API_PATHS.NOTIFICATION.KEYS.ARCHIVED,
+    options: {
+      staleTime: 0,
+      refetchOnWindowFocus: true,
+      refetchOnReconnect: true,
+    },
+  });
+
+  /*** ---> Soft-deleted Notification Query Mutation  fetch notification API Hook ---> */
+  const {
+    data: softDeletedNotifications,
+    isLoading: softDeletedNotificationsLoading,
+    isError: softDeletedNotificationsError,
+    refetch: refetchSoftDeletedNotifications,
+    error: softDeletedNotificationsErrorObj,
+  } = useApiQuery({
+    url: `${API_PATHS.NOTIFICATION.ENDPOINT}/soft/deleted`,
+    queryKey: API_PATHS.NOTIFICATION.KEYS.SOFT_DELETED,
     options: {
       staleTime: 0,
       refetchOnWindowFocus: true,
@@ -69,11 +126,40 @@ const NotificationManagement = () => {
     path: noticeToUpdate
       ? (payload) => `${API_PATHS.NOTIFICATION.ENDPOINT}/edit/${payload.id}`
       : `${API_PATHS.NOTIFICATION.ENDPOINT}/create`,
-    key: API_PATHS.NOTIFICATION.KEY, // used by useQuery
+    key: API_PATHS.NOTIFICATION.KEYS.UPDATE, // used by useQuery
 
     onSuccess: (data) => {
+      refetchAll();
       resetForm();
+      Swal.fire({
+        position: "top-end",
+        icon: "success",
+        title: `${data.message}`,
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    },
+    onError: (error) => {
+      Swal.fire({
+        position: "top-end",
+        icon: "error",
+        title: `${error.message}`,
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      console.error(error);
+    },
+  });
 
+  /*** ------> PUBLISH Notification Mutation API Hook ------> */
+  const publishNotificationMutation = useApiMutation({
+    method: "update",
+    path: (payload) =>
+      `${API_PATHS.NOTIFICATION.ENDPOINT}/publish/${payload?.id}`,
+    key: API_PATHS.NOTIFICATION.KEYS.PUBLISHED,
+    onSuccess: (data) => {
+      refetchAll();
+      resetFormAction();
       Swal.fire({
         position: "top-end",
         icon: "success",
@@ -99,8 +185,10 @@ const NotificationManagement = () => {
     method: "update",
     path: (payload) =>
       `${API_PATHS.NOTIFICATION.ENDPOINT}/archive/${payload?.id}`,
-    key: API_PATHS.NOTIFICATION.KEY,
+    key: API_PATHS.NOTIFICATION.KEYS.ARCHIVED,
     onSuccess: (data) => {
+      refetchAll();
+      resetFormAction();
       Swal.fire({
         position: "top-end",
         icon: "success",
@@ -121,13 +209,74 @@ const NotificationManagement = () => {
     },
   });
 
-  /*** ------> Notification Mutation DELETE API Hook ------> */
+  /*** ------> SOFT DELETE Notification Mutation API Hook ------> */
+  const notificationSoftDeleteMutation = useApiMutation({
+    method: "delete",
+    path: (payload) =>
+      `${API_PATHS.NOTIFICATION.ENDPOINT}/soft/delete/${payload?.id}`,
+    key: API_PATHS.NOTIFICATION.KEYS.SOFT_DELETED,
+    onSuccess: (data) => {
+      refetchAll();
+      setTimeout(() => {
+        setConfirmSoftDelete(null);
+      }, 600);
+      Swal.fire({
+        position: "top-end",
+        icon: "success",
+        title: `${data.message}`,
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    },
+    onError: (error) => {
+      Swal.fire({
+        position: "top-end",
+        icon: "error",
+        title: `${error.message}`,
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      console.error(error);
+    },
+  });
+
+  /*** ------> DELETE Notification Mutation API Hook ------> */
   const notificationDeleteMutation = useApiMutation({
     method: "delete",
     path: (id) => `${API_PATHS.NOTIFICATION.ENDPOINT}/delete/${id}`,
-    key: API_PATHS.NOTIFICATION.KEY,
+    key: API_PATHS.NOTIFICATION.KEYS.DELETE,
     onSuccess: (data) => {
+      refetchAll();
       setConfirmDelete(null);
+      Swal.fire({
+        position: "top-end",
+        icon: "success",
+        title: `${data.message}`,
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    },
+    onError: (error) => {
+      Swal.fire({
+        position: "top-end",
+        icon: "error",
+        title: `${error.message}`,
+        showConfirmButton: false,
+        timer: 1500,
+      });
+      console.error(error);
+    },
+  });
+
+  /*** ------> REVOKE ARCHIVED Notification Mutation API Hook ------> */
+  const revokeArchivedMutation = useApiMutation({
+    method: "update",
+    path: (payload) =>
+      `${API_PATHS.NOTIFICATION.ENDPOINT}/revoke/archived/${payload?.id}`,
+    key: API_PATHS.NOTIFICATION.KEYS.REVOKE_ARCHIVED,
+    onSuccess: (data) => {
+      refetchAll();
+      resetFormAction();
       Swal.fire({
         position: "top-end",
         icon: "success",
@@ -158,7 +307,6 @@ const NotificationManagement = () => {
   });
 
   /*** ------> NOTIFICATION RELATED HANDLERS ------> */
-
   const getNoticeData = () => ({
     key: form.key,
     title: form.title,
@@ -193,7 +341,6 @@ const NotificationManagement = () => {
     const notice = notifications?.find((n) => n._id === noticeId);
     setNoticeToUpdate(notice);
     setViewNotification(null);
-
     setForm(mapNoticeToForm(notice));
   };
 
@@ -215,12 +362,41 @@ const NotificationManagement = () => {
     });
   };
 
+  // Handle confirm soft delete notification
+  const handleConfirmSoftDeleteNotification = (noticeId, dataSource) => {
+    const notice = dataSource?.find(
+      (n) => n?._id.toString() === noticeId.toString(),
+    );
+    if (notice) {
+      setConfirmSoftDelete(notice);
+    }
+  };
+
+  // Handle soft delete
+  const handleSoftDeleteNotification = (noticeId) => {
+    const payload = {
+      id: noticeId,
+      data: { status: "softDeleted" },
+    };
+
+    notificationSoftDeleteMutation.mutate(payload, {
+      onSuccess: () => {
+        setTimeout(() => {
+          setConfirmSoftDelete(null);
+        }, 600);
+      },
+      onError: (error) => {
+        console.error("Error", error);
+      },
+    });
+  };
+
   // Handler to confirm delete permission
   const handleConfirmDeleteNotification = (notification) => {
     setConfirmDelete(notification);
   };
 
-  // Handler to delete permission
+  // Handler to delete notification
   const handleDeleteNotification = (id) => {
     const payload = id;
     notificationDeleteMutation.mutate(payload, {
@@ -239,8 +415,8 @@ const NotificationManagement = () => {
   };
 
   // Handle view notification
-  const handleViewNotification = (noticeId) => {
-    const notice = notifications?.find(
+  const handleViewNotification = (noticeId, dataSource) => {
+    const notice = dataSource?.find(
       (n) => n._id.toString() === noticeId.toString(),
     );
     if (notice) {
@@ -254,6 +430,15 @@ const NotificationManagement = () => {
     setViewNotification(null);
   };
 
+  const handleConfirmArchive = (noticeId, dataSource) => {
+    const notice = dataSource?.find(
+      (n) => n._id.toString() === noticeId.toString(),
+    );
+    if (notice) {
+      setConfirmArchive(notice);
+    }
+  };
+
   const handleArchiveNotice = (noticeId) => {
     const payload = {
       id: noticeId,
@@ -263,7 +448,60 @@ const NotificationManagement = () => {
     archiveNoticeMutation.mutate(payload);
   };
 
-  // handle form submit
+  // Handle confirm revoke notice
+  const handleConfirmRevokeNotification = (noticeId, dataSource) => {
+    const notice = dataSource?.find(
+      (n) => n?._id.toString() === noticeId.toString(),
+    );
+    if (notice) {
+      setConfirmRevokeNotice(notice);
+    }
+  };
+
+  // Handle revoke archived notice
+  const handleRevokeArchivedNotice = (noticeId) => {
+    const payload = {
+      id: noticeId,
+      data: { status: "draft" },
+    };
+
+    revokeArchivedMutation.mutate(payload);
+  };
+
+  // Handle confirm action
+  const handleConfirmAction = (noticeId, dataSource) => {
+    const notice = dataSource.find(
+      (n) => n?._id.toString() === noticeId.toString(),
+    );
+
+    if (notice) {
+      setConfirmAction(notice);
+    }
+  };
+
+  // Handle publish notification
+  const handlePublishNotification = (noticeId) => {
+    try {
+      const payload = {
+        id: noticeId,
+        data: { status: "published" },
+      };
+
+      publishNotificationMutation.mutate(payload);
+    } catch (error) {
+      console.error("Error in publishing notification", error);
+    }
+  };
+
+  const refetchAll = async () => {
+    await Promise.all([
+      refetchNotifications(),
+      refetchArchivedNotifications(),
+      refetchSoftDeletedNotifications(),
+    ]);
+  };
+
+  // Handle form submit
   const handleSubmit = (e) => {
     e.preventDefault();
     try {
@@ -283,12 +521,39 @@ const NotificationManagement = () => {
     }
   };
 
-  /** --------> Use Fetched Data Status Handler --------> */
+  /**--------- HANDLE SEARCH RESET ---------*/
+  const handleSearchReset = () => {
+    setNotificationSearch("");
+  };
+
+  /**--------- HANDLE SEARCH QUERY ---------*/
+  const filteredNotifications = notifications?.filter((n) => {
+    const q = notificationSearch.toLowerCase();
+    return (
+      n?.title?.toLowerCase().includes(q) || n?.title?.toLowerCase().includes(q)
+    );
+  });
+
+  /** --------> Use Fetched Data Status Handlers --------> */
   const notificationDataStatus = useFetchedDataStatusHandler({
     isLoading: notificationsLoading,
     isError: notificationsError,
     error: notificationsErrorObj,
     label: "notifications-super-admin",
+  });
+
+  const archivedNotificationDataStatus = useFetchedDataStatusHandler({
+    isLoading: archivedNotificationsLoading,
+    isError: archivedNotificationsError,
+    error: archivedNotificationsErrorObj,
+    label: "archived-notifications-super-admin",
+  });
+
+  const softDeletedNotificationDataStatus = useFetchedDataStatusHandler({
+    isLoading: softDeletedNotificationsLoading,
+    isError: softDeletedNotificationsError,
+    error: softDeletedNotificationsErrorObj,
+    label: "soft-deleted-notifications-super-admin",
   });
 
   return (
@@ -305,19 +570,126 @@ const NotificationManagement = () => {
           />
         </div>
         <div className="lg:col-span-7 col-span-12 border border-base-content/15 rounded-xl shadow-sm hover:shadow-xl p-4">
+          <div className="lg:flex grid lg:grid-cols-12 items-center grid-cols-1 lg:gap-4 gap-2 justify-between lg:mb-4 mb-2">
+            <div className="lg:col-span-6 col-span-12">
+              <h1 className="lg:text-xl text-sm font-bold flex items-center gap-2">
+                Notification List
+                <CountBadge dataLength={notifications} />
+              </h1>
+            </div>
+            <div
+              className={`lg:col-span-6 col-span-12 flex items-center justify-between gap-2 ${!notificationSearch ? "lg:w-1/3 w-full" : "lg:w-1/2  w-full"}`}
+            >
+              <input
+                type="text"
+                placeholder="Search notice..."
+                className="input input-sm input-bordered w-full shadow"
+                value={notificationSearch}
+                onChange={(e) => setNotificationSearch(e.target.value)}
+              />
+
+              <Button onClick={handleSearchReset} size="sm" variant="outline">
+                <LucideIcon.RefreshCcw size={20} /> Reset
+              </Button>
+            </div>
+          </div>
           {notificationDataStatus?.status !== "success" ? (
             notificationDataStatus?.content
           ) : (
             <NotificationList
-              notifications={notifications}
+              notifications={
+                notificationSearch ? filteredNotifications : paginatedData
+              }
               onSelect={handleSelectNoticeToEdit}
               onConfirmDelete={handleConfirmDeleteNotification}
               onView={handleViewNotification}
               handleArchiveNotice={handleArchiveNotice}
+              onConfirmAction={handleConfirmAction}
+              onConfirmArchive={handleConfirmArchive}
+              onSoftDelete={handleConfirmSoftDeleteNotification}
+            />
+          )}
+
+          {/* ----> PAGINATION READER ---->*/}
+          <div className="lg:my-4 mt-8">
+            <Pagination
+              items={notifications}
+              dataLength={dataLength}
+              onPaginatedDataChange={setPaginatedData}
+            />
+          </div>
+
+          {/* Archived notification table */}
+          {archivedNotificationDataStatus?.status !== "success" ? (
+            archivedNotificationDataStatus?.content
+          ) : (
+            <ArchivedNotificationList
+              archivedNotifications={archivedNotifications}
+              onView={handleViewNotification}
+              onRevoke={handleRevokeArchivedNotice}
+              onConfirmAction={handleConfirmAction}
+              onConfirmSoftDeleteNotification={
+                handleConfirmSoftDeleteNotification
+              }
+              onConfirmRevoke={handleConfirmRevokeNotification}
+            />
+          )}
+
+          {/* Soft deleted notification table */}
+          {softDeletedNotificationDataStatus?.status !== "success" ? (
+            softDeletedNotificationDataStatus?.content
+          ) : (
+            <SoftDeletedNotificationList
+              softDeletedNotifications={softDeletedNotifications}
+              onView={handleViewNotification}
+              onConfirmDelete={handleConfirmDeleteNotification}
+              onConfirmAction={handleConfirmAction}
+              onConfirmArchive={handleConfirmArchive}
+              onConfirmRevoke={handleConfirmRevokeNotification}
             />
           )}
         </div>
       </div>
+
+      {/* Confirm Action */}
+      {conformAction && (
+        <ConfirmActionDialogue
+          isOpen={conformAction}
+          action="Publishing Notice"
+          onClose={() => setConfirmAction(null)}
+          onConfirm={() => handlePublishNotification(conformAction?._id)}
+        />
+      )}
+
+      {/* Confirm Archiving */}
+      {confirmArchive && (
+        <ConfirmActionDialogue
+          isOpen={confirmArchive}
+          onClose={() => setConfirmArchive(null)}
+          action="Archiving Notice"
+          onConfirm={() => handleArchiveNotice(confirmArchive?._id)}
+        />
+      )}
+
+      {/* Confirm Revoke Archived or Soft Deleted Notice */}
+      {confirmRevokeNotice && (
+        <ConfirmActionDialogue
+          isOpen={confirmRevokeNotice}
+          onClose={() => setConfirmRevokeNotice(null)}
+          onConfirm={() => handleRevokeArchivedNotice(confirmRevokeNotice?._id)}
+          action="Revoking Notice"
+        />
+      )}
+
+      {/* Confirm soft delete */}
+      {confirmSoftDelete && (
+        <ConfirmDialogue
+          isOpen={confirmSoftDelete}
+          onClose={() => setConfirmSoftDelete(null)}
+          onConfirm={() => handleSoftDeleteNotification(confirmSoftDelete?._id)}
+        />
+      )}
+
       {/* Confirm delete dialogue box */}
       {confirmDelete && (
         <ConfirmDialogue
@@ -367,11 +739,15 @@ const NotificationManagement = () => {
                 </span>
               </p>
               <p className="flex items-center gap-2 capitalize">
-                {" "}
                 <span
                   className={`capitalize ${viewNotification?.type === "info" ? "badge badge-primary" : viewNotification?.type === "success" ? "badge badge-success" : viewNotification?.type === "warning" ? "badge badge-warning" : viewNotification?.type === "error" ? "badge badge-error" : ""}`}
                 >
                   Type: {viewNotification?.type}
+                </span>
+              </p>
+              <p className="">
+                <span className="badge badge-outline capitalize font-bold hover:bg-gray-900 hover:text-white">
+                  Status: {viewNotification?.status}
                 </span>
               </p>
             </div>
@@ -386,14 +762,16 @@ const NotificationManagement = () => {
               </p>
               <p>
                 {!viewNotification?.expiresAt ? (
-                  <span>No Expiry</span>
+                  <span className="badge badge-dash border-2 bg-warning border-green-500">
+                    No Expiry
+                  </span>
                 ) : isExpired ? (
                   <span className="badge badge-dash border-2 bg-warning border-green-500">
-                    <LucideIcon.X size={16} /> Expired
+                    Expired
                   </span>
                 ) : (
                   <span className="badge badge-dash border-2 bg-success text-white border-green-500 font-semibold">
-                    <LucideIcon.CheckCircle size={16} /> Active
+                    Active
                   </span>
                 )}
               </p>

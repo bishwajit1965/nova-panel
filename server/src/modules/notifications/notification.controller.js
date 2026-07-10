@@ -53,12 +53,14 @@ class NotificationController extends BaseCrudController {
   |* GET ALL NOTIFICATIONS
   |**==========================*/
   getAll = asyncHandler(async (req, res) => {
-    const notifications = await super.getAll(req.query);
+    const notifications = await super.getAll({
+      status: { $in: ["draft", "published"] },
+    });
     return this.success(res, "Notifications fetched", notifications, 200);
   });
 
   /**==========================
-  |* MARK NOTIFICATION AS READ
+  |* MARK NOTIFICATION
   |**==========================*/
   markAsRead = asyncHandler(async (req, res) => {
     const { notificationId } = req.params;
@@ -97,6 +99,74 @@ class NotificationController extends BaseCrudController {
     const { notificationId } = req.params;
     const notification = await notificationService.archive(notificationId);
     return this.success(res, "Notice archived.", notification, 200);
+  });
+
+  /**============================
+  |* FETCH ALL ARCHIVED NOTICES
+  |**=============================*/
+  archivedNotices = asyncHandler(async (req, res) => {
+    const archivedNotices = await notificationService.getAllArchived(req.query);
+    return this.success(res, "Archived notice fetched.", archivedNotices, 200);
+  });
+
+  /**==========================
+  |* REVOKE ARCHIVED NOTICE
+  |**==========================*/
+  revokeArchivedNotice = asyncHandler(async (req, res) => {
+    const { notificationId } = req.params;
+    const revokedNotice =
+      await notificationService.revokeArchived(notificationId);
+    return this.success(res, "Revoked Archived notice", revokedNotice, 200);
+  });
+
+  /**==========================
+  |* PUBLISH NOTICE
+  |**==========================*/
+  publish = asyncHandler(async (req, res) => {
+    const { notificationId } = req.params;
+    const publishedNotice =
+      await notificationService.publishNotice(notificationId);
+    return this.success(res, "Notice published", publishedNotice, 200);
+  });
+
+  /**==========================
+  |* SOFT DELETE NOTICE
+  |**==========================*/
+  softDeleteNotice = asyncHandler(async (req, res) => {
+    const { notificationId } = req.params;
+    const softDeletedNotice =
+      await notificationService.softDelete(notificationId);
+    return this.success(res, "Notice soft deleted", softDeletedNotice, 200);
+  });
+
+  /**==========================
+  |* GET SOFT DELETED NOTICES
+  |**==========================*/
+  getSoftDeleted = asyncHandler(async (req, res) => {
+    const softDeletedNotices = await notificationService.getAllSoftDeleted(
+      req.query,
+    );
+    return this.success(
+      res,
+      "Soft deleted notices are fetched",
+      softDeletedNotices,
+      200,
+    );
+  });
+
+  /**==========================
+  |* RESTORE SOFT-DELETE NOTICE
+  |**==========================*/
+  restoreSoftDeletedNotice = asyncHandler(async (req, res) => {
+    const { notificationId } = req.params;
+    const softDeletedNotice =
+      await notificationService.restoreSoftDeleted(notificationId);
+    return this.success(
+      res,
+      "Soft deleted notice restored.",
+      softDeletedNotice,
+      200,
+    );
   });
 
   /**==========================

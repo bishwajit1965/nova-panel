@@ -175,7 +175,8 @@ const UserManagement = () => {
   const handleSearchReset = () => {
     setUserSearch("");
   };
-  /**--------- HANDLE SEARCH RESET ---------*/
+
+  /**--------- HANDLE SEARCH QUERY ---------*/
   const filteredUsers = users?.filter((u) => {
     const q = userSearch.toLowerCase();
     return (

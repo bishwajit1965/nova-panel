@@ -1,5 +1,6 @@
 import {
   ArchiveIcon,
+  ArrowBigUpDash,
   BookCheck,
   CircleCheckIcon,
   CreditCardIcon,
@@ -37,6 +38,8 @@ const icons = {
   user: User,
   suspend: TimerReset,
   publish: BookCheck,
+  revoke: ArrowBigUpDash,
+  soft: Trash2,
   pdf: FaFilePdf,
 };
 
@@ -52,10 +55,12 @@ const labels = {
   close: "Close",
   download: "Download",
   pdf: "PDF",
+  revoke: "Revoke Status",
   select: "Select",
   suspend: "Suspend",
   user: "User",
   publish: "Publish",
+  soft: "Soft Delete",
 };
 
 export function MiniIconButton({

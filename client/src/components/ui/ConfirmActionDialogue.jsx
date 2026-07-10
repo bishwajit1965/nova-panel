@@ -2,25 +2,26 @@ import {
   AlertCircleIcon,
   CircleCheckBig,
   LucideLoader,
-  LucideTrash2,
+  LucideUploadCloud,
   XCircle,
 } from "lucide-react";
 
 import Modal from "./Modal";
 import Button from "./Button";
 
-export default function ConfirmDialogue({
+const ConfirmActionDialogue = ({
   isOpen,
   onClose,
   onConfirm,
   icon = <CircleCheckBig size={25} className="text-blue-500" />,
-  title = "Confirm Action",
-  message = "Are you sure you want to continue?",
-  confirmText = "Delete",
+  title = "Confirm the Action",
+  message = "Are you sure you want to continue with ?",
+  confirmText = "Submit",
   cancelText = "Cancel",
   loading = false,
-  onDelete,
-}) {
+  onConfirmAction,
+  action = "Action",
+}) => {
   return (
     <Modal isOpen={isOpen} onClose={onClose} title={title}>
       <div className="space-y-4">
@@ -28,41 +29,45 @@ export default function ConfirmDialogue({
         <div className="flex items-center gap-3">
           <span className="">{icon}</span>
 
-          <p className="text-sm text-gray-700">{message}</p>
+          <p className="text-sm text-gray-700">
+            {message} {action && action}
+          </p>
         </div>
 
         {/* Warning */}
-        <div className="flex items-center gap-2 rounded-lg border border-red-200 bg-red-50 px-3 py-2">
-          <AlertCircleIcon size={18} className="mt-0.5 text-red-500" />
+        <div className="flex items-center gap-2 rounded-lg border border-green-200 bg-green-50 px-3 py-2">
+          <AlertCircleIcon size={18} className="mt-0.5 text-blue-500" />
 
-          <p className="text-sm text-red-500">
-            Once deleted, this action cannot be revoked.
+          <p className="text-sm text-gray-800">
+            {`Please think again before ${action} is complete !`}
           </p>
         </div>
 
         {/* Actions */}
-        <div className="flex justify-end gap-3">
+        <div className="flex justify-end gap-2">
           <Button variant="warning" size="xs" onClick={onClose} icon={XCircle}>
             {cancelText}
           </Button>
 
           <Button
-            variant="danger"
+            variant="primary"
             size="xs"
-            disabled={onDelete?.isPending}
+            disabled={onConfirmAction?.isPending}
             onClick={onConfirm}
             loading={loading}
           >
-            {onDelete?.isPending ? (
+            {onConfirmAction?.isPending ? (
               <LucideLoader size={14} className="animate-spin" />
             ) : (
-              <LucideTrash2 size={14} />
+              <LucideUploadCloud size={14} />
             )}
 
-            {onDelete?.isPending ? "Deleting..." : confirmText}
+            {onConfirmAction?.isPending ? "Processing..." : confirmText}
           </Button>
         </div>
       </div>
     </Modal>
   );
-}
+};
+
+export default ConfirmActionDialogue;

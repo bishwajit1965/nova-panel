@@ -85,20 +85,35 @@ const notificationSchema = new mongoose.Schema(
 
     status: {
       type: String,
-      enum: ["draft", "published", "archived"],
+      enum: ["draft", "published", "archived", "softDeleted"],
       default: "draft",
     },
+
     authority: {
       type: String,
       required: true,
       trim: true,
     },
 
-    // May be we will use it later
-    // publishedAt: {
-    //   type: Date,
-    //   default: null,
-    // },
+    softDeletedAt: {
+      type: Date,
+      default: null,
+    },
+
+    restoredAt: {
+      type: Date,
+      default: null,
+    },
+
+    archivedAt: {
+      type: Date,
+      default: null,
+    },
+
+    publishedAt: {
+      type: Date,
+      default: null,
+    },
 
     isPinned: {
       type: Boolean,
