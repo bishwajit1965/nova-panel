@@ -363,7 +363,7 @@ This project is licensed under the MIT License.
 
 ## 👨‍💻 Author
 
-Bishwajit
+Bishwajit Paul
 
 Building reusable, production-ready software with modern MERN technologies.
 
