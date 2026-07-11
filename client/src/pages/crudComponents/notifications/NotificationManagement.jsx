@@ -18,7 +18,6 @@ import ArchivedNotificationList from "./ArchivedNotificationList";
 import SoftDeletedNotificationList from "./SoftDeletedNotificationList";
 import ConfirmActionDialogue from "../../../components/ui/ConfirmActionDialogue";
 import Pagination from "../../../components/pagination/Pagination";
-import Button from "../../../components/ui/Button";
 import CountBadge from "../../../components/ui/CountBadge";
 import SearchBox from "../../../components/ui/SearchBox";
 

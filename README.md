@@ -11,7 +11,7 @@ A production-ready modular MERN Admin Platform & Starter Framework designed to a
 
 Nova Panel combines authentication, authorization, role-based access control, reusable CRUD architecture, uploads, notifications, audit logging, system settings, subscription plans, and shared infrastructure into a single extensible platform.
 
-## 📌 Goals It is being built with three primary goals
+## 📌 Goals
 
 - Build a reusable SaaS backend core
 - Build client projects faster.
