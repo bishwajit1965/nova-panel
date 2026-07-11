@@ -20,6 +20,7 @@ import ConfirmActionDialogue from "../../../components/ui/ConfirmActionDialogue"
 import Pagination from "../../../components/pagination/Pagination";
 import Button from "../../../components/ui/Button";
 import CountBadge from "../../../components/ui/CountBadge";
+import SearchBox from "../../../components/ui/SearchBox";
 
 const NotificationManagement = () => {
   const [noticeToUpdate, setNoticeToUpdate] = useState(null);
@@ -103,7 +104,7 @@ const NotificationManagement = () => {
     },
   });
 
-  /*** ---> Soft-deleted Notification Query Mutation  fetch notification API Hook ---> */
+  /*** ---> Soft-deleted Notification Query Mutation fetch notification API Hook ---> */
   const {
     data: softDeletedNotifications,
     isLoading: softDeletedNotificationsLoading,
@@ -530,7 +531,12 @@ const NotificationManagement = () => {
   const filteredNotifications = notifications?.filter((n) => {
     const q = notificationSearch.toLowerCase();
     return (
-      n?.title?.toLowerCase().includes(q) || n?.title?.toLowerCase().includes(q)
+      n?.title?.toLowerCase().includes(q) ||
+      n?.message?.toLowerCase().includes(q) ||
+      n?.category?.toLowerCase().includes(q) ||
+      n?.authority?.toLowerCase().includes(q) ||
+      n?.status?.toLowerCase().includes(q) ||
+      n?.priority?.toLowerCase().includes(q)
     );
   });
 
@@ -577,20 +583,12 @@ const NotificationManagement = () => {
                 <CountBadge dataLength={notifications} />
               </h1>
             </div>
-            <div
-              className={`lg:col-span-6 col-span-12 flex items-center justify-between gap-2 ${!notificationSearch ? "lg:w-1/3 w-full" : "lg:w-1/2  w-full"}`}
-            >
-              <input
-                type="text"
-                placeholder="Search notice..."
-                className="input input-sm input-bordered w-full shadow"
+            <div className="lg:col-span-6 col-span-12">
+              <SearchBox
+                onReset={handleSearchReset}
                 value={notificationSearch}
-                onChange={(e) => setNotificationSearch(e.target.value)}
+                onChange={setNotificationSearch}
               />
-
-              <Button onClick={handleSearchReset} size="sm" variant="outline">
-                <LucideIcon.RefreshCcw size={20} /> Reset
-              </Button>
             </div>
           </div>
           {notificationDataStatus?.status !== "success" ? (
@@ -601,9 +599,7 @@ const NotificationManagement = () => {
                 notificationSearch ? filteredNotifications : paginatedData
               }
               onSelect={handleSelectNoticeToEdit}
-              onConfirmDelete={handleConfirmDeleteNotification}
               onView={handleViewNotification}
-              handleArchiveNotice={handleArchiveNotice}
               onConfirmAction={handleConfirmAction}
               onConfirmArchive={handleConfirmArchive}
               onSoftDelete={handleConfirmSoftDeleteNotification}
