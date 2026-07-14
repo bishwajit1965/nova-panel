@@ -14,9 +14,7 @@ router.use(roleMiddleware([ROLES.ADMIN, ROLES.SUPER_ADMIN]));
  */
 router.get("/me", adminController.getMe);
 
-/**
- * 🛡️ ADMIN ROUTES (inside same file)
- */
+/**🛡️ ADMIN ROUTES (inside same file)*/
 router.get("/users", adminController.getAllAdmins);
 
 router.get("/:id", adminController.getAdminById);

@@ -1,5 +1,11 @@
 import { asyncHandler } from "../../core/async/asyncHandler.js";
 import BaseCrudController from "../../core/base/BaseCrudController.js";
+import { eventBus } from "../../core/events/eventBus.js";
+import { EVENTS } from "../../core/events/events.js";
+import { MODULES } from "../../core/events/modules.js";
+import { OPERATION_STATUS } from "../../core/events/operationStatus.js";
+import { buildRequestContext } from "../../utils/buildRequestContext.js";
+import { ACTION_KEYS } from "../auditLogs/auditActionsAndKeyConstants.js";
 import userProfileService from "./profile.service.js";
 
 class ProfileController extends BaseCrudController {
@@ -26,6 +32,23 @@ class ProfileController extends BaseCrudController {
       req.body,
     );
 
+    // Generate audit log
+    const context = buildRequestContext(req);
+
+    eventBus.emit(EVENTS.PROFILE_UPDATED, {
+      actor: context.actor?._id,
+      action: EVENTS.PROFILE_UPDATED,
+      module: MODULES.PROFILE,
+      targetId: updatedProfile._id,
+      ip: context.ip,
+      userAgent: context.userAgent,
+      roles: context.roles,
+      metadata: {
+        actionKey: ACTION_KEYS.PROFILE_UPDATE || null,
+        operationStatus: OPERATION_STATUS.SUCCESS,
+      },
+    });
+
     return this.success(
       res,
       "Profile updated successfully",
@@ -33,9 +56,10 @@ class ProfileController extends BaseCrudController {
       200,
     );
   });
-  /**==============
-  |* GET ALL USERS
-  |**==============*/
+
+  /**======================
+  |* GET ALL USERS PROFILE
+  |**======================*/
   getAll = asyncHandler(async (req, res) => {
     const profileUsers = await super.getAll(
       { isSystem: true },
@@ -56,9 +80,9 @@ class ProfileController extends BaseCrudController {
     return this.success(res, "Users fetched", profileUsers, 200);
   });
 
-  /**=============
-  |* UPDATE AVATAR
-  |**==============*/
+  /**======================
+  |* UPDATE PROFILE AVATAR
+  |**======================*/
   updateAvatar = asyncHandler(async (req, res) => {
     const { userId } = req.params;
 
@@ -66,6 +90,24 @@ class ProfileController extends BaseCrudController {
       userId,
       req.file,
     );
+
+    // Generate audit log
+    const context = buildRequestContext(req);
+
+    eventBus.emit(EVENTS.PROFILE_AVATAR_UPDATED, {
+      actor: context.actor?._id,
+      action: EVENTS.PROFILE_AVATAR_UPDATED,
+      module: MODULES.PROFILE,
+      targetId: profileAvatarUpdated._id,
+      ip: context.ip,
+      userAgent: context.userAgent,
+      roles: context.roles,
+      metadata: {
+        actionKey: ACTION_KEYS.PROFILE_AVATAR_UPDATE || null,
+        operationStatus: OPERATION_STATUS.SUCCESS,
+      },
+    });
+
     return this.success(
       res,
       "Profile avatar updated",
@@ -74,24 +116,37 @@ class ProfileController extends BaseCrudController {
     );
   });
 
-  /**================
-  |* CHANGE PASSWORD
-  |**================*/
-  resetPassword = asyncHandler(async (req, res) => {
+  /**========================
+  |* CHANGE PROFILE PASSWORD
+  |**========================*/
+  changePassword = asyncHandler(async (req, res) => {
     const { userId } = req.params;
+
     const user = await super.getById(userId);
 
-    const passwordUpdated = await userProfileService.resetPasswordService(
+    const passwordUpdated = await userProfileService.changePasswordService(
       userId,
       req.body,
     );
 
-    return this.success(
-      res,
-      "Password reset successfully.",
-      passwordUpdated,
-      200,
-    );
+    // Generate audit log
+    const context = buildRequestContext(req);
+
+    eventBus.emit(EVENTS.PROFILE_PASSWORD_CHANGED, {
+      actor: context.actor?._id,
+      action: EVENTS.PROFILE_PASSWORD_CHANGED,
+      module: MODULES.PROFILE,
+      targetId: passwordUpdated._id,
+      ip: context.ip,
+      userAgent: context.userAgent,
+      roles: context.roles,
+      metadata: {
+        actionKey: ACTION_KEYS.PROFILE_PASSWORD_CHANGE || null,
+        operationStatus: OPERATION_STATUS.SUCCESS,
+      },
+    });
+
+    return this.success(res, "Password changed.", passwordUpdated, 200);
   });
 }
 

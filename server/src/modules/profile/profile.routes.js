@@ -27,6 +27,6 @@ router.patch(
 );
 
 // RESET PASSWORD
-router.patch("/reset/password/:userId", profileController.resetPassword);
+router.patch("/change/password/:userId", profileController.changePassword);
 
 export default router;

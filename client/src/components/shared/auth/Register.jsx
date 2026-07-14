@@ -38,13 +38,6 @@ const Register = () => {
     acceptTerms: form.acceptTerms,
   });
 
-  //   const handleChange = (e) => {
-  //     setForm({
-  //       ...form,
-  //       [e.target.name]: e.target.value,
-  //     });
-  //     };
-
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
 

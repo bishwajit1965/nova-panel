@@ -8,13 +8,13 @@ export const ProfileAvatarForm = ({
   isPending,
   avatar,
   setAvatar,
-  onCancel,
+  onCancelAvatarUpdate,
   formData,
   onAvatarUpdate,
-  selectEdit,
+  selectedAvatarUser,
   uploadProgress,
 }) => {
-  const { avatarUrl, name, email, roles } = selectEdit || {};
+  const { avatarUrl, name, email, roles } = selectedAvatarUser || {};
   return (
     <div>
       <form onSubmit={onAvatarUpdate} className="space-y-4">
@@ -116,7 +116,7 @@ export const ProfileAvatarForm = ({
             icon={LucideIcon.RefreshCcw}
             disabled={isPending}
             variant="warning"
-            onClick={onCancel}
+            onClick={onCancelAvatarUpdate}
           >
             Cancel
           </Button>

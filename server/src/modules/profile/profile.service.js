@@ -1,6 +1,11 @@
 import cloudinary from "../../config/cloudinary.js";
 import BaseCrudService from "../../core/base/BaseCrudService.js";
 import AppError from "../../core/errors/AppError.js";
+import { eventBus } from "../../core/events/eventBus.js";
+import { EVENTS } from "../../core/events/events.js";
+import { MODULES } from "../../core/events/modules.js";
+import { OPERATION_STATUS } from "../../core/events/operationStatus.js";
+import { buildRequestContext } from "../../utils/buildRequestContext.js";
 import User from "../users/user.model.js";
 import bcrypt from "bcrypt";
 
@@ -34,7 +39,7 @@ class ProfileService extends BaseCrudService {
   }
 
   /**==========================
-  |* UPDATE AVATAR
+  |* UPDATE PROFILE AVATAR
   |**==========================*/
   async updateAvatarService(userId, file) {
     if (!file) {
@@ -59,9 +64,10 @@ class ProfileService extends BaseCrudService {
   }
 
   /**==========================
-  |* RESET PASSWORD
+  |* RESET PROFILE PASSWORD
   |**==========================*/
-  async resetPasswordService(userId, body) {
+  async changePasswordService(userId, body) {
+    console.log("🚀 I am change password service");
     const { newPassword, confirmPassword } = body;
 
     const profileUser = await this.getById(userId);

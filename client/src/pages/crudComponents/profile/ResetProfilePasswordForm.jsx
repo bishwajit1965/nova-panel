@@ -5,7 +5,7 @@ import { Input } from "../../../components/ui/Input";
 import Badge from "../../../components/ui/Badge";
 
 const ResetProfilePasswordForm = ({
-  onCancel,
+  onCancelPasswordReset,
   onSubmitHandlePasswordChange,
   // IS PENDING
   isPending,
@@ -20,6 +20,7 @@ const ResetProfilePasswordForm = ({
   onPasswordChange,
   // FORM FIELD VALUES
   formData,
+  errors,
 }) => {
   // DESTRUCTURES FIELDS FROM OBJECT
   const { name, email, avatarUrl, roles } = selectProfileUser || {};
@@ -67,10 +68,11 @@ const ResetProfilePasswordForm = ({
             label="New Password"
             type={showNewPassword ? "text" : "password"}
             name="newPassword"
-            placeholder="New password..."
+            placeholder="Sample: A.#122132.#Some."
             icon={LucideIcon.Lock}
             onChange={onPasswordChange}
             value={formData?.newPassword}
+            error={errors?.newPassword}
           />
           <button
             type="button"
@@ -90,10 +92,11 @@ const ResetProfilePasswordForm = ({
             label="Confirm New Password"
             type={showConfirmNewPassword ? "text" : "password"}
             name="confirmPassword"
-            placeholder="Confirm New password..."
+            placeholder="Sample: A.#122132.#Some"
             icon={LucideIcon.Lock}
             onChange={onPasswordChange}
             value={formData?.confirmPassword}
+            error={errors?.confirmPassword}
           />
           <button
             type="button"
@@ -122,7 +125,7 @@ const ResetProfilePasswordForm = ({
           </Button>
 
           <Button
-            onClick={onCancel}
+            onClick={onCancelPasswordReset}
             size="xs"
             icon={LucideIcon.RefreshCcw}
             variant="warning"

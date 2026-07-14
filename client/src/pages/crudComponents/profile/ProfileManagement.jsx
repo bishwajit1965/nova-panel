@@ -11,21 +11,19 @@ import { useApiMutation } from "../../../hooks/useApiMutation";
 import Swal from "sweetalert2";
 import { ProfileAvatarForm } from "./ProfileAvatarForm";
 import useValidator from "../../../hooks/useValidator";
-import { profileValidationRules } from "../../../../../server/src/modules/profile/profile.validation.rules";
 import ResetProfilePasswordForm from "./ResetProfilePasswordForm";
+import { LucideIcon } from "../../../components/lib/LucideIcons";
+import Button from "../../../components/ui/Button";
+import { changePasswordValidationRules } from "./changePasswordValidationRules";
 
 const ProfileManagement = () => {
   // AVATAR UPLOAD RELATED (NOT TO CHANG) STATES
   const [avatar, setAvatar] = useState(null);
-  const [userProfile, setUserProfile] = useState(null);
+  const [userProfileView, setUserProfileView] = useState(null);
   const [userProfileToEdit, setUserProfileToEdit] = useState(null);
-  const [selectEdit, setSelectEdit] = useState(null);
+  const [selectedAvatarUser, setSelectAvatarUser] = useState(null);
   const [uploadProgress, setUploadProgress] = useState(0);
   const fileInputRef = useRef(null);
-
-  // TOGGLE CURRENT PASSWORD VIEW STATES
-  const [toggleCurrentPasswordView, setToggleCurrentPasswordView] =
-    useState(false);
 
   // TOGGLE NEW PASSWORD VIEW STATES
   const [toggleNewPasswordView, setToggleNewPasswordView] = useState(false);
@@ -48,22 +46,22 @@ const ProfileManagement = () => {
 
   // PROFILE UPDATE (NAME, EMAIL) UPDATE STATES
   const [profileToEdit, setProfileToEdit] = useState(null);
-  const [form, setForm] = useState(getInitialForm());
+  const [profileForm, setProfileForm] = useState(getInitialForm());
 
   // CHANGE PASSWORD RELATED STATES (password, newPassword)
   const [selectProfileUser, setSelectProfileUser] = useState(null);
-  const [formPassword, setFormPassword] = useState(
+  const [passwordForm, setPasswordForm] = useState(
     getInitialFormPasswordSates(),
   );
 
   // Reset form
   const resetForm = () => {
-    setForm(getInitialForm());
+    setProfileForm(getInitialForm());
   };
 
   // Reset password reset form
   const resetPasswordForm = () => {
-    setFormPassword(getInitialFormPasswordSates());
+    setPasswordForm(getInitialFormPasswordSates());
   };
 
   // Form data mapper to set in form
@@ -73,13 +71,13 @@ const ProfileManagement = () => {
   });
 
   const getProfileData = () => ({
-    name: form.name,
-    email: form.email,
+    name: profileForm.name,
+    email: profileForm.email,
   });
 
   const getProfilePasswordData = () => ({
-    newPassword: formPassword.newPassword,
-    confirmPassword: formPassword.confirmPassword,
+    newPassword: passwordForm.newPassword,
+    confirmPassword: passwordForm.confirmPassword,
   });
 
   /*** ---> PROFILE Query Mutation  fetch permissions API Hook ---> */
@@ -115,9 +113,8 @@ const ProfileManagement = () => {
     },
 
     onSuccess: (data) => {
-      console.log("Avatar/update response:", data);
       setAvatar(null);
-      setSelectEdit(null);
+      setSelectAvatarUser(null);
 
       if (fileInputRef.current) {
         fileInputRef.current.value = "";
@@ -161,10 +158,9 @@ const ProfileManagement = () => {
     },
 
     onSuccess: (data) => {
-      console.log("Profile/update response:", data);
       resetForm();
       setAvatar(null);
-      setSelectEdit(null);
+      setSelectAvatarUser(null);
 
       if (fileInputRef.current) {
         fileInputRef.current.value = "";
@@ -192,16 +188,16 @@ const ProfileManagement = () => {
   });
 
   /*** -----> Validator integration -----> */
-  const { errors, validate } = useValidator(profileValidationRules, {
-    name: form?.name,
-    email: form?.email,
+  const { errors, validate } = useValidator(changePasswordValidationRules, {
+    newPassword: passwordForm?.newPassword,
+    confirmPassword: passwordForm?.confirmPassword,
   });
 
   /*** ------> PROFILE (name & email) UPDATE Mutation  API Hook ------> */
   const changePasswordMutation = useApiMutation({
     method: "update",
     path: (payload) =>
-      `${API_PATHS.SUPER_ADMIN_PROFILE.ENDPOINT}/reset/password/${payload?.id}`,
+      `${API_PATHS.SUPER_ADMIN_PROFILE.ENDPOINT}/change/password/${payload?.id}`,
     key: API_PATHS.SUPER_ADMIN_PROFILE.KEY, // used by useQuery
 
     options: {
@@ -217,7 +213,7 @@ const ProfileManagement = () => {
       console.log("Password/update response:", data);
       resetPasswordForm();
 
-      setSelectEdit(null);
+      setSelectAvatarUser(null);
 
       if (fileInputRef.current) {
         fileInputRef.current.value = "";
@@ -251,17 +247,17 @@ const ProfileManagement = () => {
   |**======================*/
 
   // Handle Change form value
-  const handleChange = (e) => {
-    setForm({
-      ...form,
+  const handleProfileChange = (e) => {
+    setProfileForm({
+      ...profileForm,
       [e.target.name]: e.target.value,
     });
   };
 
   // Handle password change
   const handlePasswordChange = (e) => {
-    setFormPassword({
-      ...formPassword,
+    setPasswordForm({
+      ...passwordForm,
       [e.target.name]: e.target.value,
     });
   };
@@ -269,11 +265,6 @@ const ProfileManagement = () => {
   /**==========================================
   |* TOGGLERS TO SHOW AND HIDE PASSWORD FIELDS
   |**==========================================*/
-
-  // Handle toggle current password view
-  const handleToggleCurrentPasswordView = () => {
-    setToggleCurrentPasswordView((prev) => !prev);
-  };
 
   // Handle toggle new password view
   const handleToggleNewPasswordView = () => {
@@ -285,20 +276,20 @@ const ProfileManagement = () => {
     setToggleConfirmNewPasswordView((prev) => !prev);
   };
 
-  /**==============================================
-  |* LOADER HANDLERS TO SELECT AND VIEW DATA IN UIs
-  |**==============================================*/
+  /**====================================================
+  |* DATA LOADER HANDLERS TO SELECT AND VIEW DATA IN UIS
+  |**====================================================*/
   // View user profile
   const handleSelectUserProfile = (profileId) => {
     const selectedUserProfile = profileUsers.find(
       (up) => up?._id.toString() === profileId.toString(),
     );
     if (selectedUserProfile) {
-      setUserProfile(selectedUserProfile);
+      setUserProfileView(selectedUserProfile);
     }
   };
 
-  // Selects data to edit user Profile
+  // Selects data to edit user Profile name & email
   const handleEditUserProfile = (profileId) => {
     const selectedUserProfile = profileUsers.find(
       (up) => up?._id.toString() === profileId.toString(),
@@ -306,7 +297,13 @@ const ProfileManagement = () => {
     if (selectedUserProfile) {
       setUserProfileToEdit(selectedUserProfile);
       setProfileToEdit(selectedUserProfile);
-      setForm(mapProfileToForm(selectedUserProfile));
+      setProfileForm(mapProfileToForm(selectedUserProfile));
+
+      // clear UI data to vacate previously loaded UI form states
+      setSelectAvatarUser(null);
+      setSelectProfileUser(null);
+      resetPasswordForm();
+      setAvatar(null);
     }
   };
 
@@ -316,7 +313,13 @@ const ProfileManagement = () => {
       (up) => up?._id.toString() === profileId.toString(),
     );
     if (selectedUserProfile) {
-      setSelectEdit(selectedUserProfile);
+      setSelectAvatarUser(selectedUserProfile);
+
+      // clear UI data to vacate previously loaded UI form states
+      setUserProfileToEdit(null);
+      setSelectProfileUser(null);
+      resetForm();
+      resetPasswordForm();
     }
   };
 
@@ -327,6 +330,12 @@ const ProfileManagement = () => {
     );
     if (selectedUserProfile) {
       setSelectProfileUser(selectedUserProfile);
+
+      // clear UI data to vacate previously loaded UI form states
+      setSelectAvatarUser(null);
+      setUserProfileToEdit(null);
+      resetForm();
+      setAvatar(null);
     }
   };
 
@@ -341,7 +350,7 @@ const ProfileManagement = () => {
 
   // Handle cancel avatar edit
   const handleCancelAvatarEdit = () => {
-    setSelectEdit(null);
+    setSelectAvatarUser(null);
     setAvatar(null);
 
     if (fileInputRef.current) {
@@ -363,7 +372,6 @@ const ProfileManagement = () => {
   const handleSubmitProfileUpdate = (e) => {
     e.preventDefault();
 
-    if (!validate()) return;
     const payload = {
       id: profileToEdit?._id,
       data: getProfileData(),
@@ -372,14 +380,14 @@ const ProfileManagement = () => {
     updateProfileMutation.mutate(payload);
   };
 
-  // Handle submit form (AVATAR UPDATE)
-  const handleSubmit = (e) => {
+  // Handle submit Avatar Update form (AVATAR UPDATE)
+  const handleSubmitAvatarUpdate = (e) => {
     e.preventDefault();
 
     const formData = new FormData();
 
     const payload = {
-      id: selectEdit?._id,
+      id: selectedAvatarUser?._id,
       data: formData,
     };
 
@@ -391,6 +399,8 @@ const ProfileManagement = () => {
   // Handle update Profile (password) -> (RESET PASSWORD)
   const handleSubmitProfileResetPassword = (e) => {
     e.preventDefault();
+
+    if (!validate()) return;
     const payload = {
       id: selectProfileUser?._id,
       data: getProfilePasswordData(),
@@ -412,20 +422,20 @@ const ProfileManagement = () => {
       <div className="grid lg:grid-cols-12 grid-cols-1 lg:gap-4 gap-2 justify-between">
         <div
           className={
-            userProfileToEdit || selectEdit || selectProfileUser
+            userProfileToEdit || selectedAvatarUser || selectProfileUser
               ? "lg:col-span-4 col-span-12"
               : "hidden"
           }
         >
           {/* DYNAMIC FORM TITLE DISPLAYED */}
-          <div className="">
+          <div className="mb-0.5">
             <h1 className="lg:text-xl text-sm font-bold flex items-center gap-2">
               {userProfileToEdit
                 ? "Profile Update Form (Name, Email)"
-                : selectEdit
+                : selectedAvatarUser
                   ? "Update Profile Avatar"
                   : selectProfileUser
-                    ? "Reset Profile User Password"
+                    ? "Change User Password"
                     : ""}
             </h1>
           </div>
@@ -435,22 +445,22 @@ const ProfileManagement = () => {
               userProfileToEdit={userProfileToEdit}
               avatar={avatar}
               setAvatar={setAvatar}
-              onCancel={handleCancelEditUserProfile}
+              onCancelProfileUpdate={handleCancelEditUserProfile}
               onProfileUpdate={handleSubmitProfileUpdate}
-              onHandleChange={handleChange}
-              formData={form}
+              onHandleProfileChange={handleProfileChange}
+              formData={profileForm}
               errors={errors}
             />
           )}
 
-          {selectEdit && (
+          {selectedAvatarUser && (
             <ProfileAvatarForm
-              onUpdate={handleEditUserAvatar}
-              onCancel={handleCancelAvatarEdit}
+              onEditAvatar={handleEditUserAvatar}
+              onCancelAvatarUpdate={handleCancelAvatarEdit}
               avatar={avatar}
               setAvatar={setAvatar}
-              onAvatarUpdate={handleSubmit}
-              selectEdit={selectEdit}
+              onAvatarUpdate={handleSubmitAvatarUpdate}
+              selectedAvatarUser={selectedAvatarUser}
               isPending={updateAvatarMutation?.isPending}
               uploadProgress={uploadProgress}
             />
@@ -458,25 +468,24 @@ const ProfileManagement = () => {
 
           {selectProfileUser && (
             <ResetProfilePasswordForm
-              onCancel={handleCancelSelectedUserProfile}
+              onCancelPasswordReset={handleCancelSelectedUserProfile}
               onSubmitHandlePasswordChange={handleSubmitProfileResetPassword}
               isPending={changePasswordMutation?.isPending}
               selectProfileUser={selectProfileUser}
-              onToggleCurrentPassword={handleToggleCurrentPasswordView}
-              showCurrentPassword={toggleCurrentPasswordView}
               onToggleNewPassword={handleToggleNewPasswordView}
               showNewPassword={toggleNewPasswordView}
               onToggleConfirmNewPassword={handleToggleConfirmNewPasswordView}
               showConfirmNewPassword={toggleConfirmNewPasswordView}
               isPending={changePasswordMutation?.isPending}
-              formData={formPassword}
+              formData={passwordForm}
               onPasswordChange={handlePasswordChange}
+              errors={errors}
             />
           )}
         </div>
 
         <div
-          className={`${userProfileToEdit || selectEdit || selectProfileUser ? "lg:col-span-8 col-span-12" : "lg:col-span-12 col-span-8"}`}
+          className={`${userProfileToEdit || selectedAvatarUser || selectProfileUser ? "lg:col-span-8 col-span-12" : "lg:col-span-12 col-span-8"}`}
         >
           {profileUsersDataStatus?.status !== "success" ? (
             profileUsersDataStatus?.content
@@ -485,50 +494,65 @@ const ProfileManagement = () => {
               profileUsers={profileUsers}
               onView={handleSelectUserProfile}
               onEditProfile={handleEditUserProfile}
-              onEdit={handleEditUserAvatar}
+              onEditAvatar={handleEditUserAvatar}
               onSelectProfileUser={handleSelectProfileUser}
               selectProfileUser={selectProfileUser}
+              onCancelProfileUpdate={handleCancelEditUserProfile}
+              onCancelAvatarUpdate={handleCancelAvatarEdit}
+              onCancelPasswordReset={handleCancelSelectedUserProfile}
             />
           )}
         </div>
 
-        {userProfile && (
+        {userProfileView && (
           <Modal
-            isOpen={userProfile}
-            onClose={() => setUserProfile(null)}
-            title={`Profile of ${userProfile?.name}`}
+            isOpen={userProfileView}
+            onClose={() => setUserProfileView(null)}
+            title={`Profile of ${userProfileView?.name}`}
           >
             <div className="space-y-2">
               <img
                 src={
-                  userProfile?.avatarUrl
-                    ? userProfile?.avatarUrl
+                  userProfileView?.avatarUrl
+                    ? userProfileView?.avatarUrl
                     : "https://i.ibb.co.com/1z7P2wJ/girl2.jpg"
                 }
-                alt={userProfile?.name}
-                className="rounded-md lg:h-96 w-full"
+                alt={userProfileView?.name}
+                className="rounded-md lg:h-96 w-full transition-all hover:scale-105"
               />
               <h1 className="lg:text-lg text-sm font-bold">
-                {userProfile?.name}
+                {userProfileView?.name}
               </h1>
 
               <p className="flex items-center gap-2 text-sm">
-                <LucideMail size={15} /> {userProfile?.email}
+                <LucideMail size={15} /> {userProfileView?.email}
               </p>
               <p className="text-sm font-bold flex flex-wrap gap-1.5">
                 Roles:&nbsp;
-                {userProfile?.roles?.map((r) => (
+                {userProfileView?.roles?.map((r) => (
                   <Badge key={r._id}> {r?.name}</Badge>
                 ))}
               </p>
               <p className="text-sm font-bold flex items-center flex-wrap">
                 User Status:&nbsp;{" "}
-                {userProfile?.isActive ? (
+                {userProfileView?.isActive ? (
                   <Badge color="green">Active</Badge>
                 ) : (
                   <Badge color="red">Inactive</Badge>
                 )}
               </p>
+
+              <div className="divider"></div>
+
+              <div className="flex justify-end">
+                <Button
+                  onClick={() => setUserProfileView(null)}
+                  size="xs"
+                  tooltip="Close"
+                  variant="danger"
+                  icon={LucideIcon.X}
+                />
+              </div>
             </div>
           </Modal>
         )}

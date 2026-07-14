@@ -1,10 +1,10 @@
-export const resetPasswordValidationRules = {
+export const changePasswordValidationRules = {
   newPassword: {
     required: { message: "Password is required" },
 
     minLength: {
-      value: 6,
-      message: "Password must be at least 6 characters",
+      value: 8,
+      message: "Password must be at least 8 characters",
     },
 
     pattern: {
@@ -30,7 +30,7 @@ export const resetPasswordValidationRules = {
     required: { message: "Please confirm your password" },
 
     custom: (value, formData) => {
-      if (value !== formData.password) {
+      if (value !== formData.newPassword) {
         return "Passwords do not match";
       }
       return null;

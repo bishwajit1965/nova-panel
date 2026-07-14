@@ -8,7 +8,7 @@ const ProfileTable = ({
   profileUsers,
   onView,
   onEditProfile,
-  onEdit,
+  onEditAvatar,
   onSelectProfileUser,
 }) => {
   const { can } = usePermission();
@@ -75,6 +75,7 @@ const ProfileTable = ({
                       variant="primary"
                       size="xs"
                     />
+
                     {can("user.update") && (
                       <>
                         <MiniIconButton
@@ -85,7 +86,7 @@ const ProfileTable = ({
                           variant="primary"
                         />
                         <MiniIconButton
-                          onClick={() => onEdit(user?._id)}
+                          onClick={() => onEditAvatar(user?._id)}
                           icon="avatar"
                           tooltip="Change Avatar"
                           size="xs"

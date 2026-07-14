@@ -28,15 +28,31 @@ export const EVENT_REGISTRY = Object.freeze({
     module: MODULES.ROLES,
     description: "A new role was created",
   },
-
   [EVENTS.ROLE_UPDATED]: {
     module: MODULES.ROLES,
     description: "An existing role was updated",
   },
-
   [EVENTS.ROLE_DELETED]: {
     module: MODULES.ROLES,
     description: "A role was deleted",
+  },
+
+  // PROFILES
+  [EVENTS.PROFILE_CREATED]: {
+    module: MODULES.PROFILE,
+    description: "A new user profile is created",
+  },
+  [EVENTS.PROFILE_UPDATED]: {
+    module: MODULES.PROFILE,
+    description: "A profile name & email are updated",
+  },
+  [EVENTS.PROFILE_AVATAR_UPDATED]: {
+    module: MODULES.PROFILE,
+    description: "A profile avatar is updated",
+  },
+  [EVENTS.PROFILE_PASSWORD_CHANGED]: {
+    module: MODULES.PROFILE,
+    description: "A profile password is changed",
   },
 
   // PERMISSIONS
@@ -44,12 +60,10 @@ export const EVENT_REGISTRY = Object.freeze({
     module: MODULES.PERMISSIONS,
     description: "A new permission was created",
   },
-
   [EVENTS.PERMISSION_UPDATED]: {
     module: MODULES.PERMISSIONS,
     description: "An existing permission was updated",
   },
-
   [EVENTS.PERMISSION_DELETED]: {
     module: MODULES.PERMISSIONS,
     description: "A permission was deleted",

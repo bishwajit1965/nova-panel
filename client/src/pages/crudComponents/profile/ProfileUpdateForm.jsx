@@ -6,10 +6,9 @@ import { Input } from "../../../components/ui/Input";
 const ProfileUpdateForm = ({
   userProfileToEdit,
   onProfileUpdate,
-  onCancel,
-  onHandleChange,
+  onCancelProfileUpdate,
+  onHandleProfileChange,
   formData,
-  errors,
 }) => {
   const { avatarUrl, name, email, roles } = userProfileToEdit || {};
   return (
@@ -51,8 +50,8 @@ const ProfileUpdateForm = ({
           placeholder="Name..."
           type="text"
           value={formData?.name}
-          onChange={onHandleChange}
-          error={errors?.name}
+          onChange={onHandleProfileChange}
+          required
         />
 
         <Input
@@ -63,8 +62,8 @@ const ProfileUpdateForm = ({
           placeholder="Email..."
           type="text"
           value={formData?.email}
-          onChange={onHandleChange}
-          error={errors?.email}
+          onChange={onHandleProfileChange}
+          required
         />
 
         <div className="flex items-center gap-2 pt-4">
@@ -75,7 +74,7 @@ const ProfileUpdateForm = ({
             size="xs"
             icon={LucideIcon.RefreshCcw}
             variant="warning"
-            onClick={onCancel}
+            onClick={onCancelProfileUpdate}
           >
             Cancel
           </Button>
