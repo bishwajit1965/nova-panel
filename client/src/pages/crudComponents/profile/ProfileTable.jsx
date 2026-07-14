@@ -4,10 +4,17 @@ import TableDataNotFound from "../../../components/ui/TableDataNotFound";
 import { usePermission } from "../../../hooks/hasPermission";
 import { normalizeDate } from "../../../utils/normalizeDate";
 
-const UsersTable = ({ users, onToggle, onConfirmSuspend }) => {
+const ProfileTable = ({
+  profileUsers,
+  onView,
+  onEditProfile,
+  onEdit,
+  onSelectProfileUser,
+}) => {
   const { can } = usePermission();
   return (
-    <div className="">
+    <div>
+      ProfileTable {profileUsers?.length > 0 ? profileUsers?.length : 0}
       <div className="overflow-x-auto">
         <table className="table table-xs">
           {/* head */}
@@ -25,10 +32,10 @@ const UsersTable = ({ users, onToggle, onConfirmSuspend }) => {
             </tr>
           </thead>
           <tbody>
-            {users?.length === 0 ? (
+            {profileUsers?.length === 0 ? (
               <TableDataNotFound colSpan={9} />
             ) : (
-              users?.map((user, index) => (
+              profileUsers?.map((user, index) => (
                 <tr key={user._id}>
                   <td>{index + 1}</td>
                   <td>
@@ -42,7 +49,7 @@ const UsersTable = ({ users, onToggle, onConfirmSuspend }) => {
                   </td>
                   <td>{user?.name}</td>
                   <td>{user?.email}</td>
-                  <td className="capitalize">
+                  <td className="capitalize flex flex-wrap gap-2">
                     {user?.roles.length > 0
                       ? user?.roles?.map((role) => (
                           <Badge
@@ -61,9 +68,9 @@ const UsersTable = ({ users, onToggle, onConfirmSuspend }) => {
                     </Badge>
                   </td>
                   <td>{normalizeDate(user.createdAt)}</td>
-                  <th className="flex flex-wrap lg:w-36 w-32 lg:gap-2 gap-1.25">
+                  <th className="flex items-center py-2 flex-wrap lg:w-44 w-40 lg:gap-2 gap-1.25">
                     <MiniIconButton
-                      onClick={() => onToggle(user?._id)}
+                      onClick={() => onView(user?._id)}
                       icon="view"
                       variant="primary"
                       size="xs"
@@ -71,19 +78,25 @@ const UsersTable = ({ users, onToggle, onConfirmSuspend }) => {
                     {can("user.update") && (
                       <>
                         <MiniIconButton
-                          onClick={() => onToggle(user?._id)}
-                          icon="assign"
-                          tooltip="Assign Plan"
+                          onClick={() => onEditProfile(user?._id)}
+                          icon="edit"
+                          tooltip="Edit Profile"
+                          size="xs"
+                          variant="primary"
+                        />
+                        <MiniIconButton
+                          onClick={() => onEdit(user?._id)}
+                          icon="avatar"
+                          tooltip="Change Avatar"
+                          size="xs"
+                          variant="primary"
+                        />
+                        <MiniIconButton
+                          onClick={() => onSelectProfileUser(user?._id)}
+                          icon="password"
+                          tooltip="Change Password"
                           size="xs"
                           variant="success"
-                        />
-
-                        <MiniIconButton
-                          onClick={() => onConfirmSuspend(user)}
-                          icon="suspend"
-                          tooltip={`${!user.isActive ? "Suspended" : "Suspend"}`}
-                          size="xs"
-                          variant={`${!user.isActive ? "warning" : "primary"}`}
                         />
                       </>
                     )}
@@ -112,4 +125,4 @@ const UsersTable = ({ users, onToggle, onConfirmSuspend }) => {
   );
 };
 
-export default UsersTable;
+export default ProfileTable;

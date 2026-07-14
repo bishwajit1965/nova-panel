@@ -8,6 +8,7 @@ import {
   Edit2,
   Eye,
   FileSliders,
+  ImageIcon,
   Loader2,
   LucideDownload,
   Pencil,
@@ -15,6 +16,8 @@ import {
   TimerReset,
   Trash2,
   User,
+  UserCircleIcon,
+  UserKeyIcon,
   X,
 } from "lucide-react";
 
@@ -25,6 +28,7 @@ import { cn } from "../lib/utils";
 
 const icons = {
   archive: ArchiveIcon,
+  avatar: UserCircleIcon,
   edit: Edit,
   edit2: Edit2,
   delete: Trash2,
@@ -40,11 +44,14 @@ const icons = {
   publish: BookCheck,
   revoke: ArrowBigUpDash,
   soft: Trash2,
+  profile: ImageIcon,
+  password: UserKeyIcon,
   pdf: FaFilePdf,
 };
 
 const labels = {
   archive: "Archive",
+  avatar: "Change Avatar",
   assign: "Assign",
   edit: "Edit",
   edit2: "Edit",
@@ -61,6 +68,8 @@ const labels = {
   user: "User",
   publish: "Publish",
   soft: "Soft Delete",
+  profile: "Edit Profile",
+  password: "Change Password",
 };
 
 export function MiniIconButton({
@@ -79,7 +88,7 @@ export function MiniIconButton({
   const text = tooltip || labels[icon?.toLowerCase()] || "Action";
 
   const sizes = {
-    xs: "w-6.5 h-6.5 p-0",
+    xs: "w-8 h-8 p-0",
     sm: "w-9 h-9 p-0",
     md: "w-10 h-10 p-0",
   };

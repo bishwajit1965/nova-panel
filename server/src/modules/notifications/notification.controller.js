@@ -16,7 +16,6 @@ class NotificationController extends BaseCrudController {
   /**==========================
   |* CREATE NOTIFICATION
   |**==========================*/
-
   create = asyncHandler(async (req, res) => {
     const notification = await super.create(req.body);
 

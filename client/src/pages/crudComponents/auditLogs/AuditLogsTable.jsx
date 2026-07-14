@@ -1,5 +1,5 @@
 import { MiniIconButton } from "../../../components/ui/MiniIconButton";
-import NoDataFound from "../../../components/ui/NoDataFound";
+import TableDataNotFound from "../../../components/ui/TableDataNotFound";
 import { normalizeDate } from "../../../utils/normalizeDate";
 
 const AuditLogsTable = ({ auditLogs, onLoad }) => {
@@ -20,7 +20,9 @@ const AuditLogsTable = ({ auditLogs, onLoad }) => {
             </tr>
           </thead>
           <tbody>
-            {auditLogs?.length > 0 ? (
+            {auditLogs?.length === 0 ? (
+              <TableDataNotFound colSpan={8} />
+            ) : (
               auditLogs?.map((log, index) => (
                 <tr key={log._id}>
                   <th>{index + 1}</th>
@@ -50,12 +52,6 @@ const AuditLogsTable = ({ auditLogs, onLoad }) => {
                   </td>
                 </tr>
               ))
-            ) : (
-              <tr>
-                <td colSpan={8}>
-                  <NoDataFound />
-                </td>
-              </tr>
             )}
           </tbody>
           <tfoot>

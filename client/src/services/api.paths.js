@@ -51,20 +51,19 @@ const API_PATHS = {
     KEY: ["password-reset"],
   },
 
-  /**============================
+  /**==========================
    * SYSTEM SETTINGS ENDPOINTS
-   *============================*/
+   *===========================*/
   SYSTEM_SETTINGS: {
     ENDPOINT: "settings",
     KEY: ["system-settings"],
   },
 
-  /**================================
-   * NOTIFICATION SETTINGS ENDPOINTS
-   *=================================*/
+  /**=======================
+   * NOTIFICATION ENDPOINTS
+   *========================*/
   NOTIFICATION: {
     ENDPOINT: "notifications",
-
     KEYS: {
       ALL: ["notifications", "all"],
       ARCHIVED: ["notifications", "archived"],
@@ -74,6 +73,14 @@ const API_PATHS = {
       UPDATE: ["notifications", "update"],
       DELETE: ["notifications", "delete"],
     },
+  },
+
+  /**==================
+   * PROFILE ENDPOINTS
+   *===================*/
+  SUPER_ADMIN_PROFILE: {
+    ENDPOINT: "profile",
+    KEY: "profile-update",
   },
 
   /**========================
@@ -109,7 +116,7 @@ const API_PATHS = {
     KEY: ["orders"],
   },
 
-  PROFILE: {
+  USER_PROFILE: {
     ENDPOINT: "client/profile",
     KEY: ["profile"],
   },

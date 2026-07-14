@@ -159,7 +159,7 @@ const RolePermissionControl = () => {
     <div>
       <div className="grid lg:grid-cols-12 grid-cols-1 gap-4 justify-between">
         <div
-          className={`${selectedRole ? "lg:col-span-6 col-span-12" : "col-span-0"}`}
+          className={`${selectedRole ? "lg:col-span-6 col-span-12" : "hidden"}`}
         >
           {/* USER TOM ASSIGN ROLES AND PERMISSIONS */}
           <div className="space-y-4">
@@ -174,7 +174,7 @@ const RolePermissionControl = () => {
                           dataLength={selectedPermissions}
                           color="blue-500"
                         />
-                      }{" "}
+                      }
                       Permission/(s)
                     </span>
                   </h1>

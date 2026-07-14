@@ -575,7 +575,7 @@ const NotificationManagement = () => {
           />
         </div>
         <div className="lg:col-span-7 col-span-12 border border-base-content/15 rounded-xl shadow-sm hover:shadow-xl p-4">
-          <div className="lg:flex grid lg:grid-cols-12 items-center grid-cols-1 lg:gap-4 gap-2 justify-between lg:mb-4 mb-2">
+          <div className="lg:flex grid lg:grid-cols-12 items-center grid-cols-1 lg:gap-4 gap-2 justify-between">
             <div className="lg:col-span-6 col-span-12">
               <h1 className="lg:text-xl text-sm font-bold flex items-center gap-2">
                 Notification List
@@ -590,6 +590,7 @@ const NotificationManagement = () => {
               />
             </div>
           </div>
+          <div className="divider m-2"></div>
           {notificationDataStatus?.status !== "success" ? (
             notificationDataStatus?.content
           ) : (

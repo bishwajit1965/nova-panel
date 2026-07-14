@@ -5,7 +5,7 @@ const TableDataNotFound = ({ colSpan }) => {
         colSpan={colSpan}
         className="text-center text-sm font-bold text-gray-500"
       >
-        No data is available at this moment !
+        Wrong search input or data not available !
       </td>
     </tr>
   );

@@ -27,24 +27,35 @@ export const supAdminSidebarLinks = [
     icon: Users,
     permission: "user.read",
   },
+
+  {
+    label: "Profile",
+    path: "/superAdmin/profile",
+    icon: CreditCardIcon,
+    permission: "profile.read",
+  },
+
   {
     label: "Roles",
     path: "/superAdmin/roles",
     icon: Users,
     permission: "role.read",
   },
+
   {
     label: "Permissions",
     path: "/superAdmin/permissions",
     icon: Users,
     permission: "permission.read",
   },
+
   {
     label: "Roles & Permissions",
     path: "/superAdmin/roles-permissions-control",
     icon: Users,
     permission: "role_permission.manage",
   },
+
   {
     label: "Access Management",
     path: "/superAdmin/access-management",

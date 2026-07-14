@@ -16,4 +16,10 @@ export const PERMISSIONS = {
   PLAN_READ: "plan.read",
   PLAN_UPDATE: "plan.update",
   PLAN_DELETE: "plan.delete",
+
+  // Profile
+  PROFILE_CREATE: "profile.create",
+  PROFILE_READ: "profile.read",
+  PROFILE_UPDATE: "profile.update",
+  PROFILE_DELETE: "profile.delete",
 };

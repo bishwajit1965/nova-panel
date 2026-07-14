@@ -11,9 +11,9 @@ import Pagination from "../../../components/pagination/Pagination";
 import ConfirmDialogue from "../../../components/ui/ConfirmDialogue";
 import { useEffect, useRef, useState } from "react";
 import CountBadge from "../../../components/ui/CountBadge";
-import NoDataFound from "../../../components/ui/NoDataFound";
 import UploadViewModal from "./UploadViewModal";
 import { usePermission } from "../../../hooks/hasPermission";
+import SearchBox from "../../../components/ui/SearchBox";
 
 const UploadsManagement = () => {
   const [files, setFiles] = useState([]);
@@ -22,11 +22,11 @@ const UploadsManagement = () => {
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [selectEdit, setSelectEdit] = useState(null);
   const [previews, setPreviews] = useState([]);
+  const [searchUpload, setSearchUpload] = useState("");
   const [uploadProgress, setUploadProgress] = useState(0);
   const fileInputRef = useRef(null);
   const { can } = usePermission();
 
-  console.log("SELECT EDIT UPLOAD", selectEdit);
   // Fetches all uploads for super admin
   const {
     data: uploads,
@@ -231,6 +231,25 @@ const UploadsManagement = () => {
     setIsViewModalOpen(false);
   };
 
+  /**--------- HANDLE SEARCH RESET ---------*/
+  const handleSearchReset = () => {
+    setSearchUpload("");
+  };
+
+  /**--------- HANDLE SEARCH QUERY ---------*/
+  const filteredUploads = uploads?.filter((upload) => {
+    const q = searchUpload.toLowerCase();
+    return (
+      upload.originalName?.toLowerCase().includes(q) ||
+      upload.publicId?.toLowerCase().includes(q) ||
+      upload.folder?.toLowerCase().includes(q) ||
+      upload.resourceType?.toLowerCase().includes(q) ||
+      upload.format?.toLowerCase().includes(q) ||
+      upload.createdBy?.name?.toLowerCase().includes(q)
+    );
+  });
+
+  const uploadsData = searchUpload ? filteredUploads : paginatedData;
   /** --------> Use Fetched Data Status Handler --------> */
   const uploadsDataStatus = useFetchedDataStatusHandler({
     isLoading: uploadsLoading,
@@ -243,8 +262,8 @@ const UploadsManagement = () => {
     <div>
       <div className="grid lg:grid-cols-12 grid-cols-1 lg:gap-8 gap-4 justify-between">
         <div className="lg:col-span-4 col-span-12 space-y-4">
-          <h1 className="lg:text-xl text-xs font-extrabold">
-            Super Admin Uploads Management
+          <h1 className="lg:text-xl text-xs font-extrabold flex items-center gap-2">
+            <LucideIcon.UploadCloud /> Uploads Management
           </h1>
           <div className="border border-base-content/15 lg:p-4 p-3 rounded-xl shadow-md hover:shadow-xl">
             <h1 className="lg:text-lg text-xs font-bold border-b border-base-content/15 pb-1 mb-2">
@@ -343,18 +362,31 @@ const UploadsManagement = () => {
           </div>
         </div>
         <div className="lg:col-span-8 col-span-12 mb-10 space-y-4">
-          <h1 className="lg:text-xl text-lg font-extrabold flex items-center gap-2">
-            Images displayed <CountBadge dataLength={uploads} />
-          </h1>
+          <div className="lg:flex grid items-center lg:gap-4 gap-2 justify-between">
+            <div className="">
+              <h1 className="lg:text-xl text-lg font-extrabold flex items-center gap-2">
+                Images displayed <CountBadge dataLength={uploads} />
+              </h1>
+            </div>
+            <div className="">
+              <SearchBox
+                onReset={handleSearchReset}
+                value={searchUpload}
+                onChange={setSearchUpload}
+              />
+            </div>
+          </div>
           <div className="">
             {uploadsDataStatus.status !== "success" ? (
               uploadsDataStatus?.content
             ) : (
               <div className="grid lg:grid-cols-12 grid-cols-1 lg:gap-4 gap-2 justify-between cursor-pointer">
-                {paginatedData?.length === 0 ? (
-                  <NoDataFound label="Uploads" />
+                {uploadsData?.length === 0 ? (
+                  <div className="col-span-12">
+                    <h1>Data not found</h1>
+                  </div>
                 ) : (
-                  paginatedData?.map((upload) => (
+                  uploadsData?.map((upload) => (
                     <UploadCard
                       key={upload?._id}
                       upload={upload}

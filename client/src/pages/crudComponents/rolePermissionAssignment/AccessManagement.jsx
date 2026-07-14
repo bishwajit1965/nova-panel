@@ -147,48 +147,47 @@ const AccessManagement = () => {
 
   /* ---------------- UI ---------------- */
   return (
-    <div className="grid lg:grid-cols-12 grid-cols-1 gap-4 text-base-content/70">
-      {/* LEFT: USER EDITOR */}
-      <div
-        className={`${
-          selectedUser ? "lg:col-span-4 col-span-12" : "col-span-0"
-        }`}
-      >
-        {selectedUser && (
-          <UserToAssignRoles
-            selectedUser={selectedUser}
-            roles={roles}
-            selectedRoles={selectedRoles}
-            toggleRole={toggleRole}
-            onSubmit={handleSubmit}
-            onCancel={handleCancel}
-            roleMutation={roleMutation}
-            rolesDataStatus={rolesDataStatus}
-          />
-        )}
+    <>
+      <div className="grid lg:grid-cols-12 grid-cols-1 justify-between lg:gap-4 gap-2 text-base-content/70">
+        {/* LEFT: USER EDITOR */}
+        <div
+          className={`${selectedUser ? "lg:col-span-4 col-span-12" : "hidden"}`}
+        >
+          {selectedUser && (
+            <UserToAssignRoles
+              selectedUser={selectedUser}
+              roles={roles}
+              selectedRoles={selectedRoles}
+              toggleRole={toggleRole}
+              onSubmit={handleSubmit}
+              onCancel={handleCancel}
+              roleMutation={roleMutation}
+              rolesDataStatus={rolesDataStatus}
+            />
+          )}
+        </div>
+        {/* RIGHT: USERS + ROLES LIST */}
+        <div
+          className={`${
+            selectedUser ? "lg:col-span-8 col-span-12" : "col-span-12"
+          }`}
+        >
+          {/* USERS TABLE */}
+          {usersStatus.status !== "success" ? (
+            usersStatus.content
+          ) : (
+            <AdminUsersTable
+              users={filteredUsers}
+              onSelect={handleSelectUser}
+              userSearch={userSearch}
+              setUserSearch={setUserSearch}
+              selectedUser={selectedUser}
+              onReset={handleSearchReset}
+            />
+          )}
+        </div>
       </div>
-
-      {/* RIGHT: USERS + ROLES LIST */}
-      <div
-        className={`${
-          selectedUser ? "lg:col-span-8 col-span-12" : "col-span-12"
-        }`}
-      >
-        {/* USERS TABLE */}
-        {usersStatus.status !== "success" ? (
-          usersStatus.content
-        ) : (
-          <AdminUsersTable
-            users={filteredUsers}
-            onSelect={handleSelectUser}
-            userSearch={userSearch}
-            setUserSearch={setUserSearch}
-            selectedUser={selectedUser}
-            onReset={handleSearchReset}
-          />
-        )}
-      </div>
-    </div>
+    </>
   );
 };
 

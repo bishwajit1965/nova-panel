@@ -11,6 +11,7 @@ import systemSettingsModule from "./systemSettings/system.settings.module.js";
 import auditLogModule from "./auditLogs/audit.log.module.js";
 import testModule from "./test/test.module.js";
 import notificationModule from "./notifications/notification.module.js";
+import profileModule from "./profile/profile.module.js";
 
 const modules = [
   userModule,
@@ -24,6 +25,7 @@ const modules = [
   auditLogModule,
   testModule,
   notificationModule,
+  profileModule,
 ];
 
 export default modules;

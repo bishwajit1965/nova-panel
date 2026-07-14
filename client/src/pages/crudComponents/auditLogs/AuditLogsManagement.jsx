@@ -8,7 +8,7 @@ import Modal from "../../../components/ui/Modal";
 import { normalizeDate } from "../../../utils/normalizeDate";
 import { LucideIcon } from "../../../components/lib/LucideIcons";
 import CountBadge from "../../../components/ui/CountBadge";
-import Button from "../../../components/ui/Button";
+import SearchBox from "../../../components/ui/SearchBox";
 
 const AuditLogsManagement = () => {
   const [isOpenModal, setIsOpenModal] = useState(false);
@@ -73,115 +73,115 @@ const AuditLogsManagement = () => {
   });
 
   return (
-    <div className="grid grid-cols-1">
-      <div className="lg:mb-4 lg:flex grid items-center gap-2 justify-between">
+    <div className="">
+      {/* Search Functionality */}
+      <div className="lg:flex grid items-center gap-2 justify-between">
         <div className="">
           <h1 className="lg:text-xl text-sm font-extrabold flex items-center gap-2">
-            AuditLogsTable
+            AuditLogsTable • Audit Logs
             <CountBadge dataLength={auditLogs} />
           </h1>
         </div>
 
-        <div
-          className={`flex items-center justify-between gap-2 ${!log ? "lg:w-1/4" : "lg:w-1/4 w-full"}`}
-        >
-          <input
-            type="text"
-            placeholder="Search by module..."
-            className="input input-sm input-bordered w-full shadow"
+        <div className="">
+          <SearchBox
+            onReset={handleSearchReset}
             value={log}
-            onChange={(e) => setLog(e.target.value)}
+            onChange={setLog}
           />
-
-          <Button onClick={handleSearchReset} size="xs" variant="outline">
-            <LucideIcon.RefreshCcw size={20} /> Reset
-          </Button>
         </div>
       </div>
-      {auditLogDataStatus?.status !== "success" ? (
-        auditLogDataStatus?.content
-      ) : (
-        <div className=" lg:col-span-8 col-span-12">
-          <AuditLogsTable
-            auditLogs={log ? filteredLogs : paginatedData}
-            logs={auditLogs}
-            onLoad={handleLoadData}
-          />
 
-          {/* ----> PAGINATION READER ---->*/}
-          <div className="lg:my-8 my-4">
-            <Pagination
-              items={log ? filteredLogs : auditLogs}
-              dataLength={dataLength}
-              onPaginatedDataChange={setPaginatedData}
+      <div className="divider m-2"></div>
+
+      <div className="grid grid-cols-1">
+        {auditLogDataStatus?.status !== "success" ? (
+          auditLogDataStatus?.content
+        ) : (
+          <div className="lg:col-span-8 col-span-12">
+            <AuditLogsTable
+              auditLogs={log ? filteredLogs : paginatedData}
+              logs={auditLogs}
+              onLoad={handleLoadData}
             />
+
+            {/* ----> PAGINATION READER ---->*/}
+            <div className="lg:my-8 my-4">
+              <Pagination
+                items={log ? filteredLogs : auditLogs}
+                dataLength={dataLength}
+                onPaginatedDataChange={setPaginatedData}
+              />
+            </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {/* Modal to display audit log  */}
-      {isOpenModal && (
-        <Modal isOpen={isOpenModal} onClose={handleCloseModal}>
-          <div className="space-y-2">
-            <h1 className="flex items-center gap-2">
-              <LucideIcon.ToolCase size={16} />
-              <span className="font-bold badge badge-success text-base-100">
-                {dataToView?.module}
-              </span>
-            </h1>
-            <p className="flex items-center gap-2">
-              <LucideIcon.User size={16} />{" "}
-              <span className="text-sm font-bold">
-                {dataToView?.actor?.name}
-              </span>
-            </p>
-            <p className="flex flex-wrap gap-2">
-              <LucideIcon.UserRoundCog size={16} />
-              {dataToView?.actor?.roles?.map((r) => (
-                <span className="badge badge-outline font-bold">{r?.name}</span>
-              ))}
-            </p>
-            <p className="flex items-center gap-2">
-              <LucideIcon.Mail size={16} />{" "}
-              <span className="text-sm">{dataToView?.actor?.email}</span>
-            </p>
-            <p className="flex items-center gap-2">
-              <LucideIcon.CreditCard size={16} />{" "}
-              <span className="text-sm font-bold">
-                {dataToView?.metadata?.planName}
-              </span>
-            </p>
-            <p className="flex items-center gap-2">
-              <LucideIcon.Hammer size={16} />{" "}
-              <span className="badge badge-success text-base-100">
-                <span className="text-sm">{dataToView?.action} </span>
-              </span>
-              ⇣
-            </p>
+        {/* Modal to display audit log  */}
+        {isOpenModal && (
+          <Modal isOpen={isOpenModal} onClose={handleCloseModal}>
+            <div className="space-y-2">
+              <h1 className="flex items-center gap-2">
+                <LucideIcon.ToolCase size={16} />
+                <span className="font-bold badge badge-success text-base-100">
+                  {dataToView?.module}
+                </span>
+              </h1>
+              <p className="flex items-center gap-2">
+                <LucideIcon.User size={16} />{" "}
+                <span className="text-sm font-bold">
+                  {dataToView?.actor?.name}
+                </span>
+              </p>
+              <p className="flex flex-wrap gap-2">
+                <LucideIcon.UserRoundCog size={16} />
+                {dataToView?.actor?.roles?.map((r) => (
+                  <span className="badge badge-outline font-bold">
+                    {r?.name}
+                  </span>
+                ))}
+              </p>
+              <p className="flex items-center gap-2">
+                <LucideIcon.Mail size={16} />{" "}
+                <span className="text-sm">{dataToView?.actor?.email}</span>
+              </p>
+              <p className="flex items-center gap-2">
+                <LucideIcon.CreditCard size={16} />{" "}
+                <span className="text-sm font-bold">
+                  {dataToView?.metadata?.planName}
+                </span>
+              </p>
+              <p className="flex items-center gap-2">
+                <LucideIcon.Hammer size={16} />{" "}
+                <span className="badge badge-success text-base-100">
+                  <span className="text-sm">{dataToView?.action} </span>
+                </span>
+                ⇣
+              </p>
 
-            <p className="flex items-center gap-2">
-              <LucideIcon.Key size={16} />
-              <span className="badge bg-purple-500 text-base-100 lowercase">
-                {dataToView?.metadata?.actionKey || "N / A"}
-              </span>
-              <span className="text-sm text-purple-500">← Acted Upon</span>
-            </p>
+              <p className="flex items-center gap-2">
+                <LucideIcon.Key size={16} />
+                <span className="badge bg-purple-500 text-base-100 lowercase">
+                  {dataToView?.metadata?.actionKey || "N / A"}
+                </span>
+                <span className="text-sm text-purple-500">← Acted Upon</span>
+              </p>
 
-            <p className="flex items-center gap-2">
-              <LucideIcon.HistoryIcon size={16} />{" "}
-              <span className="text-xs flex flex-wrap">
-                {dataToView?.userAgent}
-              </span>
-            </p>
-            <p className="flex items-center gap-2">
-              <LucideIcon.Clock size={16} />{" "}
-              <span className="text-sm">
-                {normalizeDate(dataToView?.createdAt)}
-              </span>
-            </p>
-          </div>
-        </Modal>
-      )}
+              <p className="flex items-center gap-2">
+                <LucideIcon.HistoryIcon size={16} />{" "}
+                <span className="text-xs flex flex-wrap">
+                  {dataToView?.userAgent}
+                </span>
+              </p>
+              <p className="flex items-center gap-2">
+                <LucideIcon.Clock size={16} />{" "}
+                <span className="text-sm">
+                  {normalizeDate(dataToView?.createdAt)}
+                </span>
+              </p>
+            </div>
+          </Modal>
+        )}
+      </div>
     </div>
   );
 };

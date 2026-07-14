@@ -10,10 +10,13 @@ import ConfirmDialogue from "../../../components/ui/ConfirmDialogue";
 import Swal from "sweetalert2";
 import { useApiMutation } from "../../../hooks/useApiMutation";
 import Pagination from "../../../components/pagination/Pagination";
+import SearchBox from "../../../components/ui/SearchBox";
+import CountBadge from "../../../components/ui/CountBadge";
 
 const PermissionsManagement = () => {
   const [permissionToUpdate, setPermissionToUpdate] = useState(null);
   const [confirmDelete, setConfirmDelete] = useState(null);
+  const [permissionSearch, setPermissionSearch] = useState("");
   const [form, setForm] = useState({
     key: "",
     module: "",
@@ -212,6 +215,21 @@ const PermissionsManagement = () => {
     });
   };
 
+  // Handle Search Reset
+  const handleSearchReset = () => {
+    setPermissionSearch("");
+  };
+
+  /**--------- HANDLE SEARCH QUERY ---------*/
+  const filteredPermissions = permissions?.filter((p) => {
+    const q = permissionSearch.toLowerCase();
+    return (
+      p?.key?.toLowerCase().includes(q) ||
+      p?.module?.toLowerCase().includes(q) ||
+      p?.description?.toLowerCase().includes(q)
+    );
+  });
+
   /** --------> Use Fetched Data Status Handler --------> */
   const permissionsStatus = useFetchedDataStatusHandler({
     isLoading: permissionsLoading,
@@ -236,12 +254,30 @@ const PermissionsManagement = () => {
           />
         </div>
         <div className="lg:col-span-8 col-span-12">
-          {permissionsStatus.status !== "success" ? (
-            permissionsStatus.content
+          <div className="lg:flex grid items-center justify-between gap-2">
+            <div className="">
+              <h1 className="lg:text-xl text-sm font-bold flex items-center gap-2">
+                Permissions Management • Total{" "}
+                <CountBadge dataLength={permissions} />
+              </h1>
+            </div>
+            <div className="">
+              <SearchBox
+                onReset={handleSearchReset}
+                value={permissionSearch}
+                onChange={setPermissionSearch}
+              />
+            </div>
+          </div>
+          <div className="divider m-2"></div>
+          {permissionsStatus?.status !== "success" ? (
+            permissionsStatus?.content
           ) : (
             <>
               <PermissionsTable
-                permissions={paginatedData}
+                permissions={
+                  permissionSearch ? filteredPermissions : paginatedData
+                }
                 onSelectPermissionEdit={handleSelectPermissionEdit}
                 onConfirmDelete={handleConfirmDeletePermission}
               />

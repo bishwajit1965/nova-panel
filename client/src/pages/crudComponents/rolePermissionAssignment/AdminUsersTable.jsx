@@ -1,8 +1,8 @@
-import { LucideIcon } from "../../../components/lib/LucideIcons";
 import Badge from "../../../components/ui/Badge";
-import Button from "../../../components/ui/Button";
 import CountBadge from "../../../components/ui/CountBadge";
 import { MiniIconButton } from "../../../components/ui/MiniIconButton";
+import SearchBox from "../../../components/ui/SearchBox";
+import TableDataNotFound from "../../../components/ui/TableDataNotFound";
 import { normalizeDate } from "../../../utils/normalizeDate";
 
 const AdminUsersTable = ({
@@ -10,47 +10,46 @@ const AdminUsersTable = ({
   onSelect,
   userSearch,
   setUserSearch,
-  selectedUser,
   onReset,
 }) => {
   return (
     <div className="">
-      <div className="lg:flex grid gap-2 items-center justify-between mb-4">
-        <h1 className="lg:text-xl text-lg font-extrabold flex items-center gap-2">
-          Admin Users <CountBadge dataLength={users} color="blue-500" />
-        </h1>
-        <div
-          className={`flex items-center gap-2 ${!selectedUser ? "lg:w-1/4 w-full" : "w-1/2"}`}
-        >
-          <input
-            type="text"
-            placeholder="Search users..."
-            className="input input-sm input-bordered w-full"
+      <div className="lg:flex grid gap-2 items-center justify-between">
+        <div className="">
+          <h1 className="lg:text-xl text-lg font-extrabold flex items-center gap-2">
+            Admin Users • Total{" "}
+            <CountBadge dataLength={users} color="blue-500" />
+          </h1>
+        </div>
+        <div className="">
+          <SearchBox
+            onReset={onReset}
             value={userSearch}
-            onChange={(e) => setUserSearch(e.target.value)}
+            onChange={setUserSearch}
           />
-          <Button onClick={onReset} size="xs" variant="outline">
-            <LucideIcon.RefreshCcw size={20} /> Reset
-          </Button>
         </div>
       </div>
 
-      <div className="">
-        <div className="overflow-x-auto">
-          <table className="table table-xs">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>User Name</th>
-                <th>Users Email</th>
-                <th>Roles Name</th>
-                <th>Created At</th>
-                <th>Updated At</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {users?.map((u, index) => (
+      <div className="divider m-2"></div>
+
+      <div className="overflow-x-auto">
+        <table className="table table-xs">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>User Name</th>
+              <th>Users Email</th>
+              <th>Roles Name</th>
+              <th>Created At</th>
+              <th>Updated At</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {users?.length === 0 ? (
+              <TableDataNotFound colSpan={7} />
+            ) : (
+              users?.map((u, index) => (
                 <tr key={u.name}>
                   <th>{index + 1}</th>
                   <td>{u?.name}</td>
@@ -71,21 +70,21 @@ const AdminUsersTable = ({
                     />
                   </td>
                 </tr>
-              ))}
-            </tbody>
-            <tfoot>
-              <tr>
-                <th>#</th>
-                <th>User Name</th>
-                <th>Users Email</th>
-                <th>Roles Name</th>
-                <th>Created At</th>
-                <th>Updated At</th>
-                <th>Actions</th>
-              </tr>
-            </tfoot>
-          </table>
-        </div>
+              ))
+            )}
+          </tbody>
+          <tfoot>
+            <tr>
+              <th>#</th>
+              <th>User Name</th>
+              <th>Users Email</th>
+              <th>Roles Name</th>
+              <th>Created At</th>
+              <th>Updated At</th>
+              <th>Actions</th>
+            </tr>
+          </tfoot>
+        </table>
       </div>
     </div>
   );

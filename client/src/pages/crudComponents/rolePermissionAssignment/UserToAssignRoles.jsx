@@ -1,4 +1,5 @@
 import { LucideIcon } from "../../../components/lib/LucideIcons";
+import Badge from "../../../components/ui/Badge";
 import Button from "../../../components/ui/Button";
 
 const UserToAssignRoles = ({
@@ -15,27 +16,41 @@ const UserToAssignRoles = ({
     <div className={`${!selectedUser ? "hidden p-0" : "block"}`}>
       {selectedUser && (
         <>
-          <h1 className="lg:text-2xl text-lg font-extrabold text-base-content/70">
-            Assign Roles
-          </h1>
-
           <div className="border border-base-content/10 rounded-xl shadow-lg:md p-2">
-            <div className="lg:grid flex lg:grid-cols-12 items-center grid-cols-1 gap-4 justify-between">
-              <div className="lg:col-span-2 col-span-12">
-                <img
-                  src={selectedUser?.avatarUrl}
-                  alt={selectedUser?.name}
-                  className="w-12 h-12 rounded-full"
-                />
+            <div className="lg:space-y-4 space-y-2">
+              <div className=" ">
+                <h1 className="lg:text-xl text-sm font-extrabold text-base-content/70 flex items-center gap-2">
+                  Assign Roles to
+                </h1>
               </div>
-              <div className="lg:col-span-10 col-span-12 text-sm">
-                <p>{selectedUser._id}</p>
-                <p>{selectedUser?.name}</p>
-                <p>{selectedUser?.email}</p>
+              <div className="">
+                <h1 className="flex flex-wrap items-center capitalize">
+                  {selectedUser?.roles?.map((r, index) => (
+                    <Badge key={index} color="green" className="">
+                      {r?.name}
+                    </Badge>
+                  ))}
+                </h1>
+              </div>
+
+              <div className="lg:grid flex lg:grid-cols-12 items-center grid-cols-1 gap-4 justify-between">
+                <div className="lg:col-span-2 col-span-12">
+                  <img
+                    src={selectedUser?.avatarUrl}
+                    alt={selectedUser?.name}
+                    className="w-12 h-12 rounded-full"
+                  />
+                </div>
+                <div className="lg:col-span-10 col-span-12 text-sm">
+                  {/* <p>{selectedUser._id}</p> */}
+                  <p>{selectedUser?.name}</p>
+                  <p>{selectedUser?.email}</p>
+                </div>
               </div>
             </div>
+
             <div className="divider lg:text-[16px] text-sm font-semibold text-base-content/70">
-              SELECTED ADMIN USER
+              ADMIN USER ROLE(S)
             </div>
             {/* Roles & Permissions */}
 
@@ -53,6 +68,7 @@ const UserToAssignRoles = ({
                           key={r._id}
                           checked={selectedRoles.includes(r?._id)}
                           onChange={() => toggleRole(r?._id)}
+                          className="font-bold"
                         />
                         {r?.name}
                       </label>

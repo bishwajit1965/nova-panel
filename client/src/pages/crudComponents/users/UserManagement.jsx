@@ -10,7 +10,7 @@ import UserModalData from "./UserModalData";
 import { useApiMutation } from "../../../hooks/useApiMutation";
 import Swal from "sweetalert2";
 import ConfirmAction from "../../../components/ui/ConfirmAction";
-import Button from "../../../components/ui/Button";
+import SearchBox from "../../../components/ui/SearchBox";
 
 const UserManagement = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -180,7 +180,9 @@ const UserManagement = () => {
   const filteredUsers = users?.filter((u) => {
     const q = userSearch.toLowerCase();
     return (
-      u?.name?.toLowerCase().includes(q) || u?.slug?.toLowerCase().includes(q)
+      u?.name?.toLowerCase().includes(q) ||
+      u?.slug?.toLowerCase().includes(q) ||
+      u?.email?.toLowerCase().includes(q)
     );
   });
 
@@ -202,8 +204,8 @@ const UserManagement = () => {
 
   return (
     <div className="">
-      <div className="lg:mb-4 lg:flex grid items-center gap-2 justify-between">
-        <div className="">
+      <div className="lg:flex grid items-center gap-2 justify-between">
+        <div className="flex items-center justify-between gap-2">
           <h1 className="lg:text-xl text-xs font-extrabold text-base-content/70 flex items-center flex-wrap gap-1">
             <LucideIcon.Users /> <span>User Management</span> •
             <span>Total Users:</span>
@@ -211,22 +213,15 @@ const UserManagement = () => {
           </h1>
         </div>
 
-        <div
-          className={`flex items-center justify-between gap-2 ${!user ? "lg:w-1/4" : " w-1/2"}`}
-        >
-          <input
-            type="text"
-            placeholder="Search users..."
-            className="input input-sm input-bordered w-full shadow"
+        <div className="">
+          <SearchBox
+            onReset={handleSearchReset}
             value={userSearch}
-            onChange={(e) => setUserSearch(e.target.value)}
+            onChange={setUserSearch}
           />
-
-          <Button onClick={handleSearchReset} size="xs" variant="outline">
-            <LucideIcon.RefreshCcw size={20} /> Reset
-          </Button>
         </div>
       </div>
+      <div className="divider m-2"></div>
       <div className="">
         <div className="grid grid-cols-1">
           {usersDataStatus.status !== "success" ? (
